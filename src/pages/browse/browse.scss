@@ -1,0 +1,26 @@
+page-browse {
+ion-icon.scroll {
+    font-size: -webkit-xxx-large !important;
+}
+
+.label-left {
+    text-align: left !important;
+}
+
+.center { text-align: center}
+
+ion-content {
+    background-color: $primary !important;
+}
+
+.entry-container {
+    margin: 0 auto;
+    padding-top: 0;
+    padding-bottom: 5px;
+    text-align: center;
+    background-color: $secondary;
+    width: 90%;
+    border-radius: 15px;
+}
+
+}

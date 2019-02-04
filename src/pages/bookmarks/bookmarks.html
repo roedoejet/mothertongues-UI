@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Bookmarks</ion-title>
+    <ion-buttons right>
+      <button ion-button (click)="edit = !edit">
+      <ion-icon name="trash" *ngIf="!edit"></ion-icon>
+      <span *ngIf="edit">cancel</span>
+    </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding scrollbar-y-auto>
+  <entry-list [entries]='bookmarks' [parentEdit]="edit"></entry-list>
+  <div class='center'>
+    <button ion-button color="danger" class="remove" *ngIf="edit" (click)="removeEntries(bookmarks)">Remove selected bookmarks</button>
+  </div>
+</ion-content>

@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons left>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      Word Info
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <div *ngIf="displayImages">
+      <img (click)="playAudio(entry)" [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
+    </div>
+    <ion-card-content>
+      <ion-card-title>
+        {{entry.word}}
+      </ion-card-title>
+      <p class="definition">
+        {{entry.definition}}
+      </p>
+      <div *ngIf="entry.optional && optional">
+        <div class="option" *ngFor="let optional_dict of entry.optional; let i = index">
+          <p *ngFor="let option of objectKeys(optional_dict)">
+            <span *ngIf="checkChecked(option)">{{ option }} - {{ entry.optional[i][option]}} </span>
+          </p>
+        </div>
+      </div>
+    </ion-card-content>
+
+    <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0">
+      <ion-card>
+        <ion-card-header>
+          Audio
+        </ion-card-header>
+
+        <ion-list>
+          <button ion-item *ngIf="audio_playing?.length > 0" (click)="stopAllAudio()">
+            Stop all audio
+            <ion-icon name="hand" item-start></ion-icon>
+          </button>
+          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudioTrack(entry, track)">
+            <ion-icon name="musical-notes" item-start></ion-icon>
+            Speaker: {{ track.speaker }}
+          </button>
+        </ion-list>
+      </ion-card>
+
+    </ion-row>
+
+    <ion-row *ngIf="(entry.example_sentence | noNullValues)?.length > 0">
+      <ion-card>
+        <ion-card-header>
+          Sentences
+        </ion-card-header>
+
+        <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">
+
+          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudioTrack(entry, track)">
+            <ion-icon name="musical-notes" item-start></ion-icon>
+            <h2>{{ sentence }}</h2>
+            <h4>{{ entry.example_sentence_definition[i] }}</h4>
+            <h6>Speaker: {{ track.speaker }}</h6>
+          </button>
+
+        </ion-list>
+      </ion-card>
+
+    </ion-row>
+
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="primary" icon-left (click)="toggleFav(entry)">
+          <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>
+          <ion-icon *ngIf="!favourited(entry)" name="ios-bookmarks-outline"></ion-icon>
+          Bookmark
+        </button>
+      </ion-col>
+      <!-- <ion-col text-center>
+        <button ion-button clear small color="primary" icon-left (click)="playAudio(entry)">
+          <ion-icon name='musical-notes'></ion-icon>
+          Listen
+        </button>
+      </ion-col> -->
+    </ion-row>
+
+  </ion-card>
+</ion-content>
+
+<ion-footer *ngIf="entry.optional">
+  <ion-toolbar>
+    <ion-item>
+      <ion-toggle checked="false" [(ngModel)]="optional"></ion-toggle>
+      <ion-label (click)="showOptions()">Show optional information</ion-label>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

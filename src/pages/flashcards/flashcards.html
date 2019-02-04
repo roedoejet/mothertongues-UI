@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Flashcards</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding scrollbar-y-auto>
+
+  <ion-list class="deck-select">
+    <ion-list-header>
+      First, select a flashcard deck:
+    </ion-list-header>
+    <ion-item mode="ios">
+      <ion-label class="label-left" mode="ios">Select a Deck</ion-label>
+      <ion-select mode="ios" [(ngModel)]="deck" [selectOptions]="deckSelectOptions">
+        <ion-option *ngFor='let deck of decks'>{{deck}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">
+    <ion-list-header text-wrap>
+      Then, select a style of learning between the following options:
+    </ion-list-header>
+    <ion-item *ngFor="let style of flashcardStyles">
+      <ion-label>{{style.title}}</ion-label>
+      <p>{{style.info}}</p>
+      <ion-radio value="{{style.title}}"></ion-radio>
+    </ion-item>
+  </ion-list>
+
+  <div class="center"><button ion-button secondary (click)='startFlashcards()'>Click here to start!</button></div>
+</ion-content>
