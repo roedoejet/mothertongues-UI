@@ -29496,7 +29496,10 @@ ion-icon::before {
 }
 
 ion-card img {
-  width: 55% !important;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 55% !important;
   margin: 0 auto !important;
 }
 

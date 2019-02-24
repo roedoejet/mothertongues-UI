@@ -14,7 +14,7 @@
 <ion-content>
   <ion-card>
     <div *ngIf="displayImages">
-      <img [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
+      <img [(src)]="entry.img" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
     </div>
     <ion-card-content>
       <ion-card-title>
