@@ -14,6 +14,8 @@ import { Entry } from './entry.model'
 
 import { MTDService } from '../../app/mtd.service'
 
+import { MTDInfo } from '../../app/global'
+
 @Component({
   selector: 'word-modal',
   templateUrl: 'word-modal.component.html'
@@ -30,6 +32,7 @@ export class WordModal {
   image: string;
   default_sentence_i: number = 0;
   audio_playing = [];
+  audio_path: string = MTDInfo.config['audio_path']
   constructor(public navCtrl: NavController,
     private navParams: NavParams,
     public viewCtrl: ViewController,
@@ -42,7 +45,7 @@ export class WordModal {
     public mtdService: MTDService) {
     this.entry = navParams.get('entry');
     if (this.entry.optional) {
-      this.optionalSelection = this.entry.optional.map(x=> Object.keys(x))[0]
+      this.optionalSelection = this.entry.optional.map(x => Object.keys(x))[0]
     }
     console.log(this.optionalSelection)
     this.checkedOptions = this.optionalSelection
@@ -79,152 +82,71 @@ export class WordModal {
 
   stopAllAudio() {
     this.audio_playing.forEach(element => {
-      element.pause()
+      try {
+        element.pause()
+      } catch (error) {
+        this.nativeAudio.stop(element)
+      }
     });
     this.audio_playing = [];
   }
 
-  playAudioTrack(entry, track) {
-    let audio_url = track.filename + ".mp3"
-    let path = "https://roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + audio_url
-    let audio = new Audio(path)
-    this.audio_playing.push(audio)
-    audio.onended = () => this.audio_playing.pop();
-    audio.play()
-  }
+  playAudio(track) {
+    if (track !== undefined && track.filename !== undefined) {
+      // get path. add config path if it's there.
+      let path = track.filename
+      if (this.audio_path && this.audio_path !== undefined) {
+        let path = this.audio_path + track.filename
+      }
+      // set ID and path to internal storage
+      let internal_path = "assets/audio/" + track.filename
+      let id = track.filename
 
-  // on hold while other audio figured out
-  playAudioTrack1(entry, track) {
-    track.audio_file = track.filename + ".mp3"
-    track.audio_url = track.filename + ".mp3"
-    if (this.plt.is('core') || this.plt.is('mobileweb')) {
-      console.log('web ran')
-      if (track !== undefined && track.audio_file !== undefined && track.audio_url !== undefined) {
+      // if desktop or browser, run as HTML5 Audio
+      if (this.plt.is('core') || this.plt.is('mobileweb')) {
 
-        let id = entry.entryID
-        let path = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        console.log(path)
         let audio = new Audio(path)
+        audio.onerror = () => {
+          this.audio_playing.pop()
+          this.onError("The audio file wasn't found.")
+        }
+        this.audio_playing.push(audio)
+        audio.onended = () => this.audio_playing.pop();
         audio.play()
-        // this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, (error)=>{console.log(error)});
-        // this.nativeAudio.play(id).then(this.onSuccess, (error)=>{ this.onError(error) });
-      } else {
-        console.log('boo')
-        this.showAlert()
-      }
-    } else if (this.plt.is('ios')) {
 
-      let id = entry.entryID
-      let path = "assets/audio/" + track.audio_file
-      this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-      this.nativeAudio.play(id).then(this.onSuccess, this.onError);
+        // If iOS or Android, download and store
+      } else if (this.plt.is('android') || this.plt.is('ios')) {
 
-    } else if (this.plt.is('android')) {
-      console.log('android ran')
-      if (track != undefined) {
-        let id = entry.entryID
-        let track_url = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        let track_file = "assets/audio/" + track.audio_file
-        console.log('checking ' + track_file)
-        this.file.checkFile(this.file.dataDirectory, track_file)
-          .then((track) => {
-            console.log('trying to play')
-            this.nativeAudio.preloadSimple(id, track_file);
-            this.nativeAudio.play(id);
-          }).catch(err => {
-            console.log('couldnot play')
-            var targetPath = this.file.dataDirectory + track_file;
-            var trustHosts = true;
-            var options = {};
-            console.log('dowloading from ' + track_url)
-            console.log(targetPath)
-            this.fileTransfer.download(track_url, targetPath, trustHosts, options)
-              .then((track) => {
-                console.log('trying to play')
-                this.nativeAudio.preloadSimple(id, track_file);
-                this.nativeAudio.play(id);
-              }, (error) => { this.onError(error) });
-          })
-      }
-    } else {
-      this.showAlert()
-    }
-  }
-
-
-  playAudio(entry) {
-
-    // this.stopAllAudio()
-    // Create Media object from src
-    // if (ionic.Platform.platform() == 'macintel') {
-    if (this.plt.is('core') || this.plt.is('mobileweb')) {
-      if (entry !== undefined && entry.audio_file !== undefined && entry.audio_url !== undefined) {
-
-        let id = entry.entryID
-        let path = "http://mobile.firstvoices.com/FirstVoices/" + entry.audio_url
-        this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-        this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-
-        // var audio = new Audio(srcURL)
-        // audio_playing.push(audio)
-        // setTimeout(function () {
-        //     audio.play();
-        // }, 50);
-      } else {
-        this.showAlert()
-      }
-    } else if (this.plt.is('ios')) {
-
-      let id = entry.entryID
-      let path = "assets/audio/" + entry.audio_file
-      this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-      this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-      // srcFN = src.replace(/\//g, '')
-      // srcURL = "audio/" + srcFN
-      // var audio = new Audio(srcURL);
-
-      // Play audio
-      // audio_playing.push(audio)
-      // setTimeout(function () {
-      //     audio.play();
-      // }, 50);
-
-    } else if (this.plt.is('android')) {
-      if (entry != undefined) {
-        let id = entry.entryID
-        let entry_url = "http://mobile.firstvoices.com/FirstVoices/" + entry.audio_url
-        let entry_file = "assets/audio/" + entry.audio_file[0]
-
-        this.file.checkFile(this.file.dataDirectory, entry_file)
+        this.file.checkFile(this.file.dataDirectory, internal_path)
           .then(_ => {
-            this.nativeAudio.preloadSimple(id, entry_file);
-            this.nativeAudio.play(id);
+            this.audio_playing.push(id)
+            this.nativeAudio.preloadSimple(id, internal_path);
+            this.nativeAudio.play(id, () => this.audio_playing.pop());
           }).catch(err => {
-            var targetPath = this.file.dataDirectory + entry_file;
+            var targetPath = this.file.dataDirectory + internal_path;
             var trustHosts = true;
             var options = {};
-            this.fileTransfer.download(entry_url, targetPath, trustHosts, options)
+            this.fileTransfer.download(internal_path, targetPath, trustHosts, options)
           })
-          .then((entry) => {
-            this.nativeAudio.preloadSimple(id, entry_file);
-            this.nativeAudio.play(id);
-          }, (error) => { console.log(error) });;
+          .then((track) => {
+            this.audio_playing.push(id)
+            this.nativeAudio.preloadSimple(id, internal_path);
+            this.nativeAudio.play(id, () => this.audio_playing.pop());
+          }, (error) => { this.onError(error) });;
+
+      } else {
+        this.showAlert()
       }
     } else {
-      this.showAlert()
+      this.onError("No audio for this file.")
     }
   }
-
-  onSuccess(id) {
-    console.log(id)
-    // console.log('loaded audio ${id} with path of ${path}'); 
-  };
 
   onError(err) {
     console.log(err)
     let alert = this.alertCtrl.create({
       title: 'Sorry',
-      subTitle: "We don't have audio for that entry.",
+      subTitle: err.toString(),
       buttons: ['OK']
     });
     alert.present();

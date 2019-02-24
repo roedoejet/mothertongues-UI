@@ -298,6 +298,7 @@ var Flashcard = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_native_audio__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_mtd_service__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_global__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -307,6 +308,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -331,6 +333,7 @@ var WordModal = /** @class */ (function () {
         this.objectKeys = Object.keys;
         this.default_sentence_i = 0;
         this.audio_playing = [];
+        this.audio_path = __WEBPACK_IMPORTED_MODULE_7__app_global__["a" /* MTDInfo */].config['audio_path'];
         this.fileTransfer = this.transfer.create();
         this.entry = navParams.get('entry');
         if (this.entry.optional) {
@@ -365,150 +368,72 @@ var WordModal = /** @class */ (function () {
     };
     ;
     WordModal.prototype.stopAllAudio = function () {
+        var _this = this;
         this.audio_playing.forEach(function (element) {
-            element.pause();
+            try {
+                element.pause();
+            }
+            catch (error) {
+                _this.nativeAudio.stop(element);
+            }
         });
         this.audio_playing = [];
     };
-    WordModal.prototype.playAudioTrack = function (entry, track) {
+    WordModal.prototype.playAudio = function (track) {
         var _this = this;
-        var audio_url = track.filename + ".mp3";
-        var path = "https://roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + audio_url;
-        var audio = new Audio(path);
-        this.audio_playing.push(audio);
-        audio.onended = function () { return _this.audio_playing.pop(); };
-        audio.play();
-    };
-    // on hold while other audio figured out
-    WordModal.prototype.playAudioTrack1 = function (entry, track) {
-        var _this = this;
-        track.audio_file = track.filename + ".mp3";
-        track.audio_url = track.filename + ".mp3";
-        if (this.plt.is('core') || this.plt.is('mobileweb')) {
-            console.log('web ran');
-            if (track !== undefined && track.audio_file !== undefined && track.audio_url !== undefined) {
-                var id = entry.entryID;
-                var path = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url;
-                console.log(path);
+        if (track !== undefined && track.filename !== undefined) {
+            // get path. add config path if it's there.
+            var path = track.filename;
+            if (this.audio_path && this.audio_path !== undefined) {
+                var path_1 = this.audio_path + track.filename;
+            }
+            // set ID and path to internal storage
+            var internal_path_1 = "assets/audio/" + track.filename;
+            var id_1 = track.filename;
+            // if desktop or browser, run as HTML5 Audio
+            if (this.plt.is('core') || this.plt.is('mobileweb')) {
                 var audio = new Audio(path);
+                audio.onerror = function () {
+                    _this.audio_playing.pop();
+                    _this.onError("The audio file wasn't found.");
+                };
+                this.audio_playing.push(audio);
+                audio.onended = function () { return _this.audio_playing.pop(); };
                 audio.play();
-                // this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, (error)=>{console.log(error)});
-                // this.nativeAudio.play(id).then(this.onSuccess, (error)=>{ this.onError(error) });
+                // If iOS or Android, download and store
             }
-            else {
-                console.log('boo');
-                this.showAlert();
-            }
-        }
-        else if (this.plt.is('ios')) {
-            var id = entry.entryID;
-            var path = "assets/audio/" + track.audio_file;
-            this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-            this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-        }
-        else if (this.plt.is('android')) {
-            console.log('android ran');
-            if (track != undefined) {
-                var id_1 = entry.entryID;
-                var track_url_1 = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url;
-                var track_file_1 = "assets/audio/" + track.audio_file;
-                console.log('checking ' + track_file_1);
-                this.file.checkFile(this.file.dataDirectory, track_file_1)
-                    .then(function (track) {
-                    console.log('trying to play');
-                    _this.nativeAudio.preloadSimple(id_1, track_file_1);
-                    _this.nativeAudio.play(id_1);
-                }).catch(function (err) {
-                    console.log('couldnot play');
-                    var targetPath = _this.file.dataDirectory + track_file_1;
-                    var trustHosts = true;
-                    var options = {};
-                    console.log('dowloading from ' + track_url_1);
-                    console.log(targetPath);
-                    _this.fileTransfer.download(track_url_1, targetPath, trustHosts, options)
-                        .then(function (track) {
-                        console.log('trying to play');
-                        _this.nativeAudio.preloadSimple(id_1, track_file_1);
-                        _this.nativeAudio.play(id_1);
-                    }, function (error) { _this.onError(error); });
-                });
-            }
-        }
-        else {
-            this.showAlert();
-        }
-    };
-    WordModal.prototype.playAudio = function (entry) {
-        var _this = this;
-        // this.stopAllAudio()
-        // Create Media object from src
-        // if (ionic.Platform.platform() == 'macintel') {
-        if (this.plt.is('core') || this.plt.is('mobileweb')) {
-            if (entry !== undefined && entry.audio_file !== undefined && entry.audio_url !== undefined) {
-                var id = entry.entryID;
-                var path = "http://mobile.firstvoices.com/FirstVoices/" + entry.audio_url;
-                this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-                this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-                // var audio = new Audio(srcURL)
-                // audio_playing.push(audio)
-                // setTimeout(function () {
-                //     audio.play();
-                // }, 50);
-            }
-            else {
-                this.showAlert();
-            }
-        }
-        else if (this.plt.is('ios')) {
-            var id = entry.entryID;
-            var path = "assets/audio/" + entry.audio_file;
-            this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-            this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-            // srcFN = src.replace(/\//g, '')
-            // srcURL = "audio/" + srcFN
-            // var audio = new Audio(srcURL);
-            // Play audio
-            // audio_playing.push(audio)
-            // setTimeout(function () {
-            //     audio.play();
-            // }, 50);
-        }
-        else if (this.plt.is('android')) {
-            if (entry != undefined) {
-                var id_2 = entry.entryID;
-                var entry_url_1 = "http://mobile.firstvoices.com/FirstVoices/" + entry.audio_url;
-                var entry_file_1 = "assets/audio/" + entry.audio_file[0];
-                this.file.checkFile(this.file.dataDirectory, entry_file_1)
+            else if (this.plt.is('android') || this.plt.is('ios')) {
+                this.file.checkFile(this.file.dataDirectory, internal_path_1)
                     .then(function (_) {
-                    _this.nativeAudio.preloadSimple(id_2, entry_file_1);
-                    _this.nativeAudio.play(id_2);
+                    _this.audio_playing.push(id_1);
+                    _this.nativeAudio.preloadSimple(id_1, internal_path_1);
+                    _this.nativeAudio.play(id_1, function () { return _this.audio_playing.pop(); });
                 }).catch(function (err) {
-                    var targetPath = _this.file.dataDirectory + entry_file_1;
+                    var targetPath = _this.file.dataDirectory + internal_path_1;
                     var trustHosts = true;
                     var options = {};
-                    _this.fileTransfer.download(entry_url_1, targetPath, trustHosts, options);
+                    _this.fileTransfer.download(internal_path_1, targetPath, trustHosts, options);
                 })
-                    .then(function (entry) {
-                    _this.nativeAudio.preloadSimple(id_2, entry_file_1);
-                    _this.nativeAudio.play(id_2);
-                }, function (error) { console.log(error); });
+                    .then(function (track) {
+                    _this.audio_playing.push(id_1);
+                    _this.nativeAudio.preloadSimple(id_1, internal_path_1);
+                    _this.nativeAudio.play(id_1, function () { return _this.audio_playing.pop(); });
+                }, function (error) { _this.onError(error); });
                 ;
             }
+            else {
+                this.showAlert();
+            }
         }
         else {
-            this.showAlert();
+            this.onError("No audio for this file.");
         }
     };
-    WordModal.prototype.onSuccess = function (id) {
-        console.log(id);
-        // console.log('loaded audio ${id} with path of ${path}'); 
-    };
-    ;
     WordModal.prototype.onError = function (err) {
         console.log(err);
         var alert = this.alertCtrl.create({
             title: 'Sorry',
-            subTitle: "We don't have audio for that entry.",
+            subTitle: err.toString(),
             buttons: ['OK']
         });
         alert.present();
@@ -578,20 +503,12 @@ var WordModal = /** @class */ (function () {
     };
     WordModal = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'word-modal',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/'<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Word Info\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-card>\n    <div *ngIf="displayImages">\n      <img (click)="playAudio(entry)" [(src)]="image" onError="this.src=\'assets/img/default.png\'" *ngIf="entry.img" />\n    </div>\n    <ion-card-content>\n      <ion-card-title>\n        {{entry.word}}\n      </ion-card-title>\n      <p class="definition">\n        {{entry.definition}}\n      </p>\n      <div *ngIf="entry.optional && optional">\n        <div class="option" *ngFor="let optional_dict of entry.optional; let i = index">\n          <p *ngFor="let option of objectKeys(optional_dict)">\n            <span *ngIf="checkChecked(option)">{{ option }} - {{ entry.optional[i][option]}} </span>\n          </p>\n        </div>\n      </div>\n    </ion-card-content>\n\n    <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <button ion-item *ngIf="audio_playing?.length > 0" (click)="stopAllAudio()">\n            Stop all audio\n            <ion-icon name="hand" item-start></ion-icon>\n          </button>\n          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudioTrack(entry, track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            Speaker: {{ track.speaker }}\n          </button>\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row *ngIf="(entry.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">\n\n          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudioTrack(entry, track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ entry.example_sentence_definition[i] }}</h4>\n            <h6>Speaker: {{ track.speaker }}</h6>\n          </button>\n\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button ion-button clear small color="primary" icon-left (click)="toggleFav(entry)">\n          <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>\n          <ion-icon *ngIf="!favourited(entry)" name="ios-bookmarks-outline"></ion-icon>\n          Bookmark\n        </button>\n      </ion-col>\n      <!-- <ion-col text-center>\n        <button ion-button clear small color="primary" icon-left (click)="playAudio(entry)">\n          <ion-icon name=\'musical-notes\'></ion-icon>\n          Listen\n        </button>\n      </ion-col> -->\n    </ion-row>\n\n  </ion-card>\n</ion-content>\n\n<ion-footer *ngIf="entry.optional">\n  <ion-toolbar>\n    <ion-item>\n      <ion-toggle checked="false" [(ngModel)]="optional"></ion-toggle>\n      <ion-label (click)="showOptions()">Show optional information</ion-label>\n    </ion-item>\n  </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/
+            selector: 'word-modal',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/'<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Word Info\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-card>\n    <div *ngIf="displayImages">\n      <img [(src)]="image" onError="this.src=\'assets/img/default.png\'" *ngIf="entry.img" />\n    </div>\n    <ion-card-content>\n      <ion-card-title>\n        {{entry.word}}\n      </ion-card-title>\n      <p class="definition">\n        {{entry.definition}}\n      </p>\n      <div *ngIf="entry.optional && optional">\n        <div class="option" *ngFor="let optional_dict of entry.optional; let i = index">\n          <p *ngFor="let option of objectKeys(optional_dict)">\n            <span *ngIf="checkChecked(option)">{{ option }} - {{ entry.optional[i][option]}} </span>\n          </p>\n        </div>\n      </div>\n    </ion-card-content>\n\n    <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <button ion-item *ngIf="audio_playing?.length > 0" (click)="stopAllAudio()">\n            Stop all audio\n            <ion-icon name="hand" item-start></ion-icon>\n          </button>\n          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>\n          </button>\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row *ngIf="(entry.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">\n\n          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"\n            (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ entry.example_sentence_definition[i] }}</h4>\n            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>\n          </button>\n\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button ion-button clear small color="primary" icon-left (click)="toggleFav(entry)">\n          <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>\n          <ion-icon *ngIf="!favourited(entry)" name="ios-bookmarks-outline"></ion-icon>\n          Bookmark\n        </button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n</ion-content>\n\n<ion-footer *ngIf="entry.optional">\n  <ion-toolbar>\n    <ion-item>\n      <ion-toggle checked="false" [(ngModel)]="optional"></ion-toggle>\n      <ion-label (click)="showOptions()">Show optional information</ion-label>\n    </ion-item>\n  </ion-toolbar>\n</ion-footer>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ViewController */],
-            __WEBPACK_IMPORTED_MODULE_5__ionic_native_native_audio__["a" /* NativeAudio */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__["a" /* File */],
-            __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__["a" /* FileTransfer */],
-            __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_6__app_mtd_service__["a" /* MTDService */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ViewController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__ionic_native_native_audio__["a" /* NativeAudio */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ionic_native_native_audio__["a" /* NativeAudio */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__["a" /* File */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__["a" /* File */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__["a" /* FileTransfer */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__["a" /* FileTransfer */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_6__app_mtd_service__["a" /* MTDService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__app_mtd_service__["a" /* MTDService */]) === "function" && _k || Object])
     ], WordModal);
     return WordModal;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 }());
 
 //# sourceMappingURL=word-modal.component.js.map
@@ -703,7 +620,7 @@ var AppModule = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MTDService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(54);
@@ -796,7 +713,7 @@ var MTDService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mtd_service__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -898,7 +815,7 @@ var MyApp = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return About; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -985,7 +902,7 @@ var Bookmarks = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Browse; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__ = __webpack_require__(28);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1207,7 +1124,7 @@ var Random = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Search; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1487,7 +1404,7 @@ var NoNullObjectValuesPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 42:
+/***/ 34:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

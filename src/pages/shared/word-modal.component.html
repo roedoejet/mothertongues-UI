@@ -14,7 +14,7 @@
 <ion-content>
   <ion-card>
     <div *ngIf="displayImages">
-      <img (click)="playAudio(entry)" [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
+      <img [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
     </div>
     <ion-card-content>
       <ion-card-title>
@@ -43,9 +43,9 @@
             Stop all audio
             <ion-icon name="hand" item-start></ion-icon>
           </button>
-          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudioTrack(entry, track)">
+          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
-            Speaker: {{ track.speaker }}
+            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
           </button>
         </ion-list>
       </ion-card>
@@ -60,11 +60,12 @@
 
         <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">
 
-          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudioTrack(entry, track)">
+          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
+            (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <h2>{{ sentence }}</h2>
             <h4>{{ entry.example_sentence_definition[i] }}</h4>
-            <h6>Speaker: {{ track.speaker }}</h6>
+            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
           </button>
 
         </ion-list>
@@ -80,12 +81,6 @@
           Bookmark
         </button>
       </ion-col>
-      <!-- <ion-col text-center>
-        <button ion-button clear small color="primary" icon-left (click)="playAudio(entry)">
-          <ion-icon name='musical-notes'></ion-icon>
-          Listen
-        </button>
-      </ion-col> -->
     </ion-row>
 
   </ion-card>
