@@ -40,4 +40,4 @@ As well as institutional support from the [First Peoples' Cultural Council](http
 
 ## License
 
-[GPL-3 © Aidan Pine.](LICENSE)
+[MPL-2.0 © Aidan Pine.](LICENSE)
