@@ -96,7 +96,7 @@ export class WordModal {
       // get path. add config path if it's there.
       let path = track.filename
       if (this.audio_path && this.audio_path !== undefined) {
-        let path = this.audio_path + track.filename
+        path = this.audio_path + track.filename
       }
       // set ID and path to internal storage
       let internal_path = "assets/audio/" + track.filename

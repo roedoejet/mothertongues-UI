@@ -385,7 +385,7 @@ var WordModal = /** @class */ (function () {
             // get path. add config path if it's there.
             var path = track.filename;
             if (this.audio_path && this.audio_path !== undefined) {
-                var path_1 = this.audio_path + track.filename;
+                path = this.audio_path + track.filename;
             }
             // set ID and path to internal storage
             var internal_path_1 = "assets/audio/" + track.filename;
