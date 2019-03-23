@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
-
 import { NavController, NavParams, ViewController, AlertController, Platform, ItemSliding } from 'ionic-angular';
-
 import { File } from '@ionic-native/file';
-
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-
 import { Storage } from '@ionic/storage';
-
 import { NativeAudio } from '@ionic-native/native-audio'
-
-import { Entry } from './entry.model'
-
-import { MTDService } from '../../app/mtd.service'
-
+import { DictionaryData } from '../../app/models'
+import { BookmarkService } from '../../app/bookmark.service'
 import { MTDInfo } from '../../app/global'
+import { MTDService } from '../../app/mtd.service';
 
 @Component({
   selector: 'word-modal',
@@ -25,14 +18,14 @@ import { MTDInfo } from '../../app/global'
 export class WordModal {
   checkedOptions: string[];
   displayImages: boolean = true; //default show images, turns to false on 404
-  entry: Entry
+  entry: DictionaryData
   optional: boolean = false;
   optionalSelection: string[];
   objectKeys = Object.keys;
   image: string;
   default_sentence_i: number = 0;
   audio_playing = [];
-  audio_path: string = MTDInfo.config['audio_path']
+  audio_path: string;
   constructor(public navCtrl: NavController,
     private navParams: NavParams,
     public viewCtrl: ViewController,
@@ -42,7 +35,9 @@ export class WordModal {
     private transfer: FileTransfer,
     public storage: Storage,
     public plt: Platform,
-    public mtdService: MTDService) {
+    public bookmarkService: BookmarkService,
+    private mtdService: MTDService) {
+    // this.audio_path = this.mtdService.config_value.audio_path
     this.entry = navParams.get('entry');
     if (this.entry.optional) {
       this.optionalSelection = this.entry.optional.map(x => Object.keys(x))[0]
@@ -212,10 +207,10 @@ export class WordModal {
   }
 
   toggleFav(entry) {
-    this.mtdService.toggleBookmark(entry)
+    this.bookmarkService.toggleBookmark(entry)
   }
 
   favourited(entry) {
-    return this.mtdService.bookmarks.value.indexOf(entry) > -1
+    return this.bookmarkService.bookmarks.value.indexOf(entry) > -1
   }
 }

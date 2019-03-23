@@ -4,7 +4,7 @@ import { NavController, ModalController, AlertController } from 'ionic-angular';
 
 import { Flashcard } from './flashcard-modal.component'
 
-import { MTDService } from '../../app/mtd.service'
+import { BookmarkService } from '../../app/bookmark.service'
 
 @Component({
   selector: 'page-flashcards',
@@ -17,8 +17,8 @@ export class Flashcards {
   deckSelectOptions: Object = { title: "Select a Deck" };
   selectedFlashcardStyle: string;
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public mtdService: MTDService, private alertCtrl: AlertController) {
-    this.decks = Object.keys(mtdService.categories)
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public bookmarkService: BookmarkService, private alertCtrl: AlertController) {
+    this.decks = Object.keys(bookmarkService.categories)
     this.flashcardStyles = [
     { "title": "Passive", "info": "This is the easiest method. It involves seeing the {{name}} word and guessing English." },
     { "title": "Active", "info": "This method is designed to test your spelling of the {{ name }} word. You are provided with the English, and have to guess the {{ name } } word." },

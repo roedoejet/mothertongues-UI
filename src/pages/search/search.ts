@@ -1,25 +1,21 @@
 import { Component } from '@angular/core';
-
 import { NavController } from 'ionic-angular';
-
-import { EntryList } from '../shared/entry-list.component';
-
-import { Entry } from '../shared/entry.model';
-
-import { MTDInfo } from '../../app/global';
+import { DictionaryData } from '../../app/models';
+import { MTDService } from '../../app/mtd.service';
 
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
 })
 export class Search {
-  entries: Entry[] = MTDInfo.allEntries;
-  matches: Entry[];
-  partMatches: Entry[];
-  maybeMatches: Entry[];
+  entries: DictionaryData[];
+  matches: DictionaryData[];
+  partMatches: DictionaryData[];
+  maybeMatches: DictionaryData[];
   searchQuery: string = '';
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private mtdService: MTDService) {
+    this.entries = this.mtdService.dataDict_value
   }
 
   getL2() {

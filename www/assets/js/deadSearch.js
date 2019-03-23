@@ -21,9 +21,9 @@
 
 var l1SearchAlg = null;
 
-function searchL1(query_value) {
+function searchL1(query_value, entries) {
     if (l1SearchAlg === null) {
-        l1SearchAlg = distanceCalculator(getAllEntries());
+        l1SearchAlg = distanceCalculator(entries);
     }
     query_value = query_value.toLowerCase();
     // Case for multi-word query
@@ -56,8 +56,8 @@ function shuffle(array) {
     return array;
 }
 
-function getRandom10() {
-    var entries = shuffle(getAllEntries()); // shuffle entries
+function getRandom10(all_entries) {
+    var entries = shuffle(all_entries); // shuffle entries
     return entries.slice(0, 10);
 }
 

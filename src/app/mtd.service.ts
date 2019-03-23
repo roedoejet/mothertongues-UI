@@ -1,55 +1,70 @@
 import { Injectable } from "@angular/core";
-import { MTDInfo } from './global'
-import { Entry } from '../pages/shared/entry.model'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Storage } from '@ionic/storage';
-
-import { uniq } from 'lodash';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Config, DictionaryData } from './models'
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class MTDService {
-    public bookmarks = new BehaviorSubject<Entry[]>([]);
-    categories: Object = {};
-    constructor(public storage: Storage) {
-        if (MTDInfo.allAudioEntries.length > 0 && MTDInfo.allAudioEntries.length < (MTDInfo.allEntries.length * .5)) {
-            this.categories["audio"] = {};
-            this.categories["audio"] = MTDInfo.allAudioEntries;
+    _dictionary_data$ = new BehaviorSubject<DictionaryData[]>(window['dataDict'])
+    _config$ = new BehaviorSubject<Config>(window['config'])
+    remote_data$ = this.http.get('https://www.google.ca', { observe: 'response' })
+    remote_config$ = this.http.get('https://www.google.ca', { observe: 'response' })
+    constructor(private http: HttpClient) {
+
+        if (true) {
+            this._config$.next({ "L1": { "name": "<YourUpdatedLanguageName>", "lettersInLanguage": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"] }, "L2": { "name": "English" } })
         }
 
-        for (let key of MTDInfo.dataKeys) {
-            this.categories[key] = MTDInfo.dataDict.filter(x => x['source'] == key)
-        }
-
-        let semantic_categories = uniq(MTDInfo.allEntries.map(entry => {
-            if (entry.theme) {
-                entry.theme = entry.theme.toLowerCase()
+        this.remote_config$.subscribe(x => {
+            if (x.status === 200) {
+                console.log('yay')
+            } else {
+                console.log('nay')
             }
-            return entry.theme
-        })).sort()
+        })
 
-        for (let cat of semantic_categories) {
-            if (cat) {
-                this.categories[cat] = MTDInfo.allEntries.filter(entry => entry.theme === cat)
+    }
+
+    private shuffle(array) {
+        var tmp, current, top = array.length;
+        if (top)
+            while (--top) {
+                current = Math.floor(Math.random() * (top + 1));
+                tmp = array[current];
+                array[current] = array[top];
+                array[top] = tmp;
             }
-        }
-        console.log(this.categories)
+        return array;
     }
 
-    setBookmarks(val) {
-        this.bookmarks.next(val)
-        this.storage.set(MTDInfo.config.L1.name + MTDInfo.config.build, JSON.stringify(val));
+    getRandom$(no_random: number) {
+        return this._dictionary_data$.asObservable().pipe(
+            map((x) => this.shuffle(x).slice(0, no_random))
+        )
     }
 
-    toggleBookmark(entry) {
-        let i = this.bookmarks.value.indexOf(entry)
-        let bookmarks;
-        if (i > -1) {
-            bookmarks = this.bookmarks.value
-            bookmarks.splice(i, 1)
-        } else if (i < 0) {
-            bookmarks = this.bookmarks.value.concat([entry])
-        }
-        this.setBookmarks(bookmarks)
+    get allAudioEntries$() {
+        return this._dictionary_data$.asObservable().pipe(
+            map((arr) => arr.filter((x) => x.audio))
+        )
     }
+
+    get config$() {
+        return this._config$.asObservable()
+    }
+
+    get dataDict$() {
+        return this._dictionary_data$.asObservable()
+    }
+
+    get config_value() {
+        return this._config$.getValue()
+    }
+
+    get dataDict_value() {
+        return this._dictionary_data$.getValue()
+    }
+
 
 }

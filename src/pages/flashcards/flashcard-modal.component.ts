@@ -1,16 +1,10 @@
 import { Component } from '@angular/core';
-
 import { NavController, NavParams, ViewController, Platform, AlertController } from 'ionic-angular';
-
-import { Entry } from '../shared/entry.model'
-
-import { MTDService } from '../../app/mtd.service'
-
+import { BookmarkService } from '../../app/bookmark.service'
 import { File } from '@ionic-native/file';
-
 import { NativeAudio } from '@ionic-native/native-audio'
-
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { DictionaryData } from '../../app/models';
 
 @Component({
   selector: 'flashcard-modal',
@@ -20,7 +14,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 
 export class Flashcard {
   displayImages: boolean = true; //default show images, turns to false on 404
-  card: Entry;
+  card: DictionaryData;
   categories: Object;
   deck: string;
   front: Boolean;
@@ -28,10 +22,10 @@ export class Flashcard {
   startIndex: number = 0;
   style: string;
   audio_playing = [];
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private mtdService: MTDService, public viewCtrl: ViewController, private file: File, private plt: Platform, private transfer: FileTransfer, private nativeAudio: NativeAudio) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public viewCtrl: ViewController, private file: File, private plt: Platform, private transfer: FileTransfer, private nativeAudio: NativeAudio) {
 
     this.deck = navParams.get('deck');
-    this.categories = mtdService.categories
+    this.categories = bookmarkService.categories
     this.card = this.categories[this.deck][this.startIndex]
     this.front = true;
     try {
@@ -191,11 +185,11 @@ export class Flashcard {
   }
 
   toggleFav(entry) {
-    this.mtdService.toggleBookmark(entry)
+    this.bookmarkService.toggleBookmark(entry)
   }
 
   favourited(entry) {
-    return this.mtdService.bookmarks.value.indexOf(entry) > -1
+    return this.bookmarkService.bookmarks.value.indexOf(entry) > -1
   }
 
 }

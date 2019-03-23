@@ -1,12 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-
 import { NavController } from 'ionic-angular';
-
-import { Entry } from '../shared/entry.model'
-
-import { EntryList } from '../shared/entry-list.component'
-
-import { MTDService } from '../../app/mtd.service'
+import { BookmarkService } from '../../app/bookmark.service'
+import { DictionaryData } from '../../app/models';
 
 @Component({
   selector: 'page-bookmarks',
@@ -16,15 +11,15 @@ import { MTDService } from '../../app/mtd.service'
 export class Bookmarks {
   // @ViewChild(EntryList) child: EntryList
 
-  bookmarks: Entry[];
+  bookmarks: DictionaryData[];
   edit: boolean = false;
 
-  constructor(public navCtrl: NavController, public mtdService: MTDService) {
-   this.mtdService.bookmarks.subscribe((bookmarks)=> { this.bookmarks = bookmarks });
+  constructor(public navCtrl: NavController, public bookmarkService: BookmarkService) {
+   this.bookmarkService.bookmarks.subscribe((bookmarks)=> { this.bookmarks = bookmarks });
   }
 
   removeEntries(bookmarks) {
-    this.mtdService.setBookmarks(bookmarks.filter(bookmark => !bookmark.checked))
+    this.bookmarkService.setBookmarks(bookmarks.filter(bookmark => !bookmark.checked))
     this.toggleEdit()
   }
 

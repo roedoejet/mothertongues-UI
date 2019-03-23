@@ -1,14 +1,7 @@
 import { Component, Input,  OnChanges, SimpleChange } from '@angular/core';
-
 import { NavController, ViewController, ModalController } from 'ionic-angular';
-
-import { SearchBar } from '../search/search-bar.component'
-
-import { Entry } from './entry.model'
-
 import { WordModal } from './word-modal.component'
-
-import { Bookmarks } from '../bookmarks/bookmarks'
+import { DictionaryData } from '../../app/models'
 
 @Component({
   selector: 'entry-list',
@@ -21,7 +14,7 @@ export class EntryList implements OnChanges {
   edit: boolean = false;
 
   @Input() parentEdit: boolean;
-  @Input() entries: Entry[];
+  @Input() entries: DictionaryData[];
   @Input() searchterm: string;
 
   constructor(public navCtrl: NavController, private viewCtrl: ViewController, public modalCtrl: ModalController) {

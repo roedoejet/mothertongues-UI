@@ -9,7 +9,7 @@
 
 <ion-content padding scrollbar-y-auto>
   <div class="center"><button ion-button color="ternary" (click)='getRandom()'>Click here for 10 Random words</button></div>
-  <div class="entry-container" *ngIf="entries">
+  <div class="entry-container" *ngIf="entries$ | async as entries">
     <entry-list [entries]="entries"></entry-list>
   </div>
 </ion-content>

@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { IonicStorageModule } from '@ionic/storage';
@@ -11,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { MyApp } from './app.component';
 import { About, Bookmarks, Browse, Flashcards, Random, Search, EntryList, WordModal, Flashcard } from '../pages'
 import { MTDService } from './mtd.service'
+import { BookmarkService } from './bookmark.service'
 import { PipesModule } from '../pipes/pipes.module'
 
 @NgModule({
@@ -28,6 +30,7 @@ import { PipesModule } from '../pipes/pipes.module'
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     PipesModule
@@ -45,6 +48,6 @@ import { PipesModule } from '../pipes/pipes.module'
     WordModal,
     Flashcard,
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, MTDService, File, FileTransfer, FileTransferObject, NativeAudio, SplashScreen, StatusBar]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, BookmarkService, MTDService, File, FileTransfer, FileTransferObject, NativeAudio, SplashScreen, StatusBar]
 })
 export class AppModule {}

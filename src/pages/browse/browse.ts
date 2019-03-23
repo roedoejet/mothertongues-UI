@@ -1,12 +1,8 @@
 import { Component, Input } from '@angular/core';
-
 import { NavController, NavParams } from 'ionic-angular';
-
-import { Entry } from '../shared/entry.model'
-
-import { MTDInfo } from '../../app/global'
-
+import { BookmarkService } from '../../app/bookmark.service'
 import { MTDService } from '../../app/mtd.service'
+import { DictionaryData } from '../../app/models';
 
 @Component({
   selector: 'page-browse',
@@ -15,11 +11,11 @@ import { MTDService } from '../../app/mtd.service'
 
 export class Browse {
 
-  currentEntries: Entry[] = window['dataDict'];
-  currentTen: Entry[] = window['get10'](window['dataDict'], 0);
+  currentEntries: DictionaryData[] = window['dataDict'];
+  currentTen: DictionaryData[] = window['get10'](window['dataDict'], 0);
   displayCategories: string[];
   displayLetters: string[];
-  letters: string[] = MTDInfo.config.L1.lettersInLanguage;
+  letters: string[];
   initialLetters: string[];
   selectedCategory: string = "words";
   selectedLetter: string;
@@ -29,13 +25,14 @@ export class Browse {
   letterSelectOptions: Object = { title: "Select a Letter" };
   categorySelectOptions: Object = { title: "Select a Category" };
 
-  constructor(public navCtrl: NavController, public mtdService: MTDService) {
-    this.initializeEntries(mtdService);
+  constructor(public navCtrl: NavController, public bookmarkService: BookmarkService, private mtdService: MTDService) {
+    this.letters = this.mtdService.config_value.L1.lettersInLanguage;
+    this.initializeEntries(bookmarkService);
   }
 
-  initializeEntries(mtdService) {
-    console.log(mtdService.categories)
-    this.displayCategories = Object.keys(mtdService.categories);
+  initializeEntries(bookmarkService) {
+    console.log(bookmarkService.categories)
+    this.displayCategories = Object.keys(bookmarkService.categories);
 
     // Add letter index to first words of that letter in entries
     this.letterInit()
@@ -43,11 +40,9 @@ export class Browse {
 
   // Determine whether letter occurs word-initially
   letterInit() {
-    let letters = MTDInfo.config.L1.lettersInLanguage;
     let newLetters = [];
-
-    for (let letter of letters) {
-      let ind = letters.indexOf(letter)
+    for (let letter of this.letters) {
+      let ind = this.letters.indexOf(letter)
       for (let entry of this.currentEntries) {
         if (entry.sorting_form[0] === ind) {
           entry.firstWordIndex = ind;
@@ -94,7 +89,7 @@ export class Browse {
   }
 
   selectCategory(category: string) {
-    this.currentEntries = this.mtdService.categories[category];
+    this.currentEntries = this.bookmarkService.categories[category];
     this.currentTen = window['get10'](this.currentEntries, 0);
     this.letterInit()
   }

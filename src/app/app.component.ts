@@ -7,11 +7,9 @@ import { Storage } from '@ionic/storage';
 
 import { About, Bookmarks, Browse, Flashcards, Random, Search, } from '../pages'
 
-import { Entry } from '../pages/shared/entry.model'
-
-import { MTDInfo } from './global'
-
+import { BookmarkService } from './bookmark.service'
 import { MTDService } from './mtd.service'
+import { Config, DictionaryData } from './models'
 
 
 @Component({
@@ -19,15 +17,12 @@ import { MTDService } from './mtd.service'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  bookmarks: Entry[];
+  bookmarks: DictionaryData[];
   rootPage: any = Search;
 
   pages: Array<{ title: string, component: any }>;
 
-
-  constructor(public platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public storage: Storage, public mtdService: MTDService) {
-
-
+  constructor(public platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public storage: Storage, private bookmarkService: BookmarkService, private mtdService: MTDService) {
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -46,26 +41,34 @@ export class MyApp {
       this.splashScreen.hide();
 
       this.storage.ready().then(() => {
-        let language_name = MTDInfo.config.L1.name
-        let build_no = MTDInfo.config.build
-        let id = language_name + build_no
+        this.mtdService.config$.subscribe((config) => {
 
-        // retrieve favourited entries from storage and tag favourited entries
-        this.storage.get(id).then((val) => {
-          if (val) {
-            val = JSON.parse(val);
-            let favs = [];
-            for (let fav of val) {
-              for (let entry of MTDInfo.dataDict.filter(x=>x['source'] == fav['source'])) {
-                if (entry.entryID === fav.entryID) {
-                  entry.favourited = true;
-                  favs.push(entry)
-                  break;
+          let language_name = config.L1.name
+          // let build_no = config.build // TODO: Make sure build numbers are being added to config
+          let id = language_name
+
+          this.mtdService.dataDict$.subscribe((dataDict) => {
+            // retrieve favourited entries from storage and tag favourited entries
+            this.storage.get(id).then((val) => {
+              if (val) {
+                val = JSON.parse(val);
+                let favs = [];
+                for (let fav of val) {
+                  for (let entry of dataDict.filter(x => x['source'] == fav['source'])) {
+                    if (entry.entryID === fav.entryID) {
+                      entry['favourited'] = true;
+                      favs.push(entry)
+                      break;
+                    }
+                  }
                 }
+                this.bookmarkService.setBookmarks(favs)
               }
-            }
-            this.mtdService.setBookmarks(favs)
-          }
+            })
+
+          })
+
+
         })
 
       });

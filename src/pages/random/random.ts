@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-
 import { NavController } from 'ionic-angular';
-
-import { Entry } from '../shared/entry.model'
+import { DictionaryData } from '../../app/models'
+import { MTDService } from '../../app/mtd.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'page-random',
@@ -10,14 +10,13 @@ import { Entry } from '../shared/entry.model'
 })
 export class Random {
 
-  entries: Entry[];
+  entries$: Observable<DictionaryData[]>;
 
-  constructor(public navCtrl: NavController) {
-    
+  constructor(public navCtrl: NavController, private mtdService: MTDService) {
   }
 
   getRandom() {
-    this.entries = window['getRandom10']()
+    this.entries$ = this.mtdService.getRandom$(10)
   }
 
 }
