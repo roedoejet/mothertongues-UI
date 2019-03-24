@@ -33,18 +33,27 @@ export class MyApp {
       { title: 'Flashcards', component: Flashcards },
       { title: 'About', component: About }
     ];
+    this.mtdService.config$.subscribe((x)=>{
+      // console.log('pre-ready updated')
+  })
 
     this.platform.ready().then(() => {
+      this.mtdService.config$.subscribe((x)=>{
+        // console.log('post-ready updated')
+    })
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
       this.storage.ready().then(() => {
+        this.mtdService.config$.subscribe((x)=>{
+          // console.log('storage ready updated')
+      })
         this.mtdService.config$.subscribe((config) => {
 
           let language_name = config.L1.name
-          // let build_no = config.build // TODO: Make sure build numbers are being added to config
+          let build_no = config.build 
           let id = language_name
 
           this.mtdService.dataDict$.subscribe((dataDict) => {

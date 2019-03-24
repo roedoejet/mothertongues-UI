@@ -1,4 +1,4 @@
-import { Component, Input,  OnChanges, SimpleChange } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { NavController, ViewController, ModalController } from 'ionic-angular';
 import { WordModal } from './word-modal.component'
 import { DictionaryData } from '../../app/models'
@@ -21,19 +21,23 @@ export class EntryList implements OnChanges {
     this.pageName = viewCtrl.name
   }
 
+  ionViewDidLoad() {
+    console.log(this.entries)
+  }
+
   showModal(clicked_entry) {
     let wordModal = this.modalCtrl.create(WordModal, { entry: clicked_entry });
     wordModal.present();
   }
 
-  highlight(text){
+  highlight(text) {
     if (!this.searchterm) {
       return text;
-  }
-  return text.replace(new RegExp(this.searchterm, 'gi'), '<span class="langMatched">$&</span>');
+    }
+    return text.replace(new RegExp(this.searchterm, 'gi'), '<span class="langMatched">$&</span>');
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.edit = this.parentEdit;
   }
 

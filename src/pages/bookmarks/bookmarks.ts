@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { BookmarkService } from '../../app/bookmark.service'
 import { DictionaryData } from '../../app/models';
@@ -9,7 +9,6 @@ import { DictionaryData } from '../../app/models';
   // providers: [EntryList]
 })
 export class Bookmarks {
-  // @ViewChild(EntryList) child: EntryList
 
   bookmarks: DictionaryData[];
   edit: boolean = false;

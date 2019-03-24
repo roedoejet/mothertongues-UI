@@ -8,6 +8,7 @@ export interface Config {
     L2: {
         name: string,
     },
+    build: string,
     // optional_field_name?: string,
     // credits?: object[],
     // audio_path?: string,

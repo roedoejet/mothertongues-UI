@@ -3,7 +3,7 @@ import { NavController, NavParams, ViewController, Platform, AlertController } f
 import { BookmarkService } from '../../app/bookmark.service'
 import { File } from '@ionic-native/file';
 import { NativeAudio } from '@ionic-native/native-audio'
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { DictionaryData } from '../../app/models';
 
 @Component({
@@ -24,7 +24,7 @@ export class Flashcard {
   audio_playing = [];
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public viewCtrl: ViewController, private file: File, private plt: Platform, private transfer: FileTransfer, private nativeAudio: NativeAudio) {
 
-    this.deck = navParams.get('deck');
+    this.deck = this.navParams.get('deck');
     this.categories = bookmarkService.categories
     this.card = this.categories[this.deck][this.startIndex]
     this.front = true;
@@ -34,7 +34,7 @@ export class Flashcard {
       this.image = "";
     }
 
-    this.style = navParams.get('style');
+    this.style = this.navParams.get('style');
   }
 
   fileTransfer: FileTransferObject = this.transfer.create();

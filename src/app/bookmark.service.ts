@@ -13,6 +13,9 @@ export class BookmarkService {
     categories: Object = {};
     config: Config;
     constructor(public storage: Storage, private mtdService: MTDService) {
+        this.mtdService.config$.subscribe((x)=>{
+            console.log('bookmark updated')
+        })
         this.config = this.mtdService.config_value
 
         this.mtdService.allAudioEntries$.subscribe(
@@ -42,7 +45,7 @@ export class BookmarkService {
                         this.categories[cat] = allEntries.filter(entry => entry.theme === cat)
                     }
                 }
-                console.log(this.categories)
+                // console.log(this.categories)
 
             }
         )

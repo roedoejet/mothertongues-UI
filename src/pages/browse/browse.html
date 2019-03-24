@@ -23,7 +23,7 @@
       </ion-select>
     </ion-item>
   </ion-list>
-  <div class="entry-container">
+  <div class="entry-container" *ngIf="currentTen$ | async as currentTen">
     <entry-list [entries]='currentTen'></entry-list>
   </div>
  
