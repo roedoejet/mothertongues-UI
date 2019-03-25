@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { DictionaryData } from '../../app/models';
 import { MTDService } from '../../app/mtd.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { debounceTime, map, switchMap } from 'rxjs/operators';
+import { debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import { FormControl } from "@angular/forms"
 
 @Component({
   selector: 'page-search',
-  templateUrl: 'search.html'
+  templateUrl: 'search.html',
+  styleUrls: ['search.scss']
 })
 export class Search {
   entries$: Observable<DictionaryData[]>;
@@ -20,23 +20,25 @@ export class Search {
   matches: DictionaryData[];
   partMatches$: Observable<DictionaryData[]>;
   maybeMatches$: Observable<DictionaryData[]>;
-  searchQuery: string = '';
-  _searchQuery$: BehaviorSubject<string>;
   searchControl: FormControl;
-  constructor(public navCtrl: NavController, private mtdService: MTDService) {
+  searchQuery$: Observable<string>;
+  constructor(private mtdService: MTDService) {
     this.entries$ = this.mtdService.dataDict$;
     this.searchControl = new FormControl();
   }
 
-  ionViewDidLoad() {
-    this.results$ = this.searchControl.valueChanges.pipe(
+  ngOnInit() {
+    this.searchQuery$ = this.searchControl.valueChanges
+    this.results$ = this.searchQuery$.pipe(
       debounceTime(100),
       switchMap((term) => this.entries$.pipe(
         map((entries) => this.getResults(term, entries)))),
     )
+    this.results$.subscribe(x => console.log(x))
     this.matches$ = this.results$.pipe(
       map(results => results.filter(r => r['distance'] <= this.matchThreshold))
     )
+    this.matches$.subscribe(x => console.log(x))
     this.partMatches$ = this.results$.pipe(
       map(results => results.filter(r => (r['distance'] <= this.partMatchThreshold && r['distance'] > this.matchThreshold)))
     )

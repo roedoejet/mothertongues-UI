@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { BookmarkService } from '../../app/bookmark.service'
 import { MTDService } from '../../app/mtd.service'
 import { DictionaryData } from '../../app/models';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators'
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'page-browse',
@@ -24,10 +23,10 @@ export class Browse {
   startIndex: number = 0;
 
   // currentBrowsingLetter: String = this.letters[this.currentBrowsingEntries[0].sorting_form[0]];
-  letterSelectOptions: Object = { title: "Select a Letter" };
-  categorySelectOptions: Object = { title: "Select a Category" };
+  letterSelectOptions: Object = { header: "Select a Letter" };
+  categorySelectOptions: Object = { header: "Select a Category" };
 
-  constructor(public navCtrl: NavController, public bookmarkService: BookmarkService, private mtdService: MTDService) {
+  constructor(public bookmarkService: BookmarkService, private mtdService: MTDService) {
     this.currentEntries$ = new BehaviorSubject<DictionaryData[]>(this.mtdService.dataDict_value);
     this.letters = this.mtdService.config_value.L1.lettersInLanguage;
     this.mtdService.dataDict$.subscribe((x) => {

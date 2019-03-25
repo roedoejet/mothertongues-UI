@@ -1,11 +1,11 @@
-entry-list {
+@import '../../theme/variables.scss';
 
 .browseElements {
     margin: auto;
     height:auto;
     width: auto;
     text-align: center;
-    background-color: $secondary;
+    background-color: var(--ion-color-secondary);
 }
 
 .browseElements {
@@ -13,7 +13,7 @@ entry-list {
     height:auto;
     width: auto;
     text-align: center !important;
-    background-color: $secondary;
+    background-color: var(--ion-color-secondary);
 }
 
 
@@ -23,7 +23,7 @@ entry-list {
 }
 
 .matchLeftDiv {
-    color: $match;
+    color: var(--ion-color-primary);
     margin-right: .2em;
     text-align: left;
 }
@@ -56,6 +56,3 @@ entry-list {
 // ion-item {
 //     text-align: center;
 // }
-
-    
-}

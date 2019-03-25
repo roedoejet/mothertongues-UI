@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons left>
-      <button ion-button (click)="dismiss()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </button>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
     </ion-buttons>
-    <ion-title>
-      Flashcard Quiz
-    </ion-title>
+    <ion-title>Flashcard Quiz</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -54,10 +54,11 @@
         </ion-card-header>
 
         <ion-list>
-          <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudioTrack(card, track)">
+          <ion-item button *ngFor="let track of (card.audio | noNullObjectValues)"
+            (click)="playAudioTrack(card, track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
-            Speaker: {{ track.speaker }}
-          </button>
+            <ion-label>Speaker: {{ track.speaker }}</ion-label>
+          </ion-item>
 
         </ion-list>
       </ion-card>
@@ -72,12 +73,15 @@
 
         <ion-list *ngFor="let sentence of (card.example_sentence | noNullValues); let i = index">
 
-          <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudioTrack(card, track)">
-            <ion-icon name="musical-notes" item-start></ion-icon>
-            <h2>{{ sentence }}</h2>
-            <h4>{{ card.example_sentence_definition[i] }}</h4>
-            <h6>Speaker: {{ track.speaker }}</h6>
-          </button>
+          <ion-item button *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)"
+            (click)="playAudioTrack(card, track)">
+            <ion-label>
+              <ion-icon name="musical-notes" item-start></ion-icon>
+              <h2>{{ sentence }}</h2>
+              <h4>{{ card.example_sentence_definition[i] }}</h4>
+              <h6>Speaker: {{ track.speaker }}</h6>
+            </ion-label>
+          </ion-item>
 
         </ion-list>
       </ion-card>

@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, Platform, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, Platform, AlertController } from '@ionic/angular';
 import { BookmarkService } from '../../app/bookmark.service'
-import { File } from '@ionic-native/file';
-import { NativeAudio } from '@ionic-native/native-audio'
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { DictionaryData } from '../../app/models';
 
 @Component({
@@ -22,7 +19,7 @@ export class Flashcard {
   startIndex: number = 0;
   style: string;
   audio_playing = [];
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public viewCtrl: ViewController, private file: File, private plt: Platform, private transfer: FileTransfer, private nativeAudio: NativeAudio) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public modalCtrl: ModalController, private file: File, private plt: Platform) {
 
     this.deck = this.navParams.get('deck');
     this.categories = bookmarkService.categories
@@ -36,9 +33,6 @@ export class Flashcard {
 
     this.style = this.navParams.get('style');
   }
-
-  fileTransfer: FileTransferObject = this.transfer.create();
-
 
   // Go to previous card in deck
   prev1() {
@@ -83,7 +77,7 @@ export class Flashcard {
   }
 
   dismiss() {
-    this.viewCtrl.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   onSuccess(id) {
@@ -91,23 +85,23 @@ export class Flashcard {
     // console.log('loaded audio ${id} with path of ${path}'); 
   };
 
-  onError(err) {
+  async onError(err) {
     console.log(err)
-    let alert = this.alertCtrl.create({
-      title: 'Sorry',
-      subTitle: "We don't have audio for that entry.",
+    let alert = await this.alertCtrl.create({
+      header: 'Sorry',
+      subHeader: "We don't have audio for that entry.",
       buttons: ['OK']
     });
-    alert.present();
+    await alert.present();
   };
 
-  showAlert() {
-    let alert = this.alertCtrl.create({
-      title: 'Sorry',
-      subTitle: 'There is no audio for this yet.',
+  async showAlert() {
+    let alert = await this.alertCtrl.create({
+      header: 'Sorry',
+      subHeader: 'There is no audio for this yet.',
       buttons: ['Dismiss']
     });
-    alert.present();
+    await alert.present();
   };
 
   stopAllAudio() {
@@ -126,58 +120,6 @@ export class Flashcard {
     this.audio_playing.push(audio)
     audio.onended = () => this.audio_playing.pop();
     audio.play()
-  }
-
-  playAudioTrack1(entry, track) {
-    track.audio_file = track.filename + ".mp3"
-    track.audio_url = track.filename + ".mp3"
-    if (this.plt.is('core') || this.plt.is('mobileweb')) {
-      console.log('web ran')
-      if (track !== undefined && track.audio_file !== undefined && track.audio_url !== undefined) {
-
-        let id = entry.entryID
-        let path = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        console.log(path)
-        let audio = new Audio(path)
-        audio.play()
-        // this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, (error)=>{console.log(error)});
-        // this.nativeAudio.play(id).then(this.onSuccess, (error)=>{ this.onError(error) });
-      } else {
-        console.log('boo')
-        this.showAlert()
-      }
-    } else if (this.plt.is('ios')) {
-
-      let id = entry.entryID
-      let path = "assets/audio/" + track.audio_file
-      this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-      this.nativeAudio.play(id).then(this.onSuccess, this.onError);
-
-    } else if (this.plt.is('android')) {
-      console.log('android ran')
-      if (track != undefined) {
-        let id = entry.entryID
-        let track_url = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        let track_file = "assets/audio/" + track.audio_file
-
-        this.file.checkFile(this.file.dataDirectory, track_file)
-          .then(_ => {
-            this.nativeAudio.preloadSimple(id, track_file);
-            this.nativeAudio.play(id);
-          }).catch(err => {
-            var targetPath = this.file.dataDirectory + track_file;
-            var trustHosts = true;
-            var options = {};
-            this.fileTransfer.download(track_url, targetPath, trustHosts, options)
-          })
-          .then((track) => {
-            this.nativeAudio.preloadSimple(id, track_file);
-            this.nativeAudio.play(id);
-          }, (error) => { this.onError(error) });;
-      }
-    } else {
-      this.showAlert()
-    }
   }
 
   imageError() {

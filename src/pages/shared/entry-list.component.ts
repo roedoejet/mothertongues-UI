@@ -1,11 +1,12 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
-import { NavController, ViewController, ModalController } from 'ionic-angular';
+import { ModalController } from '@ionic/angular';
 import { WordModal } from './word-modal.component'
 import { DictionaryData } from '../../app/models'
 
 @Component({
   selector: 'entry-list',
-  templateUrl: 'entry-list.component.html'
+  templateUrl: 'entry-list.component.html',
+  styleUrls: ['entry-list.component.scss']
 })
 
 
@@ -15,26 +16,25 @@ export class EntryList implements OnChanges {
 
   @Input() parentEdit: boolean;
   @Input() entries: DictionaryData[];
-  @Input() searchterm: string;
+  @Input() searchTerm: string;
 
-  constructor(public navCtrl: NavController, private viewCtrl: ViewController, public modalCtrl: ModalController) {
-    this.pageName = viewCtrl.name
+  constructor(public modalCtrl: ModalController) {
+    // this.pageName = modalCtrl.name
   }
 
-  ionViewDidLoad() {
-    console.log(this.entries)
-  }
-
-  showModal(clicked_entry) {
-    let wordModal = this.modalCtrl.create(WordModal, { entry: clicked_entry });
-    wordModal.present();
+  async showModal(clicked_entry) {
+    let wordModal = await this.modalCtrl.create({
+      component: WordModal,
+      componentProps: { entry: clicked_entry }
+    });
+    await wordModal.present();
   }
 
   highlight(text) {
-    if (!this.searchterm) {
+    if (!this.searchTerm) {
       return text;
     }
-    return text.replace(new RegExp(this.searchterm, 'gi'), '<span class="langMatched">$&</span>');
+    return text.replace(new RegExp(this.searchTerm, 'gi'), '<span class="langMatched">$&</span>');
   }
 
   ngOnChanges() {

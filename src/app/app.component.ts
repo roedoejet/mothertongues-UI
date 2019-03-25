@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 import { Storage } from '@ionic/storage';
 
@@ -13,47 +14,45 @@ import { Config, DictionaryData } from './models'
 
 
 @Component({
+  selector: 'mtd-root',
   templateUrl: 'app.html'
 })
-export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+export class MTDApp {
   bookmarks: DictionaryData[];
   rootPage: any = Search;
 
-  pages: Array<{ title: string, component: any }>;
+  public appPages: Array<{ title: string, icon?: any, url: string }> = [
+    {title: "Search", url: '/search', icon: 'search' },
+    {title: "Browse", url: '/browse' },
+    {title: "Pick a Random Word!", url: '/random' },
+    {title: "Bookmarks", url: '/bookmarks', icon: 'bookmarks' },
+    {title: "Flashcards", url: '/flashcards' },
+    {title: "About", url: '/about', icon: 'help' }
+  ];
 
-  constructor(public platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public storage: Storage, private bookmarkService: BookmarkService, private mtdService: MTDService) {
+  constructor(public platform: Platform, private router: Router, private statusBar: StatusBar, private splashScreen: SplashScreen, public storage: Storage, private bookmarkService: BookmarkService, private mtdService: MTDService) {
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Search', component: Search },
-      { title: 'Browse', component: Browse },
-      { title: 'Pick a Random Word!', component: Random },
-      { title: 'Bookmarks', component: Bookmarks },
-      { title: 'Flashcards', component: Flashcards },
-      { title: 'About', component: About }
-    ];
-    this.mtdService.config$.subscribe((x)=>{
+    this.mtdService.config$.subscribe((x) => {
       // console.log('pre-ready updated')
-  })
+    })
 
     this.platform.ready().then(() => {
-      this.mtdService.config$.subscribe((x)=>{
+      this.mtdService.config$.subscribe((x) => {
         // console.log('post-ready updated')
-    })
+      })
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
       this.storage.ready().then(() => {
-        this.mtdService.config$.subscribe((x)=>{
+        this.mtdService.config$.subscribe((x) => {
           // console.log('storage ready updated')
-      })
+        })
         this.mtdService.config$.subscribe((config) => {
 
           let language_name = config.L1.name
-          let build_no = config.build 
+          let build_no = config.build
           let id = language_name
 
           this.mtdService.dataDict$.subscribe((dataDict) => {
@@ -90,10 +89,12 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    // this.nav.setRoot(page.component);
+    this.router.navigate(page.component)
   }
 
-  isiPad() {
-    return this.platform.is('iPad')
-  }
+  // isiPad() {
+  // return this.platform.is('iPad')
+
+  // }
 }

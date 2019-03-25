@@ -1,21 +1,26 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Bookmarks</ion-title>
-    <ion-buttons right>
-      <button ion-button (click)="edit = !edit">
-      <ion-icon name="trash" *ngIf="!edit"></ion-icon>
-      <span *ngIf="edit">cancel</span>
-    </button>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
     </ion-buttons>
-  </ion-navbar>
+    <ion-title>Bookmarks</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="edit = !edit">
+        <ion-icon slot="icon-only" name="trash" *ngIf="!edit"></ion-icon>
+        <span *ngIf="edit">cancel</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding scrollbar-y-auto>
   <entry-list [entries]='bookmarks' [parentEdit]="edit"></entry-list>
   <div class='center'>
-    <button ion-button color="danger" class="remove" *ngIf="edit" (click)="removeEntries(bookmarks)">Remove selected bookmarks</button>
+    <ion-button color="danger" class="remove" *ngIf="edit" (click)="removeEntries(bookmarks)">Remove selected
+      bookmarks</ion-button>
   </div>
 </ion-content>

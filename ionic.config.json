@@ -1,8 +1,5 @@
 {
-    "name": "mothertongues-ui",
-    "app_id": "",
-    "type": "ionic-angular",
-    "integrations": {
-      "cordova": {}
-    }
+    "name": "mothertongues-UI",
+    "integrations": {},
+    "type": "angular"
   }

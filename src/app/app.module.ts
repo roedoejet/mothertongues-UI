@@ -2,52 +2,46 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http'
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { NativeAudio } from '@ionic-native/native-audio';
+import { RouteReuseStrategy } from '@angular/router';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { IonicStorageModule } from '@ionic/storage';
-import { StatusBar } from '@ionic-native/status-bar';
-import { File } from '@ionic-native/file';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { MyApp } from './app.component';
-import { About, Bookmarks, Browse, Flashcards, Random, Search, EntryList, WordModal, Flashcard } from '../pages'
+import { MTDApp } from './app.component';
+import { EntryList, WordModal, Flashcard } from '../pages'
 import { MTDService } from './mtd.service'
 import { BookmarkService } from './bookmark.service'
 import { PipesModule } from '../pipes/pipes.module'
+import { AppRoutingModule } from './app-routing.module';
+import { EntryListModule } from '../pages/shared/entry-list.module'
+import { WordModalPageModule } from '../pages/shared/word-modal.module';
 
 @NgModule({
   declarations: [
-    MyApp,
-    About,
-    Bookmarks,
-    Browse,
-    Flashcards,
-    Random,
-    Search,
-    EntryList,
-    WordModal,
+    MTDApp,
     Flashcard,
   ],
+  bootstrap: [MTDApp],
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
+    AppRoutingModule,
+    EntryListModule,
+    WordModalPageModule,
     PipesModule
   ],
-  bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    About,
-    Bookmarks,
-    Browse,
-    Flashcards,
-    Random,
-    Search,
-    EntryList,
-    WordModal,
+    MTDApp,
+    // EntryList,
+    // WordModal,
+    // EntryListModule,
     Flashcard,
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, BookmarkService, MTDService, File, FileTransfer, FileTransferObject, NativeAudio, SplashScreen, StatusBar]
+  providers: [BookmarkService, MTDService, SplashScreen, StatusBar, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }]
 })
 export class AppModule {}

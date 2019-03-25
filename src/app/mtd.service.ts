@@ -3,8 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Config, DictionaryData } from './models'
 import { HttpClient, HttpResponse } from "@angular/common/http";
+// import { AlertController } from '@ionic/angular';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MTDService {
     _dictionary_data$ = new BehaviorSubject<DictionaryData[]>(window['dataDict'])
     _config$ = new BehaviorSubject<Config>(window['config'])
@@ -20,7 +21,9 @@ export class MTDService {
                     this._config$.next(x.body)
                     this.remote_data$.subscribe(x => {
                         if (x.status === 200) {
-                            this._dictionary_data$.next(x.body)
+                            setTimeout(() => {
+                                this._dictionary_data$.next(x.body)
+                            }, 3000)
                         } else {
                             // return error message
                         }

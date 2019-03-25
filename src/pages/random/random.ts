@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { DictionaryData } from '../../app/models'
 import { MTDService } from '../../app/mtd.service';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'page-random',
-  templateUrl: 'random.html'
+  templateUrl: 'random.html',
+  styleUrls: ['random.scss']
 })
 export class Random {
 
   entries$: Observable<DictionaryData[]>;
 
-  constructor(public navCtrl: NavController, private mtdService: MTDService) {
+  constructor(private mtdService: MTDService) {
   }
 
   getRandom() {

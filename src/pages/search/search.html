@@ -1,36 +1,40 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
     <ion-title>Search</ion-title>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding scrollbar-y-auto>
-  <ion-searchbar [(ngModel)]="searchQuery" [formControl]="searchControl" autocapitalize="none"></ion-searchbar>
-  <div *ngIf="searchQuery?.length > 1">
+  <ion-searchbar [formControl]="searchControl" autocapitalize="none"></ion-searchbar>
+  <div *ngIf="(searchQuery$ | async)?.length > 1">
     <div *ngIf="matches$ | async as matches">
       <div class="result-container" *ngIf="matches?.length > 0">
         <h4>Matches</h4>
-        <entry-list [entries]="matches" [searchterm]="searchQuery"></entry-list>
+        <entry-list [entries]="matches" [searchTerm]="searchQuery$ | async"></entry-list>
       </div>
     </div>
     <div *ngIf="partMatches$ | async as partMatches">
       <div class="result-container" *ngIf="partMatches?.length > 0">
         <h4>Partial Matches</h4>
-        <entry-list [entries]="partMatches" [searchterm]="searchQuery"></entry-list>
+        <entry-list [entries]="partMatches" [searchTerm]="searchQuery$ | async"></entry-list>
       </div>
     </div>
     <div *ngIf="maybeMatches$ | async as maybeMatches">
       <div class="result-container" *ngIf="maybeMatches?.length > 0">
         <h4>Maybe you meant this?</h4>
-        <entry-list [entries]="maybeMatches" [searchterm]="searchQuery"></entry-list>
+        <entry-list [entries]="maybeMatches" [searchTerm]="searchQuery$ | async"></entry-list>
       </div>
     </div>
     <div class="result-container"
       *ngIf="(matches$ | async)?.length === 0 && (partMatches$ | async)?.length === 0 && (maybeMatches | async)?.length === 0">
-      <h6>Sorry, we couldn't find any words matching '{{ searchQuery }}'. Please try something else.</h6>
+      <h6>Sorry, we couldn't find any words matching '{{ (searchQuery$ | async) }}'. Please try something else.</h6>
     </div>
   </div>
 </ion-content>

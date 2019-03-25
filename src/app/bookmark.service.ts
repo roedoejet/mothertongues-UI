@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { MTDInfo } from './global'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { MTDService } from './mtd.service'
 import { Config, DictionaryData } from './models'
 
 import { uniq } from 'lodash';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BookmarkService {
     public bookmarks = new BehaviorSubject<DictionaryData[]>([]);
     categories: Object = {};

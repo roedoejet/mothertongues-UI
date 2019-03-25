@@ -1,46 +1,62 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
     <ion-title>Browse</ion-title>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content scrollbar-y-auto>
 
-  <ion-list mode="ios">
+  <ion-list class='no-margin' mode="ios">
     <ion-item mode="ios">
       <ion-label class="label-left" mode="ios">Select a Category</ion-label>
-      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)" [selectOptions]="categorySelectOptions">
-        <ion-option *ngFor='let category of displayCategories'>{{category}}</ion-option>
+      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)"
+        [interfaceOptions]="categorySelectOptions">
+        <ion-select-option *ngFor='let category of displayCategories'>{{category}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item mode="ios">
       <ion-label class="label-left" mode="ios">Select a Letter</ion-label>
-      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)" [selectOptions]="letterSelectOptions">
-        <ion-option *ngFor='let letter of displayLetters'>{{letter}}</ion-option>
+      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)"
+        [interfaceOptions]="letterSelectOptions">
+        <ion-select-option *ngFor='let letter of displayLetters'>{{letter}}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
   <div class="entry-container" *ngIf="currentTen$ | async as currentTen">
     <entry-list [entries]='currentTen'></entry-list>
   </div>
- 
+
 
 </ion-content>
 
- <ion-footer>
-    <ion-toolbar>
-      <ion-buttons left class="bar-buttons bar-buttons-ios">
-        <button ion-button icon-only (click)="prev10()">
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="prev10()">
+        <ion-icon slot="icon-only" name="ios-arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="next10()">
+        <ion-icon slot="icon-only" name="ios-arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- <ion-buttons left class="bar-buttons bar-buttons-ios">
+      <button ion-button icon-only (click)="prev10()">
         <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>
       </button>
-      </ion-buttons>
-      <ion-buttons end class="bar-buttons bar-buttons-ios">
-        <button ion-button icon-only (click)="next10()">
+    </ion-buttons>
+    <ion-buttons end class="bar-buttons bar-buttons-ios">
+      <button ion-button icon-only (click)="next10()">
         <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>
       </button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-footer>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-footer>
