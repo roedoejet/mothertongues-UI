@@ -14,8 +14,8 @@ export class Browse {
 
   currentEntries$: BehaviorSubject<DictionaryData[]>;
   currentTen$: Observable<DictionaryData[]>;
-  displayCategories: string[];
-  displayLetters: string[];
+  displayCategories$: Observable<any>;
+  displayLetters$: Observable<string[]>;
   letters: string[];
   initialLetters: string[];
   selectedCategory: string = "words";
@@ -28,12 +28,13 @@ export class Browse {
 
   constructor(public bookmarkService: BookmarkService, private mtdService: MTDService) {
     this.currentEntries$ = new BehaviorSubject<DictionaryData[]>(this.mtdService.dataDict_value);
-    this.letters = this.mtdService.config_value.L1.lettersInLanguage;
+    // this.letters = this.mtdService.config_value.L1.lettersInLanguage;
     this.mtdService.dataDict$.subscribe((x) => {
-      this.currentEntries$.next(x)
+      this.currentEntries$.next(x);
+      this.initializeEntries();
     })
     this.currentTen$ = this.getTenFrom(0)
-    this.initializeEntries(bookmarkService);
+    this.initializeEntries();
   }
 
   getTenFrom(i) {
@@ -42,28 +43,41 @@ export class Browse {
     )
   }
 
-  initializeEntries(bookmarkService) {
-    console.log(bookmarkService.categories)
-    this.displayCategories = Object.keys(bookmarkService.categories);
-
+  initializeEntries() {
+    // generate categories
+    this.catInit()
     // Add letter index to first words of that letter in entries
     this.letterInit()
   }
 
+  catInit() {
+    this.displayCategories$ = this.mtdService.categories$.pipe(
+      map((cats) => {
+        return Object.keys(cats)
+      })
+    )
+  }
+
   // Determine whether letter occurs word-initially
   letterInit() {
-    // let newLetters = [];
-    // for (let letter of this.letters) {
-    //   let ind = this.letters.indexOf(letter)
-    //   for (let entry of this.currentEntries) {
-    //     if (entry.sorting_form[0] === ind) {
-    //       entry.firstWordIndex = ind;
-    //       newLetters.push(letter)
-    //       break;
-    //     }
-    //   }
-    // }
-    // this.displayLetters = newLetters;
+    this.letters = this.mtdService.config_value.L1.lettersInLanguage;
+    this.displayLetters$ = this.currentEntries$.pipe(
+      map((entries) => {
+        let newLetters = [];
+        for (let letter of this.letters) {
+          let ind = this.letters.indexOf(letter)
+          for (let entry of entries) {
+            if (entry.sorting_form[0] === ind) {
+              entry.firstWordIndex = ind;
+              newLetters.push(letter)
+              break;
+            }
+          }
+        }
+        return newLetters;
+      })
+    )
+
   }
   // Scroll to previous 10 entries
   prev10() {
@@ -77,30 +91,30 @@ export class Browse {
 
   // Scroll to next 10 entries
   next10() {
-    //   if (this.startIndex + 10 < this.currentEntries.length) {
-    //     this.startIndex += 10
-    //     this.currentTen$ = this.getTenFrom(this.startIndex)
-    //   } else {
-    //     this.startIndex = this.currentEntries.length - 10
-    //     this.currentTen$ = this.getTenFrom(this.startIndex)
-    //   }
+    if (this.startIndex + 10 < this.currentEntries$.getValue().length) {
+      this.startIndex += 10
+      this.currentTen$ = this.getTenFrom(this.startIndex)
+    } else {
+      this.startIndex = this.currentEntries$.getValue().length - 10
+      this.currentTen$ = this.getTenFrom(this.startIndex)
+    }
   }
 
   // Scroll to letter
   // Still needed: change selected letter dynamically
   scrollTo(letter: string) {
-    //   let letterIndex = this.letters.indexOf(letter)
-    //   for (let entry of this.currentEntries) {
-    //     if (entry.firstWordIndex === letterIndex) {
-    //       this.startIndex = this.currentEntries.indexOf(entry)
-    //       this.currentTen$ = this.getTenFrom(this.startIndex)
-    //       break;
-    //     }
-    //   }
+    let letterIndex = this.letters.indexOf(letter)
+    for (let entry of this.currentEntries$.getValue()) {
+      if (entry.firstWordIndex === letterIndex) {
+        this.startIndex = this.currentEntries$.getValue().indexOf(entry)
+        this.currentTen$ = this.getTenFrom(this.startIndex)
+        break;
+      }
+    }
   }
 
   selectCategory(category: string) {
-    this.currentEntries$.next(this.bookmarkService.categories[category]);
+    this.currentEntries$.next(this.mtdService.categories$[category]);
     this.currentTen$ = this.getTenFrom(0)
     this.letterInit()
   }
