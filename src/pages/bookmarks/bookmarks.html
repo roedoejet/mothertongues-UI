@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-menu-toggle>
         <ion-button>
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
+          <ion-icon slot="icon-only" name="menu" src='/static/assets/svg/md-menu.svg'></ion-icon>
         </ion-button>
       </ion-menu-toggle>
     </ion-buttons>
     <ion-title>Bookmarks</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="edit = !edit">
-        <ion-icon slot="icon-only" name="trash" *ngIf="!edit"></ion-icon>
+        <ion-icon slot="icon-only" name="trash" *ngIf="!edit" src='/static/assets/svg/md-trash.svg'></ion-icon>
         <span *ngIf="edit">cancel</span>
       </ion-button>
     </ion-buttons>

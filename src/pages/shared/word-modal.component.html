@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="dismiss()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        <ion-icon slot="icon-only" name="arrow-back" src='/static/assets/svg/ios-arrow-back.svg'></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Word Information</ion-title>
@@ -12,7 +12,7 @@
 <ion-content>
   <ion-card>
     <div *ngIf="displayImages">
-      <img [(src)]="entry.img" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
+      <img [(src)]="entry.img" onError="this.src='/static/assets/img/default.png'" *ngIf="entry.img" />
     </div>
     <ion-card-content>
       <ion-card-title>
@@ -39,11 +39,11 @@
         <ion-list>
           <ion-item button *ngIf="audio_playing?.length > 0" (click)="stopAllAudio()">
             <ion-label>Stop all audio</ion-label>
-            <ion-icon name="hand" item-start></ion-icon>
+            <ion-icon name="hand" item-start src='/static/assets/svg/md-hand.svg'></ion-icon>
           </ion-item>
           <ion-item button *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)">
             <ion-label>
-              <ion-icon name="musical-notes" item-start></ion-icon>
+              <ion-icon name="musical-notes" item-start src='/static/assets/svg/md-musical-notes.svg'></ion-icon>
               <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
             </ion-label>
           </ion-item>
@@ -63,7 +63,7 @@
           <ion-item button *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
             (click)="playAudio(track)">
             <ion-label>
-              <ion-icon name="musical-notes" item-start></ion-icon>
+              <ion-icon name="musical-notes" item-start src='/static/assets/svg/md-musical-notes.svg'></ion-icon>
               <h2>{{ sentence }}</h2>
               <h4>{{ entry.example_sentence_definition[i] }}</h4>
               <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
@@ -79,8 +79,8 @@
       <ion-col>
         <ion-buttons>
           <ion-button (click)="toggleFav(entry)">
-            <ion-icon *ngIf="!favourited(entry)" slot="icon-only" name="bookmarks"></ion-icon>
-            <ion-icon *ngIf="favourited(entry)" [style.color]="'#EF3B51'" slot="icon-only" name="bookmarks"></ion-icon>
+            <ion-icon *ngIf="!favourited(entry)" slot="icon-only" name="bookmarks" src='/static/assets/svg/md-bookmarks.svg'></ion-icon>
+            <ion-icon *ngIf="favourited(entry)" [style.color]="'#EF3B51'" slot="icon-only" name="bookmarks" src='/static/assets/svg/md-bookmarks.svg'></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-col>
