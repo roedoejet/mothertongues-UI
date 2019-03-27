@@ -16,8 +16,8 @@ export class MTDService {
     remote_data$: any;
     remote_config$: any;
     constructor(private http: HttpClient, public alertCtrl: AlertController) {
-        // this.slug = slugify(this._config$.getValue().L1.name);
-        this.slug = 'ucwalmicwts';
+        this.slug = slugify(this._config$.getValue().L1.name);
+        console.log(this.slug)
         this.remote_data$ = this.http.get(`http://localhost:5000/api/v1/languages?name=${this.slug}&only-data=true`, { observe: 'response' });
         this.remote_config$ = this.http.get(`http://localhost:5000/api/v1/languages?name=${this.slug}&only-config=true`, { observe: 'response' });
         // TODO: if in storage
@@ -143,7 +143,7 @@ export class MTDService {
                     categories[key] = entries.filter((x) => x['source'] == key)
                 }
                 let semantic_categories = uniq(entries.map((entry) => {
-                    if (entry.theme && entry.theme !== undefined) {
+                    if (entry.theme && entry.theme !== undefined && typeof entry.theme === 'string') {
                         return entry.theme.toLowerCase()
                     }
                 })).sort()
