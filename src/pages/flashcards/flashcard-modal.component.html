@@ -1,18 +1,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-toggle>
-        <ion-button>
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-menu-toggle>
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>Flashcard Quiz</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content ng-switch="style" on-swipe-up="front = !front">
-
+  <p>Hello World</p>
+  <!-- 
   <ion-card>
 
     <div *ngIf="displayImages">
@@ -103,10 +102,10 @@
 
     </ion-row>
 
-  </ion-card>
+  </ion-card> -->
 
 </ion-content>
-
+<!-- 
 <ion-footer>
   <ion-toolbar>
     <ion-buttons left class="bar-buttons bar-buttons-ios">
@@ -120,4 +119,4 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->

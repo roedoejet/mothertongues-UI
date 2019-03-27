@@ -16,6 +16,8 @@ import { PipesModule } from '../pipes/pipes.module'
 import { AppRoutingModule } from './app-routing.module';
 import { EntryListModule } from '../pages/shared/entry-list.module'
 import { WordModalPageModule } from '../pages/shared/word-modal.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { WordModalPageModule } from '../pages/shared/word-modal.module';
     AppRoutingModule,
     EntryListModule,
     WordModalPageModule,
-    PipesModule
+    PipesModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     MTDApp,

@@ -4,7 +4,6 @@ import { Storage } from '@ionic/storage';
 import { NativeAudio } from '@ionic-native/native-audio'
 import { DictionaryData } from '../../app/models'
 import { BookmarkService } from '../../app/bookmark.service'
-import { MTDInfo } from '../../app/global'
 import { MTDService } from '../../app/mtd.service';
 
 @Component({

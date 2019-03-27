@@ -116,6 +116,12 @@ export class MTDService {
         return this._config$.asObservable()
     }
 
+    get name$() {
+        return this.config$.pipe(
+            map((config) => config.L1.name)
+        )
+    }
+
     get dataDict$() {
         return this._dictionary_data$.asObservable()
     }
@@ -156,6 +162,12 @@ export class MTDService {
                 }
                 return categories
             })
+        )
+    }
+
+    get category_keys$() {
+        return this.categories$.pipe(
+            map((cats) => Object.keys(cats))
         )
     }
 

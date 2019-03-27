@@ -15,26 +15,34 @@
 
   <ion-list class="deck-select">
     <ion-list-header>
-      First, select a flashcard deck:
+      <ion-label>
+        First, select a flashcard deck:
+      </ion-label>
     </ion-list-header>
     <ion-item mode="ios">
       <ion-label class="label-left" mode="ios">Select a Deck</ion-label>
       <ion-select mode="ios" [(ngModel)]="deck" [interfaceOptions]="deckSelectOptions">
-        <ion-select-option *ngFor='let deck of decks'>{{deck}}</ion-select-option>
+        <ion-select-option *ngFor='let deck of decks$ | async'>{{deck}}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
 
-  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">
+  <ion-list>
     <ion-list-header text-wrap>
-      Then, select a style of learning between the following options:
+      <ion-label>
+        Then, select a style of learning between the following options:
+      </ion-label>
     </ion-list-header>
-    <ion-item *ngFor="let style of flashcardStyles">
-      <ion-label>{{style.title}}</ion-label>
-      <p>{{style.info}}</p>
-      <ion-radio value="{{style.title}}"></ion-radio>
-    </ion-item>
+    <ion-radio-group [(ngModel)]="selectedFlashcardStyle">
+      <ion-item *ngFor="let style of flashcardStyles$ | async">
+        <ion-label>{{style.title}}<p>{{style.info}}</p>
+        </ion-label>
+        <ion-radio value="{{style.title}}"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
   </ion-list>
 
-  <div class="center"><button ion-button secondary (click)='startFlashcards()'>Click here to start!</button></div>
+  <div class="center">
+    <ion-button secondary (click)='startFlashcards()'>Click here to start!</ion-button>
+  </div>
 </ion-content>

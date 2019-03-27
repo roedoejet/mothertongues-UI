@@ -1,29 +1,35 @@
 import { Component } from '@angular/core';
-
 import { ModalController, AlertController } from '@ionic/angular';
-
 import { Flashcard } from './flashcard-modal.component'
+import { MTDService } from '../../app/mtd.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { BookmarkService } from '../../app/bookmark.service'
 
 @Component({
   selector: 'page-flashcards',
-  templateUrl: 'flashcards.html'
+  templateUrl: 'flashcards.html',
+  styleUrls: ['flashcards.scss']
 })
 export class Flashcards {
-  flashcardStyles: Object[];
+  flashcardStyles$: Observable<any>;
   deck: string;
-  decks: string[];
+  decks$: Observable<string[]>;
   deckSelectOptions: Object = { header: "Select a Deck" };
   selectedFlashcardStyle: string;
-
-  constructor(public modalCtrl: ModalController, public bookmarkService: BookmarkService, private alertCtrl: AlertController) {
-    this.decks = Object.keys(bookmarkService.categories)
-    this.flashcardStyles = [
-      { "title": "Passive", "info": "This is the easiest method. It involves seeing the {{name}} word and guessing English." },
-      { "title": "Active", "info": "This method is designed to test your spelling of the {{ name }} word. You are provided with the English, and have to guess the {{ name } } word." },
-      { "title": "Non-Written", "info": "This method is entirely without any written prompt. Try and guess the word in both English and {{ name }}!" }
-    ]
+  name$: Observable<string>;
+  constructor(public modalCtrl: ModalController, public mtdService: MTDService, private alertCtrl: AlertController) {
+    this.name$ = this.mtdService.name$
+    this.decks$ = this.mtdService.category_keys$
+    this.flashcardStyles$ = this.name$.pipe(
+      map((name) =>
+        [
+          { "title": "Easy", "info": `See the ${name} word and guess English.` },
+          { "title": "Medium", "info": `See the English and guess ${name}` },
+          { "title": "Hard", "info": `See audio/image only and try and guess the word in both English and ${name}!` }
+        ]
+      )
+    )
   }
 
   async startFlashcards() {

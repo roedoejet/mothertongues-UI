@@ -19,19 +19,19 @@ export class Flashcard {
   startIndex: number = 0;
   style: string;
   audio_playing = [];
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public modalCtrl: ModalController, private file: File, private plt: Platform) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private bookmarkService: BookmarkService, public modalCtrl: ModalController, private plt: Platform) {
 
-    this.deck = this.navParams.get('deck');
-    this.categories = bookmarkService.categories
-    this.card = this.categories[this.deck][this.startIndex]
-    this.front = true;
-    try {
-      this.image = 'assets/img/' + this.card.img[0];
-    } catch (error) {
-      this.image = "";
-    }
+    // this.deck = this.navParams.get('deck');
+    // this.categories = bookmarkService.categories
+    // this.card = this.categories[this.deck][this.startIndex]
+    // this.front = true;
+    // try {
+    //   this.image = 'assets/img/' + this.card.img[0];
+    // } catch (error) {
+    //   this.image = "";
+    // }
 
-    this.style = this.navParams.get('style');
+    // this.style = this.navParams.get('style');
   }
 
   // Go to previous card in deck
@@ -103,24 +103,6 @@ export class Flashcard {
     });
     await alert.present();
   };
-
-  stopAllAudio() {
-    this.audio_playing.forEach(element => {
-      element.pause()
-    });
-    this.audio_playing = [];
-  }
-
-  playAudioTrack(entry, track) {
-    let audio_file = track.filename + ".mp3"
-    let audio_url = track.filename + ".mp3"
-    let id = entry.entryID
-    let path = "https://roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + audio_url
-    let audio = new Audio(path)
-    this.audio_playing.push(audio)
-    audio.onended = () => this.audio_playing.pop();
-    audio.play()
-  }
 
   imageError() {
     this.displayImages = false;

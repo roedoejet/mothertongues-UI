@@ -27,6 +27,7 @@ export class Browse {
   categorySelectOptions: Object = { header: "Select a Category" };
 
   constructor(public bookmarkService: BookmarkService, private mtdService: MTDService) {
+    this.displayCategories$ = this.mtdService.category_keys$
     this.currentEntries$ = new BehaviorSubject<DictionaryData[]>(this.mtdService.dataDict_value);
     // this.letters = this.mtdService.config_value.L1.lettersInLanguage;
     this.mtdService.dataDict$.subscribe((x) => {
@@ -44,18 +45,8 @@ export class Browse {
   }
 
   initializeEntries() {
-    // generate categories
-    this.catInit()
     // Add letter index to first words of that letter in entries
     this.letterInit()
-  }
-
-  catInit() {
-    this.displayCategories$ = this.mtdService.categories$.pipe(
-      map((cats) => {
-        return Object.keys(cats)
-      })
-    )
   }
 
   // Determine whether letter occurs word-initially
