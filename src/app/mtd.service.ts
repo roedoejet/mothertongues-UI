@@ -18,8 +18,8 @@ export class MTDService {
     constructor(private http: HttpClient, public alertCtrl: AlertController) {
         this.slug = slugify(this._config$.getValue().L1.name);
         console.log(this.slug)
-        this.remote_data$ = this.http.get(`http://localhost:5000/api/v1/languages?name=${this.slug}&only-data=true`, { observe: 'response' });
-        this.remote_config$ = this.http.get(`http://localhost:5000/api/v1/languages?name=${this.slug}&only-config=true`, { observe: 'response' });
+        this.remote_data$ = this.http.get(`https://mtd-fv.herokuapp.com/api/v1/languages?name=${this.slug}&only-data=true`, { observe: 'response' });
+        this.remote_config$ = this.http.get(`https://mtd-fv.herokuapp.com/api/v1/languages?name=${this.slug}&only-config=true`, { observe: 'response' });
         // TODO: if in storage
         if (true) {
             // TODO: check remote build is newer
