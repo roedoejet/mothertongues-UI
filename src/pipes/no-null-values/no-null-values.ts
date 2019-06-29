@@ -29,7 +29,6 @@ export class NoNullObjectValuesPipe implements PipeTransform {
   transform(value: Array<object>, ...args) {
     if (value){
       return value.filter(x => {
-        console.log(x);
         let not_empty = true;
         Object.keys(x).forEach(k => {
           if (!x[k]) {

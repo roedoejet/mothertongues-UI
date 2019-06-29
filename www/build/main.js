@@ -1389,7 +1389,6 @@ var NoNullObjectValuesPipe = /** @class */ (function () {
         }
         if (value) {
             return value.filter(function (x) {
-                console.log(x);
                 var not_empty = true;
                 Object.keys(x).forEach(function (k) {
                     if (!x[k]) {
