@@ -6,6 +6,7 @@ import { Config, DictionaryData } from './models'
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { slugify } from './global'
 import { uniq } from 'lodash';
+import { environment } from '../environments/environment'
 // import { AlertController } from '@ionic/angular';
 
 @Injectable({ providedIn: 'root' })
@@ -15,9 +16,14 @@ export class MTDService {
     slug: string;
     remote_data$: any;
     remote_config$: any;
+    base: string = environment.apiBaseURL;
+    // remote: string = environment.remoteSlug;
     constructor(private http: HttpClient, public alertCtrl: AlertController) {
+
+        console.log(this.base)
         this.slug = slugify(this._config$.getValue().L1.name);
-        console.log(this.slug)
+        // this.slug = this.remote
+        // console.log(this.slug)
         this.remote_data$ = this.http.get(`https://mtd-fv.herokuapp.com/api/v1/languages?name=${this.slug}&only-data=true`, { observe: 'response' });
         this.remote_config$ = this.http.get(`https://mtd-fv.herokuapp.com/api/v1/languages?name=${this.slug}&only-config=true`, { observe: 'response' });
         // TODO: if in storage

@@ -1,5 +1,7 @@
 {
-    "name": "mothertongues-UI",
-    "integrations": {},
-    "type": "angular"
-  }
+  "name": "mothertongues-UI",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
