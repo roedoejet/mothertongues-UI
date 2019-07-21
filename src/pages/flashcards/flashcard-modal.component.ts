@@ -12,6 +12,8 @@ import { NativeAudio } from '@ionic-native/native-audio'
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
+import { MTDInfo } from '../../app/global'
+
 @Component({
   selector: 'flashcard-modal',
   templateUrl: 'flashcard-modal.component.html'
@@ -28,6 +30,7 @@ export class Flashcard {
   startIndex: number = 0;
   style: string;
   audio_playing = [];
+  audio_path: string = MTDInfo.config['audio_path']
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, private navParams: NavParams, private mtdService: MTDService, public viewCtrl: ViewController, private file: File, private plt: Platform, private transfer: FileTransfer, private nativeAudio: NativeAudio) {
 
     this.deck = navParams.get('deck');
@@ -35,7 +38,7 @@ export class Flashcard {
     this.card = this.categories[this.deck][this.startIndex]
     this.front = true;
     try {
-      this.image = 'assets/img/' + this.card.img[0];
+      this.image = 'assets/img/' + this.card.img;
     } catch (error) {
       this.image = "";
     }
@@ -52,7 +55,7 @@ export class Flashcard {
       this.startIndex -= 1
       this.card = this.categories[this.deck][this.startIndex]
       try {
-        this.image = 'assets/img/' + this.card.img[0];
+        this.image = 'assets/img/' + this.card.img;
       } catch (error) {
 
       }
@@ -60,7 +63,7 @@ export class Flashcard {
       this.startIndex = 0
       this.card = this.categories[this.deck][this.startIndex]
       try {
-        this.image = 'assets/img/' + this.card.img[0];
+        this.image = 'assets/img/' + this.card.img;
       } catch (error) {
 
       }
@@ -73,7 +76,7 @@ export class Flashcard {
       this.startIndex += 1
       this.card = this.categories[this.deck][this.startIndex]
       try {
-        this.image = 'assets/img/' + this.card.img[0];
+        this.image = 'assets/img/' + this.card.img;
       } catch (error) {
 
       }
@@ -81,7 +84,7 @@ export class Flashcard {
       this.startIndex = this.categories[this.deck].length - 1
       this.card = this.categories[this.deck][this.startIndex]
       try {
-        this.image = 'assets/img/' + this.card.img[0];
+        this.image = 'assets/img/' + this.card.img;
       } catch (error) {
 
       }
@@ -123,66 +126,54 @@ export class Flashcard {
     this.audio_playing = [];
   }
 
-  playAudioTrack(entry, track) {
-    let audio_file = track.filename + ".mp3"
-    let audio_url = track.filename + ".mp3"
-    let id = entry.entryID
-    let path = "https://roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + audio_url
-    let audio = new Audio(path)
-    this.audio_playing.push(audio)
-    audio.onended = () => this.audio_playing.pop();
-    audio.play()
-  }
-
-  playAudioTrack1(entry, track) {
-    track.audio_file = track.filename + ".mp3"
-    track.audio_url = track.filename + ".mp3"
-    if (this.plt.is('core') || this.plt.is('mobileweb')) {
-      console.log('web ran')
-      if (track !== undefined && track.audio_file !== undefined && track.audio_url !== undefined) {
-
-        let id = entry.entryID
-        let path = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        console.log(path)
-        let audio = new Audio(path)
-        audio.play()
-        // this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, (error)=>{console.log(error)});
-        // this.nativeAudio.play(id).then(this.onSuccess, (error)=>{ this.onError(error) });
-      } else {
-        console.log('boo')
-        this.showAlert()
+  playAudio(track) {
+    if (track !== undefined && track.filename !== undefined) {
+      // get path. add config path if it's there.
+      let path = track.filename
+      if (this.audio_path && this.audio_path !== undefined) {
+        path = this.audio_path + track.filename
       }
-    } else if (this.plt.is('ios')) {
+      // set ID and path to internal storage
+      let internal_path = "assets/audio/" + track.filename
+      let id = track.filename
 
-      let id = entry.entryID
-      let path = "assets/audio/" + track.audio_file
-      this.nativeAudio.preloadSimple(id, path).then(this.onSuccess, this.onError);
-      this.nativeAudio.play(id).then(this.onSuccess, this.onError);
+      // if desktop or browser, run as HTML5 Audio
+      if (this.plt.is('core') || this.plt.is('mobileweb')) {
 
-    } else if (this.plt.is('android')) {
-      console.log('android ran')
-      if (track != undefined) {
-        let id = entry.entryID
-        let track_url = "//roedoejet.github.io/wmrc-ayajuthem/resources/audio/words/" + track.audio_url
-        let track_file = "assets/audio/" + track.audio_file
+        let audio = new Audio(path)
+        audio.onerror = () => {
+          this.audio_playing.pop()
+          this.onError("The audio file wasn't found.")
+        }
+        this.audio_playing.push(audio)
+        audio.onended = () => this.audio_playing.pop();
+        audio.play()
 
-        this.file.checkFile(this.file.dataDirectory, track_file)
+        // If iOS or Android, download and store
+      } else if (this.plt.is('android') || this.plt.is('ios')) {
+
+        this.file.checkFile(this.file.dataDirectory, internal_path)
           .then(_ => {
-            this.nativeAudio.preloadSimple(id, track_file);
-            this.nativeAudio.play(id);
+            this.audio_playing.push(id)
+            this.nativeAudio.preloadSimple(id, internal_path);
+            this.nativeAudio.play(id, () => this.audio_playing.pop());
           }).catch(err => {
-            var targetPath = this.file.dataDirectory + track_file;
+            var targetPath = this.file.dataDirectory + internal_path;
             var trustHosts = true;
             var options = {};
-            this.fileTransfer.download(track_url, targetPath, trustHosts, options)
+            this.fileTransfer.download(internal_path, targetPath, trustHosts, options)
           })
           .then((track) => {
-            this.nativeAudio.preloadSimple(id, track_file);
-            this.nativeAudio.play(id);
+            this.audio_playing.push(id)
+            this.nativeAudio.preloadSimple(id, internal_path);
+            this.nativeAudio.play(id, () => this.audio_playing.pop());
           }, (error) => { this.onError(error) });;
+
+      } else {
+        this.showAlert()
       }
     } else {
-      this.showAlert()
+      this.onError("No audio for this file.")
     }
   }
 
