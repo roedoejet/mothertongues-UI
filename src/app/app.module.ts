@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { NativeAudio } from '@ionic-native/native-audio';
+import { Media } from '@ionic-native/media';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { File } from '@ionic-native/file';
@@ -45,6 +45,6 @@ import { PipesModule } from '../pipes/pipes.module'
     WordModal,
     Flashcard,
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, MTDService, File, FileTransfer, FileTransferObject, NativeAudio, SplashScreen, StatusBar]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, MTDService, File, FileTransfer, FileTransferObject, Media, SplashScreen, StatusBar]
 })
 export class AppModule {}

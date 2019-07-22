@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams, ViewController, AlertController, Platform, ItemSliding } from 'ionic-angular';
 
-import { File } from '@ionic-native/file';
+import { File, FileEntry } from '@ionic-native/file';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { Storage } from '@ionic/storage';
 
-import { NativeAudio } from '@ionic-native/native-audio'
+import { Media, MediaObject } from '@ionic-native/media'
 
 import { Entry } from './entry.model'
 
@@ -33,10 +33,11 @@ export class WordModal {
   default_sentence_i: number = 0;
   audio_playing = [];
   audio_path: string = MTDInfo.config['audio_path']
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     private navParams: NavParams,
     public viewCtrl: ViewController,
-    public nativeAudio: NativeAudio,
+    public audio: Media,
     public alertCtrl: AlertController,
     private file: File,
     private transfer: FileTransfer,
@@ -83,12 +84,62 @@ export class WordModal {
   stopAllAudio() {
     this.audio_playing.forEach(element => {
       try {
-        element.pause()
+        element.stop()
       } catch (error) {
-        this.nativeAudio.stop(element)
+        element.pause()
       }
     });
     this.audio_playing = [];
+  }
+
+  mediaPlay(path) {
+    let audio: MediaObject = this.audio.create(path);
+    audio.onError.subscribe(() => {
+      this.audio_playing.pop();
+      this.onError("The audio file wasn't found.");
+    })
+    audio.onStatusUpdate.subscribe((status) => {
+      if (status === 1) {
+        this.audio_playing.push(audio)
+        console.log('playing')
+      }
+      if (status === 4) {
+        this.audio_playing.pop()
+        console.log('stopped')
+      }
+    })
+    audio.play()
+  }
+
+  htmlAudioPlay(path) {
+    let audio = new Audio(path);
+    audio.onerror = () => {
+      this.audio_playing.pop();
+      this.onError("The audio file wasn't found.");
+    }
+    audio.onended = () => {
+      this.audio_playing.pop()
+    }
+    this.audio_playing.push(audio)
+    audio.play()
+  }
+
+  playInternal(path) {
+    this.file.resolveDirectoryUrl(this.file.dataDirectory).then((rootdir) => {
+      this.file.getFile(rootdir, path, { create: false }).then((entryFile) => {
+        this.mediaPlay(entryFile.toInternalURL())
+      })
+    })
+  }
+
+  downloadAndPlay(external_path, internal_path) {
+    var targetPath = this.file.dataDirectory + internal_path;
+    console.log('downloading to ' + targetPath)
+    var trustHosts = true;
+    var options = {};
+    this.fileTransfer.download(external_path, targetPath, trustHosts, options).then((track: FileEntry) => {
+      this.mediaPlay(track.toInternalURL())
+    }, (error) => { this.onError(error) });
   }
 
   playAudio(track) {
@@ -100,40 +151,22 @@ export class WordModal {
       }
       // set ID and path to internal storage
       let internal_path = "assets/audio/" + track.filename
-      let id = track.filename
-
+      let id = Date.now().toString()
       // if desktop or browser, run as HTML5 Audio
       if (this.plt.is('core') || this.plt.is('mobileweb')) {
-
-        let audio = new Audio(path)
-        audio.onerror = () => {
-          this.audio_playing.pop()
-          this.onError("The audio file wasn't found.")
-        }
-        this.audio_playing.push(audio)
-        audio.onended = () => this.audio_playing.pop();
-        audio.play()
-
-        // If iOS or Android, download and store
+        this.htmlAudioPlay(path)
+        // If iOS or Android, download, store and play
       } else if (this.plt.is('android') || this.plt.is('ios')) {
-
         this.file.checkFile(this.file.dataDirectory, internal_path)
-          .then(_ => {
-            this.audio_playing.push(id)
-            this.nativeAudio.preloadSimple(id, internal_path);
-            this.nativeAudio.play(id, () => this.audio_playing.pop());
+          .then((check) => {
+            if (check) {
+              this.playInternal(internal_path);
+            } else {
+              this.downloadAndPlay(path, internal_path)
+            }
           }).catch(err => {
-            var targetPath = this.file.dataDirectory + internal_path;
-            var trustHosts = true;
-            var options = {};
-            this.fileTransfer.download(internal_path, targetPath, trustHosts, options)
+            this.downloadAndPlay(path, internal_path)
           })
-          .then((track) => {
-            this.audio_playing.push(id)
-            this.nativeAudio.preloadSimple(id, internal_path);
-            this.nativeAudio.play(id, () => this.audio_playing.pop());
-          }, (error) => { this.onError(error) });;
-
       } else {
         this.showAlert()
       }
