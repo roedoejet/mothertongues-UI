@@ -62,6 +62,13 @@ export class WordModal {
 
   fileTransfer: FileTransferObject = this.transfer.create();
 
+  checkOptionTruth(options: object[]) {
+    if (options && options.length > 0){
+      return options.some((option)=>Object.keys(option).some((key)=>option[key]))
+    } else {
+      return false
+    }
+  }
 
   showAlert() {
     let alert = this.alertCtrl.create({
