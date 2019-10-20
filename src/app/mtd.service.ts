@@ -56,7 +56,7 @@ export class MTDService {
     }
 
     formatSecondaryTheme(theme, secondary_theme) {
-        if (theme) {
+        if (theme && secondary_theme) {
             return this.formatTheme(theme) + ' / ' + secondary_theme.toLowerCase()
         } else {
             return ''
