@@ -31,6 +31,7 @@ export class Browse {
 
   constructor(public navCtrl: NavController, public mtdService: MTDService) {
     this.initializeEntries(mtdService);
+    console.log(this.categorySelectOptions)
   }
 
   initializeEntries(mtdService) {
@@ -78,6 +79,10 @@ export class Browse {
       this.startIndex = this.currentEntries.length - 10
       this.currentTen = window['get10'](this.currentEntries, this.startIndex)
     }
+  }
+
+  secondary(cat) {
+    return cat.charAt(0) === '-'
   }
 
   // Scroll to letter

@@ -20,19 +20,47 @@ export class MTDService {
             this.categories[key] = MTDInfo.dataDict.filter(x => x['source'] == key)
         }
 
-        let semantic_categories = uniq(MTDInfo.allEntries.map(entry => {
-            if (entry.theme) {
-                entry.theme = entry.theme.toLowerCase()
-            }
-            return entry.theme
-        })).sort()
+        let semantic_categories = {}
 
-        for (let cat of semantic_categories) {
+        MTDInfo.allEntries.forEach(entry => {
+            if (entry.theme) {
+                let formattedTheme = this.formatTheme(entry.theme)
+                if (!(formattedTheme in semantic_categories)) {
+                    semantic_categories[formattedTheme] = []
+                }
+                if ('secondary_theme' in entry && entry.secondary_theme && entry.theme) {
+                    let formattedSecondaryTheme = this.formatSecondaryTheme(entry.theme, entry.secondary_theme)
+                    semantic_categories[formattedTheme].push(formattedSecondaryTheme)
+                }
+            }
+        })
+        // sort themes
+        let ordered_categories = []
+        Object.keys(semantic_categories).sort().forEach(key => {
+            ordered_categories.push(key);
+            ordered_categories = ordered_categories.concat(semantic_categories[key].sort());
+        })
+        for (let cat of ordered_categories) {
             if (cat) {
-                this.categories[cat] = MTDInfo.allEntries.filter(entry => entry.theme === cat)
+                this.categories[cat] = MTDInfo.allEntries.filter(entry => this.formatTheme(entry.theme) === cat || this.formatSecondaryTheme(entry.theme, entry.secondary_theme) === cat)
             }
         }
-        console.log(this.categories)
+    }
+
+    formatTheme(theme) {
+        if (theme) {
+            return theme.charAt(0).toUpperCase() + theme.slice(1)
+        } else {
+            return ''
+        }
+    }
+
+    formatSecondaryTheme(theme, secondary_theme) {
+        if (theme) {
+            return this.formatTheme(theme) + ' / ' + secondary_theme.toLowerCase()
+        } else {
+            return ''
+        }
     }
 
     setBookmarks(val) {
