@@ -97,12 +97,9 @@ export class Flashcard {
   }
 
   onSuccess(id) {
-    console.log(id)
-    // console.log('loaded audio ${id} with path of ${path}'); 
   };
 
   onError(err) {
-    console.log(err)
     let alert = this.alertCtrl.create({
       title: 'Sorry',
       subTitle: "We don't have audio for that entry.",
@@ -136,11 +133,9 @@ export class Flashcard {
     audio.onStatusUpdate.subscribe((status) => {
       if (status === 1) {
         this.audio_playing.push(audio)
-        console.log('playing')
       }
       if (status === 4) {
         this.audio_playing.pop()
-        console.log('stopped')
       }
     })
     audio.play()
@@ -169,7 +164,6 @@ export class Flashcard {
 
   downloadAndPlay(external_path, internal_path) {
     var targetPath = this.file.dataDirectory + internal_path;
-    console.log('downloading to ' + targetPath)
     var trustHosts = true;
     var options = {};
     this.fileTransfer.download(external_path, targetPath, trustHosts, options).then((track: FileEntry) => {

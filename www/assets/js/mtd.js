@@ -13,7 +13,6 @@ mtd.transduce = function (str, transducerName) {
         var transducer = mtd.transducers[transducerName];
         return transducer(str);
     } else {
-        console.log('Transducer with name ' + transducerName + " was not found.")
         return str;
     }
 };

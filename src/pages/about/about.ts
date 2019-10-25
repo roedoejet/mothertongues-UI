@@ -11,7 +11,6 @@ import { MTDInfo } from '../../app/global'
 export class About {
   language: string = MTDInfo.config['L1']['name']
   constructor(public navCtrl: NavController) {
-    console.log(this.language)
   }
 
 }

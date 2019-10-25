@@ -48,13 +48,10 @@ export class WordModal {
     if (this.entry.optional) {
       this.optionalSelection = this.entry.optional.map(x => Object.keys(x))[0]
     }
-    console.log(this.optionalSelection)
     this.checkedOptions = this.optionalSelection
-    console.log(this.checkedOptions)
     try {
       this.image = 'assets/img/' + this.entry.img;
     } catch (error) {
-      console.log(error)
     }
 
 
@@ -108,11 +105,9 @@ export class WordModal {
     audio.onStatusUpdate.subscribe((status) => {
       if (status === 1) {
         this.audio_playing.push(audio)
-        console.log('playing')
       }
       if (status === 4) {
         this.audio_playing.pop()
-        console.log('stopped')
       }
     })
     audio.play()
@@ -141,7 +136,6 @@ export class WordModal {
 
   downloadAndPlay(external_path, internal_path) {
     var targetPath = this.file.dataDirectory + internal_path;
-    console.log('downloading to ' + targetPath)
     var trustHosts = true;
     var options = {};
     this.fileTransfer.download(external_path, targetPath, trustHosts, options).then((track: FileEntry) => {
@@ -183,7 +177,6 @@ export class WordModal {
   }
 
   onError(err) {
-    console.log(err)
     let alert = this.alertCtrl.create({
       title: 'Sorry',
       subTitle: err.toString(),
@@ -208,7 +201,6 @@ export class WordModal {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -239,7 +231,6 @@ export class WordModal {
   }
 
   checkChecked(option) {
-    console.log(option)
     if (this.checkedOptions.indexOf(option) >= 0) {
       return true;
     } else {

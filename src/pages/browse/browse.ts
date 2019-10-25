@@ -31,11 +31,9 @@ export class Browse {
 
   constructor(public navCtrl: NavController, public mtdService: MTDService) {
     this.initializeEntries(mtdService);
-    console.log(this.categorySelectOptions)
   }
 
   initializeEntries(mtdService) {
-    console.log(mtdService.categories)
     this.displayCategories = Object.keys(mtdService.categories);
 
     // Add letter index to first words of that letter in entries
