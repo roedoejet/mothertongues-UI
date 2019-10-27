@@ -102,7 +102,7 @@ export class Flashcard {
   onError(err) {
     let alert = this.alertCtrl.create({
       title: 'Sorry',
-      subTitle: "We don't have audio for that entry.",
+      subTitle: "We couldn't play the audio for this file. Please make sure you're connected to the internet and try again.",
       buttons: ['OK']
     });
     alert.present();
@@ -111,7 +111,7 @@ export class Flashcard {
   showAlert() {
     let alert = this.alertCtrl.create({
       title: 'Sorry',
-      subTitle: 'There is no audio for this yet.',
+      subTitle: "We couldn't find the audio for this. Are you sure you are connected to the internet?",
       buttons: ['Dismiss']
     });
     alert.present();
@@ -162,6 +162,10 @@ export class Flashcard {
     })
   }
 
+  getBaseName(path) {
+    return path.split(/[\\/]/).pop();
+  }
+
   downloadAndPlay(external_path, internal_path) {
     var targetPath = this.file.dataDirectory + internal_path;
     var trustHosts = true;
@@ -179,7 +183,7 @@ export class Flashcard {
         path = this.audio_path + track.filename
       }
       // set ID and path to internal storage
-      let internal_path = "assets/audio/" + track.filename
+      let internal_path = "assets/audio/" + this.getBaseName(track.filename);
       let id = Date.now().toString()
       // if desktop or browser, run as HTML5 Audio
       if (this.plt.is('core') || this.plt.is('mobileweb')) {
