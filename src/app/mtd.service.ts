@@ -30,7 +30,9 @@ export class MTDService {
                 }
                 if ('secondary_theme' in entry && entry.secondary_theme && entry.theme) {
                     let formattedSecondaryTheme = this.formatSecondaryTheme(entry.theme, entry.secondary_theme)
-                    semantic_categories[formattedTheme].push(formattedSecondaryTheme)
+                    if (semantic_categories[formattedTheme].indexOf(formattedSecondaryTheme) < 0) {
+                        semantic_categories[formattedTheme].push(formattedSecondaryTheme)
+                    }
                 }
             }
         })
