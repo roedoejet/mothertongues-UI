@@ -24,9 +24,9 @@ export class Flashcards {
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public mtdService: MTDService, private alertCtrl: AlertController) {
     this.decks = Object.keys(mtdService.categories)
     this.flashcardStyles = [
-      { "title": `Show ${this.language}`, "info": `This is the easiest method. It involves seeing the ${this.language} word and guessing ${this.language2}.` },
-      { "title": `Show ${this.language2}`, "info": `This method is designed to test your spelling of the ${this.language} word. You are provided with the ${this.language2}, and have to guess the ${this.language} word.` },
-      { "title": "Audio Only", "info": `This method is entirely without any written prompt. Try and guess the word in both ${this.language2} and ${this.language}!` }
+      { "title": `Show ${this.language}`, "info": `This is the easiest method. It involves seeing the ${this.language} word and guessing ${this.language2}.`, "type": "passive"},
+      { "title": `Show ${this.language2}`, "info": `This method is designed to test your spelling of the ${this.language} word. You are provided with the ${this.language2}, and have to guess the ${this.language} word.`, "type": "active" },
+      { "title": "Audio Only", "info": `This method is entirely without any written prompt. Try and guess the word in both ${this.language2} and ${this.language}!`, "type": "audio" }
     ]
   }
 

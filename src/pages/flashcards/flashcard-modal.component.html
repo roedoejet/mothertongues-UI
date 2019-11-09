@@ -15,11 +15,11 @@
 
   <ion-card>
 
-    <div *ngIf="displayImages">
+    <div *ngIf="displayImages && style === 'audio'">
       <img (click)="playAudio(card)" [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="card.img" />
     </div>
     <ion-card-content [ngSwitch]="style">
-      <div *ngSwitchCase="'Active'">
+      <div *ngSwitchCase="'active'">
         <ion-card-title *ngIf="!front">
           {{card.word}}
         </ion-card-title>
@@ -27,7 +27,7 @@
           {{card.definition}}
         </ion-card-title>
       </div>
-      <div *ngSwitchCase="'Passive'">
+      <div *ngSwitchCase="'passive'">
         <ion-card-title *ngIf="!front">
           {{card.definition}}
         </ion-card-title>
@@ -35,7 +35,7 @@
           {{card.word}}
         </ion-card-title>
       </div>
-      <div *ngSwitchCase="'Non-Written'">
+      <div *ngSwitchCase="'audio'">
         <ion-card-title *ngIf="!front">
           {{card.word}} - {{card.definition}}
         </ion-card-title>
