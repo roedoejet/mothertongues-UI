@@ -47,7 +47,8 @@
       </div>
     </ion-card-content>
 
-    <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0">
+    <ion-row *ngIf="(card.audio)?.length > 0">
+    <!-- <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0"> -->
       <ion-card>
         <ion-card-header>
           Audio

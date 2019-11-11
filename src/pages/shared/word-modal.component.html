@@ -34,7 +34,8 @@
       </div>
     </ion-card-content>
 
-    <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0">
+    <!-- <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0"> -->
+    <ion-row *ngIf="(entry.audio)?.length > 0">
       <ion-card>
         <ion-card-header>
           Audio
@@ -45,7 +46,8 @@
             Stop all audio
             <ion-icon name="hand" item-start></ion-icon>
           </button>
-          <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)">
+          <!-- <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)"> -->
+          <button ion-item *ngFor="let track of entry.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
           </button>
@@ -62,7 +64,9 @@
 
         <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">
 
-          <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
+          <!-- <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
+          (click)="playAudio(track)"> -->
+          <button ion-item *ngFor="let track of entry.example_sentence_audio[i]"
             (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <h2>{{ sentence }}</h2>
