@@ -176,6 +176,7 @@ export class Flashcard {
   }
 
   playAudio(track) {
+    this.stopAllAudio()
     if (track !== undefined && track.filename !== undefined) {
       // get path. add config path if it's there.
       let path = track.filename
