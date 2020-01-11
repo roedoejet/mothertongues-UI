@@ -16,11 +16,11 @@ export class About {
   }
 
   buildToString(build: string){
-    let year = build.slice(0,5)
-    let month = build.slice(5,7)
-    let day = build.slice(7,9)
-    let time = build.slice(9,11) + ":" + build.slice(11,13)
-    return `at ${time} on ${year}/${month}/${day}`
+    let year = build.slice(0,4)
+    let month = build.slice(4,6)
+    let day = build.slice(6,8)
+    let time = build.slice(8,10) + ":" + build.slice(10,12)
+    return `${time} on ${year}/${month}/${day}`
   }
 
 }
