@@ -42,10 +42,6 @@
         </ion-card-header>
 
         <ion-list>
-          <button ion-item *ngIf="audio_playing?.length > 0" (click)="stopAllAudio()">
-            Stop all audio
-            <ion-icon name="hand" item-start></ion-icon>
-          </button>
           <!-- <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)"> -->
           <button ion-item *ngFor="let track of entry.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
