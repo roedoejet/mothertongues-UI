@@ -132,7 +132,7 @@ export class Flashcard {
       this.onError("The audio file wasn't found.");
     })
     audio.onStatusUpdate.subscribe((status) => {
-      if (status === 1) {
+      if (status === 1 || status === 2) {
         this.audio_playing.push(audio)
       }
       if (status === 4) {
