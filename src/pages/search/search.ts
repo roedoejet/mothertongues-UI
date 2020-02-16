@@ -22,16 +22,16 @@ export class Search {
   constructor(public navCtrl: NavController) {
   }
 
-  getL2() {
+  getRegex(key = 'definition') {
     var results = []
     var re = new RegExp(this.searchQuery, 'i')
     for (let entry of this.entries) {
-      if (re.test(entry.definition)) {
+      if (re.test(entry[key])) {
         results.push(entry)
       }
     }
     let sorted_answers = results.sort(function (a, b) {
-      return a["definition"].length - b["definition"].length;
+      return a[key].length - b[key].length;
     });
     return (sorted_answers.slice(0, 9))
   };
@@ -39,8 +39,10 @@ export class Search {
   // Get English and target results
   getResults() {
     if (this.searchQuery.length > 1) {
-      let english = this.getL2();
+      let english = this.getRegex();
+      let exact = this.getRegex('word')
       let target = window["searchL1"](this.searchQuery)
+      let allMatches = [];
       let matches = [];
       let partMatches = [];
       let maybeMatches = [];
@@ -48,32 +50,51 @@ export class Search {
         for (let result of english) {
           var entry = result
           entry.type = "L2";
-          matches.push(entry);
+          entry.distance = 0;
+          allMatches.push(entry);
+        }
+      }
+
+      var populateExact = function () {
+        for (let result of exact) {
+          var entry = result;
+          entry.type = "L1";
+          entry.distance = 0;
+          allMatches.push(entry)
         }
       }
 
       var populateTarget = function () {
         for (let result of target) {
           var entry = result[1]
-          if (entry.distance === 0) {
-            entry.type = "L1";
-            matches.push(entry);
-          }
-
-          if (entry.distance <= 1 && entry.distance > 0) {
-            entry.type = "L1";
-            partMatches.push(entry);
-          }
-
-          if (entry.distance <= 2 && entry.distance > 1) {
-            entry.type = "L1";
-            maybeMatches.push(entry);
+          entry.type = "L1";
+          if (allMatches.findIndex(match => match.word === entry.word && match.definition === match.definition) === -1) {
+            allMatches.push(entry)
           }
         }
       }
-      
+
+      var mergeMatches = function () {
+        for (let entry of allMatches) {
+          if ('distance' in entry) {
+            if (entry.distance === 0) {
+              matches.push(entry);
+            } else if ('distance' in entry && entry.distance <= 1 && entry.distance > 0) {
+              partMatches.push(entry);
+            } else if (entry.distance <= 2 && entry.distance > 1) {
+              maybeMatches.push(entry);
+            }
+          } else {
+            matches.push(entry)
+          }
+        }
+      }
+
+      populateExact();
       populateEng();
       populateTarget();
+      allMatches = allMatches.filter((match, index, self) => self.findIndex(t => t.word === match.word && t.definition === match.definition) === index)
+      mergeMatches();
       this.matches = matches;
       this.partMatches = partMatches;
       this.maybeMatches = maybeMatches;
