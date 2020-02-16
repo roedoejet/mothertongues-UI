@@ -93,6 +93,7 @@ export class Flashcard {
   }
 
   dismiss() {
+    this.stopAllAudio();
     this.viewCtrl.dismiss();
   }
 

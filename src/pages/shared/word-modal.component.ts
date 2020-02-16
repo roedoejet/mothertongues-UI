@@ -191,6 +191,7 @@ export class WordModal {
   };
 
   dismiss() {
+    this.stopAllAudio()
     this.viewCtrl.dismiss();
   }
 
