@@ -57,7 +57,7 @@ function shuffle(array) {
 }
 
 function getRandom10() {
-    var entries = shuffle(getAllEntries()); // shuffle entries
+    var entries = shuffle(getAllEntriesByValue()); // shuffle entries
     return entries.slice(0, 10);
 }
 
