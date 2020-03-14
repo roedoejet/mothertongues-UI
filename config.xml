@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10000" id="org.mothertongues.mtdui" version="1.0" 
-    xmlns="http://www.w3.org/ns/widgets" 
-    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10000" id="org.mothertongues.mtdui" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>mothertongues-UI</name>
     <description />
     <author email="info@mothertongues.org" href="http://mothertongues.org/">Aidan Pine</author>
@@ -93,6 +91,7 @@
     <plugin name="cordova-plugin-media" spec="^5.0.3">
         <variable name="KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE" value="NO" />
     </plugin>
+    <plugin name="cordova-clipboard" spec="^1.3.0" />
     <engine name="browser" spec="^5.0.3" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="^8.1.0" />
