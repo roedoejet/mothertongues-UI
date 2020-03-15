@@ -1,7 +1,7 @@
 webpackJsonp(
   [0],
   {
-    /***/ 117: /***/ function(module, exports) {
+    /***/ 118: /***/ function(module, exports) {
       function webpackEmptyAsyncContext(req) {
         // Here Promise.resolve().then() is used instead of new Promise() to prevent
         // uncatched exception popping up in devtools
@@ -14,12 +14,12 @@ webpackJsonp(
       };
       webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
       module.exports = webpackEmptyAsyncContext;
-      webpackEmptyAsyncContext.id = 117;
+      webpackEmptyAsyncContext.id = 118;
 
       /***/
     },
 
-    /***/ 158: /***/ function(module, exports) {
+    /***/ 159: /***/ function(module, exports) {
       function webpackEmptyAsyncContext(req) {
         // Here Promise.resolve().then() is used instead of new Promise() to prevent
         // uncatched exception popping up in devtools
@@ -32,12 +32,12 @@ webpackJsonp(
       };
       webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
       module.exports = webpackEmptyAsyncContext;
-      webpackEmptyAsyncContext.id = 158;
+      webpackEmptyAsyncContext.id = 159;
 
       /***/
     },
 
-    /***/ 201: /***/ function(
+    /***/ 202: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -54,7 +54,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bookmarks_bookmarks__ = __webpack_require__(
-        286
+        287
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -64,7 +64,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__browse_browse__ = __webpack_require__(
-        288
+        289
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -74,7 +74,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__flashcards_flashcards__ = __webpack_require__(
-        289
+        290
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -84,7 +84,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__flashcards_flashcard_modal_component__ = __webpack_require__(
-        202
+        203
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -96,7 +96,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__random_random__ = __webpack_require__(
-        290
+        291
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -106,7 +106,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__search_search__ = __webpack_require__(
-        291
+        292
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -116,11 +116,11 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_entry_model__ = __webpack_require__(
-        292
+        293
       );
       /* unused harmony namespace reexport */
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_entry_list_component__ = __webpack_require__(
-        293
+        294
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -132,7 +132,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_word_modal_component__ = __webpack_require__(
-        203
+        204
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -149,7 +149,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 202: /***/ function(
+    /***/ 203: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -180,7 +180,10 @@ webpackJsonp(
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_transfer__ = __webpack_require__(
         106
       );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_global__ = __webpack_require__(
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_clipboard__ = __webpack_require__(
+        107
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_global__ = __webpack_require__(
         25
       );
       var __decorate =
@@ -219,6 +222,8 @@ webpackJsonp(
 
       var Flashcard = /** @class */ (function() {
         function Flashcard(
+          clipboard,
+          toastCtrl,
           audio,
           alertCtrl,
           navCtrl,
@@ -229,6 +234,8 @@ webpackJsonp(
           plt,
           transfer
         ) {
+          this.clipboard = clipboard;
+          this.toastCtrl = toastCtrl;
           this.audio = audio;
           this.alertCtrl = alertCtrl;
           this.navCtrl = navCtrl;
@@ -242,7 +249,7 @@ webpackJsonp(
           this.startIndex = 0;
           this.audio_playing = [];
           this.audio_path =
-            __WEBPACK_IMPORTED_MODULE_6__app_global__["a" /* MTDInfo */].config[
+            __WEBPACK_IMPORTED_MODULE_7__app_global__["a" /* MTDInfo */].config[
               "audio_path"
             ];
           this.fileTransfer = this.transfer.create();
@@ -360,6 +367,43 @@ webpackJsonp(
                 });
             });
         };
+        Flashcard.prototype.copyToast = function(clipboard) {
+          var toast = this.toastCtrl.create({
+            message: 'Word "' + clipboard + '" was copied to your clipboard.',
+            duration: 2000,
+            position: "top"
+          });
+          toast.onDidDismiss(function() {
+            console.log("Dismissed toast");
+          });
+          toast.present();
+        };
+        Flashcard.prototype.copyToClipboard = function(word) {
+          var _this = this;
+          if (this.plt.is("core") || this.plt.is("mobileweb")) {
+            var selBox = document.createElement("textarea");
+            selBox.style.position = "fixed";
+            selBox.style.left = "0";
+            selBox.style.top = "0";
+            selBox.style.opacity = "0";
+            selBox.value = word;
+            document.body.appendChild(selBox);
+            selBox.focus();
+            selBox.select();
+            document.execCommand("copy");
+            document.body.removeChild(selBox);
+            this.copyToast(word);
+          } else {
+            this.clipboard.copy(word).then(
+              function(success) {
+                _this.copyToast(word);
+              },
+              function(err) {
+                console.log(err);
+              }
+            );
+          }
+        };
         Flashcard.prototype.getBaseName = function(path) {
           return path.split(/[\\/]/).pop();
         };
@@ -435,9 +479,15 @@ webpackJsonp(
             )({
               selector: "flashcard-modal",
               template:
-                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcard-modal.component.html"*/ '<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Flashcard Quiz\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content ng-switch="style" on-swipe-up="front = !front">\n\n  <ion-card>\n\n    <div *ngIf="displayImages && style === \'audio\'">\n      <img (click)="playAudio(card)" [(src)]="image" onError="this.src=\'assets/img/default.png\'" *ngIf="card.img" />\n    </div>\n    <ion-card-content [ngSwitch]="style">\n      <div *ngSwitchCase="\'active\'">\n        <ion-card-title *ngIf="!front">\n          {{card.word}}\n        </ion-card-title>\n        <ion-card-title class="definition" *ngIf="front">\n          {{card.definition}}\n        </ion-card-title>\n      </div>\n      <div *ngSwitchCase="\'passive\'">\n        <ion-card-title *ngIf="!front">\n          {{card.definition}}\n        </ion-card-title>\n        <ion-card-title class="definition" *ngIf="front">\n          {{card.word}}\n        </ion-card-title>\n      </div>\n      <div *ngSwitchCase="\'audio\'">\n        <ion-card-title *ngIf="!front">\n          {{card.word}} - {{card.definition}}\n        </ion-card-title>\n      </div>\n      <div *ngIf="card.optional && optional">\n        <p class="option" *ngFor="let option of checkedOptions; let i = index">\n          {{option}} - {{card.optional[option]}}\n        </p>\n      </div>\n    </ion-card-content>\n\n    <ion-row *ngIf="(card.audio)?.length > 0">\n      <!-- <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0"> -->\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <!-- <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            Speaker: {{ track.speaker }}\n          </button>\n\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row *ngIf="(card.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list *ngFor="let sentence of (card.example_sentence | noNullValues); let i = index">\n\n          <!-- <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ card.example_sentence_definition[i] }}</h4>\n            <h6>Speaker: {{ track.speaker }}</h6>\n          </button>\n\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button ion-button clear small color="primary" icon-left (click)="toggleFav(card)">\n          <ion-icon *ngIf="favourited(card)" name="ios-bookmarks"></ion-icon>\n          <ion-icon *ngIf="!favourited(card)" name="ios-bookmarks-outline"></ion-icon>\n          Bookmark\n        </button>\n        <button ion-button clear small color="primary" icon-left (click)="front = !front">\n          <ion-icon name=\'refresh\'></ion-icon>\n          <span *ngIf="front">Flip to back</span><span *ngIf="!front">Flip to front</span>\n        </button>\n      </ion-col>\n\n    </ion-row>\n\n  </ion-card>\n\n</ion-content>\n\n<ion-footer>\n  <ion-toolbar>\n    <ion-buttons left class="bar-buttons bar-buttons-ios">\n      <button ion-button icon-only (click)="prev1()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-buttons end class="bar-buttons bar-buttons-ios">\n      <button ion-button icon-only (click)="next1()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-footer>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcard-modal.component.html"*/
+                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcard-modal.component.html"*/ '<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Flashcard Quiz\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content ng-switch="style" on-swipe-up="front = !front">\n  <ion-card>\n    <div *ngIf="displayImages && style === \'audio\'">\n      <img\n        (click)="playAudio(card)"\n        [(src)]="image"\n        onError="this.src=\'assets/img/default.png\'"\n        *ngIf="card.img"\n      />\n    </div>\n    <ion-card-content [ngSwitch]="style">\n      <div *ngSwitchCase="\'active\'">\n        <ion-card-title *ngIf="!front">\n          {{ card.word }}\n        </ion-card-title>\n        <ion-card-title class="definition" *ngIf="front">\n          {{ card.definition }}\n        </ion-card-title>\n      </div>\n      <div *ngSwitchCase="\'passive\'">\n        <ion-card-title *ngIf="!front">\n          {{ card.definition }}\n        </ion-card-title>\n        <ion-card-title class="definition" *ngIf="front">\n          {{ card.word }}\n        </ion-card-title>\n      </div>\n      <div *ngSwitchCase="\'audio\'">\n        <ion-card-title *ngIf="!front">\n          {{ card.word }} - {{ card.definition }}\n        </ion-card-title>\n      </div>\n      <div *ngIf="card.optional && optional">\n        <p class="option" *ngFor="let option of checkedOptions; let i = index">\n          {{ option }} - {{ card.optional[option] }}\n        </p>\n      </div>\n    </ion-card-content>\n\n    <ion-row *ngIf="card.audio?.length > 0">\n      <!-- <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0"> -->\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <!-- <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button\n            ion-item\n            *ngFor="let track of card.audio"\n            (click)="playAudio(track)"\n          >\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            Speaker: {{ track.speaker }}\n          </button>\n        </ion-list>\n      </ion-card>\n    </ion-row>\n\n    <ion-row *ngIf="(card.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list\n          *ngFor="\n            let sentence of card.example_sentence | noNullValues;\n            let i = index\n          "\n        >\n          <!-- <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button\n            ion-item\n            *ngFor="let track of card.audio"\n            (click)="playAudio(track)"\n          >\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ card.example_sentence_definition[i] }}</h4>\n            <h6>Speaker: {{ track.speaker }}</h6>\n          </button>\n        </ion-list>\n      </ion-card>\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button\n          ion-button\n          clear\n          small\n          color="primary"\n          icon-left\n          (click)="toggleFav(card)"\n        >\n          <ion-icon *ngIf="favourited(card)" name="ios-bookmarks"></ion-icon>\n          <ion-icon\n            *ngIf="!favourited(card)"\n            name="ios-bookmarks-outline"\n          ></ion-icon>\n          Bookmark\n        </button>\n        <ion-col>\n          <button\n            ion-button\n            clear\n            small\n            color="primary"\n            icon-left\n            (click)="copyToClipboard(card.word)"\n          >\n            <ion-icon name="copy"></ion-icon>\n            Copy\n          </button>\n        </ion-col>\n        <button\n          ion-button\n          clear\n          small\n          color="primary"\n          icon-left\n          (click)="front = !front"\n        >\n          <ion-icon name="refresh"></ion-icon>\n          <span *ngIf="front">Flip to back</span\n          ><span *ngIf="!front">Flip to front</span>\n        </button>\n      </ion-col>\n    </ion-row>\n  </ion-card>\n</ion-content>\n\n<ion-footer>\n  <ion-toolbar>\n    <ion-buttons left class="bar-buttons bar-buttons-ios">\n      <button ion-button icon-only (click)="prev1()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-buttons end class="bar-buttons bar-buttons-ios">\n      <button ion-button icon-only (click)="next1()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-footer>\n' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcard-modal.component.html"*/
             }),
             __metadata("design:paramtypes", [
+              __WEBPACK_IMPORTED_MODULE_6__ionic_native_clipboard__[
+                "a" /* Clipboard */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "j" /* ToastController */
+              ],
               __WEBPACK_IMPORTED_MODULE_4__ionic_native_media__[
                 "a" /* Media */
               ],
@@ -471,7 +521,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 203: /***/ function(
+    /***/ 204: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -497,7 +547,7 @@ webpackJsonp(
         106
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__ = __webpack_require__(
-        204
+        107
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(
         54
@@ -642,7 +692,7 @@ webpackJsonp(
           });
           toast.present();
         };
-        WordModal.prototype.copyToClipboard = function(entry) {
+        WordModal.prototype.copyToClipboard = function(word) {
           var _this = this;
           if (this.plt.is("core") || this.plt.is("mobileweb")) {
             var selBox = document.createElement("textarea");
@@ -650,17 +700,17 @@ webpackJsonp(
             selBox.style.left = "0";
             selBox.style.top = "0";
             selBox.style.opacity = "0";
-            selBox.value = entry.word;
+            selBox.value = word;
             document.body.appendChild(selBox);
             selBox.focus();
             selBox.select();
             document.execCommand("copy");
             document.body.removeChild(selBox);
-            this.copyToast(entry.word);
+            this.copyToast(word);
           } else {
-            this.clipboard.copy(entry.word).then(
+            this.clipboard.copy(word).then(
               function(success) {
-                _this.copyToast(entry.word);
+                _this.copyToast(word);
               },
               function(err) {
                 console.log(err);
@@ -854,123 +904,42 @@ webpackJsonp(
             )({
               selector: "word-modal",
               template:
-                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/ '<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Word Info\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-card>\n    <div *ngIf="displayImages">\n      <img [(src)]="entry.img" onError="this.src=\'assets/img/default.png\'" *ngIf="entry.img" />\n    </div>\n    <ion-card-content>\n      <ion-card-title>\n        {{entry.word}}\n      </ion-card-title>\n      <p class="definition">\n        {{entry.definition}}\n      </p>\n      <div *ngIf="entry.optional && optional && checkOptionTruth(entry.optional)">\n        <div class="option" *ngFor="let optional_dict of entry.optional; let i = index">\n          <ng-container *ngFor="let option of objectKeys(optional_dict)">\n            <p *ngIf="entry.optional[i][option]">\n              <span>{{ option }} - {{ entry.optional[i][option]}} </span>\n            </p>\n          </ng-container>\n        </div>\n      </div>\n    </ion-card-content>\n\n    <!-- <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0"> -->\n    <ion-row *ngIf="(entry.audio)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <!-- <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button ion-item *ngFor="let track of entry.audio" (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>\n          </button>\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row *ngIf="(entry.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list *ngFor="let sentence of (entry.example_sentence | noNullValues); let i = index">\n\n          <!-- <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"\n          (click)="playAudio(track)"> -->\n          <button ion-item *ngFor="let track of entry.example_sentence_audio[i]"\n            (click)="playAudio(track)">\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ entry.example_sentence_definition[i] }}</h4>\n            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>\n          </button>\n\n        </ion-list>\n      </ion-card>\n\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button ion-button clear small color="primary" icon-left (click)="toggleFav(entry)">\n          <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>\n          <ion-icon *ngIf="!favourited(entry)" name="ios-bookmarks-outline"></ion-icon>\n          Bookmark\n        </button>\n      </ion-col>\n      <ion-col>\n        <button ion-button clear small color="primary" icon-left (click)="copyToClipboard(entry)">\n          <ion-icon name="copy"></ion-icon>\n          Copy\n        </button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n</ion-content>\n\n<ion-footer *ngIf="checkOptionTruth(entry.optional)">\n  <ion-toolbar>\n    <ion-item>\n      <ion-toggle checked="false" [(ngModel)]="optional"></ion-toggle>\n      <ion-label>Show optional information</ion-label>\n    </ion-item>\n  </ion-toolbar>\n</ion-footer>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/
+                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/ '<ion-header>\n  <ion-toolbar>\n    <ion-buttons left>\n      <button ion-button (click)="dismiss()">\n        <ion-icon name="arrow-back"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>\n      Word Info\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-card>\n    <div *ngIf="displayImages">\n      <img\n        [(src)]="entry.img"\n        onError="this.src=\'assets/img/default.png\'"\n        *ngIf="entry.img"\n      />\n    </div>\n    <ion-card-content>\n      <ion-card-title>\n        {{ entry.word }}\n      </ion-card-title>\n      <p class="definition">\n        {{ entry.definition }}\n      </p>\n      <div\n        *ngIf="entry.optional && optional && checkOptionTruth(entry.optional)"\n      >\n        <div\n          class="option"\n          *ngFor="let optional_dict of entry.optional; let i = index"\n        >\n          <ng-container *ngFor="let option of objectKeys(optional_dict)">\n            <p *ngIf="entry.optional[i][option]">\n              <span>{{ option }} - {{ entry.optional[i][option] }} </span>\n            </p>\n          </ng-container>\n        </div>\n      </div>\n    </ion-card-content>\n\n    <!-- <ion-row *ngIf="(entry.audio | noNullObjectValues)?.length > 0"> -->\n    <ion-row *ngIf="entry.audio?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Audio\n        </ion-card-header>\n\n        <ion-list>\n          <!-- <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)"> -->\n          <button\n            ion-item\n            *ngFor="let track of entry.audio"\n            (click)="playAudio(track)"\n          >\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>\n          </button>\n        </ion-list>\n      </ion-card>\n    </ion-row>\n\n    <ion-row *ngIf="(entry.example_sentence | noNullValues)?.length > 0">\n      <ion-card>\n        <ion-card-header>\n          Sentences\n        </ion-card-header>\n\n        <ion-list\n          *ngFor="\n            let sentence of entry.example_sentence | noNullValues;\n            let i = index\n          "\n        >\n          <!-- <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"\n          (click)="playAudio(track)"> -->\n          <button\n            ion-item\n            *ngFor="let track of entry.example_sentence_audio[i]"\n            (click)="playAudio(track)"\n          >\n            <ion-icon name="musical-notes" item-start></ion-icon>\n            <h2>{{ sentence }}</h2>\n            <h4>{{ entry.example_sentence_definition[i] }}</h4>\n            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>\n          </button>\n        </ion-list>\n      </ion-card>\n    </ion-row>\n\n    <ion-row no-padding>\n      <ion-col>\n        <button\n          ion-button\n          clear\n          small\n          color="primary"\n          icon-left\n          (click)="toggleFav(entry)"\n        >\n          <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>\n          <ion-icon\n            *ngIf="!favourited(entry)"\n            name="ios-bookmarks-outline"\n          ></ion-icon>\n          Bookmark\n        </button>\n      </ion-col>\n      <ion-col>\n        <button\n          ion-button\n          clear\n          small\n          color="primary"\n          icon-left\n          (click)="copyToClipboard(entry.word)"\n        >\n          <ion-icon name="copy"></ion-icon>\n          Copy\n        </button>\n      </ion-col>\n    </ion-row>\n  </ion-card>\n</ion-content>\n\n<ion-footer *ngIf="checkOptionTruth(entry.optional)">\n  <ion-toolbar>\n    <ion-item>\n      <ion-toggle checked="false" [(ngModel)]="optional"></ion-toggle>\n      <ion-label>Show optional information</ion-label>\n    </ion-item>\n  </ion-toolbar>\n</ion-footer>\n' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/word-modal.component.html"*/
             }),
             __metadata("design:paramtypes", [
-              (typeof (_a =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "j" /* ToastController */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "j" /* ToastController */
-                ]) === "function" &&
-                _a) ||
-                Object,
-              (typeof (_b =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "g" /* NavController */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "g" /* NavController */
-                ]) === "function" &&
-                _b) ||
-                Object,
-              (typeof (_c =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "h" /* NavParams */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "h" /* NavParams */
-                ]) === "function" &&
-                _c) ||
-                Object,
-              (typeof (_d =
-                typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__[
-                  "a" /* Clipboard */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__[
-                  "a" /* Clipboard */
-                ]) === "function" &&
-                _d) ||
-                Object,
-              (typeof (_e =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "k" /* ViewController */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "k" /* ViewController */
-                ]) === "function" &&
-                _e) ||
-                Object,
-              (typeof (_f =
-                typeof __WEBPACK_IMPORTED_MODULE_6__ionic_native_media__[
-                  "a" /* Media */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_6__ionic_native_media__[
-                  "a" /* Media */
-                ]) === "function" &&
-                _f) ||
-                Object,
-              (typeof (_g =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "a" /* AlertController */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "a" /* AlertController */
-                ]) === "function" &&
-                _g) ||
-                Object,
-              (typeof (_h =
-                typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__[
-                  "a" /* File */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__[
-                  "a" /* File */
-                ]) === "function" &&
-                _h) ||
-                Object,
-              (typeof (_j =
-                typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__[
-                  "a" /* FileTransfer */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__[
-                  "a" /* FileTransfer */
-                ]) === "function" &&
-                _j) ||
-                Object,
-              (typeof (_k =
-                typeof __WEBPACK_IMPORTED_MODULE_5__ionic_storage__[
-                  "b" /* Storage */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_5__ionic_storage__[
-                  "b" /* Storage */
-                ]) === "function" &&
-                _k) ||
-                Object,
-              (typeof (_l =
-                typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "i" /* Platform */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                  "i" /* Platform */
-                ]) === "function" &&
-                _l) ||
-                Object,
-              (typeof (_m =
-                typeof __WEBPACK_IMPORTED_MODULE_7__app_mtd_service__[
-                  "a" /* MTDService */
-                ] !== "undefined" &&
-                __WEBPACK_IMPORTED_MODULE_7__app_mtd_service__[
-                  "a" /* MTDService */
-                ]) === "function" &&
-                _m) ||
-                Object
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "j" /* ToastController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "g" /* NavController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
+              __WEBPACK_IMPORTED_MODULE_4__ionic_native_clipboard__[
+                "a" /* Clipboard */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "k" /* ViewController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_6__ionic_native_media__[
+                "a" /* Media */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "a" /* AlertController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__["a" /* File */],
+              __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__[
+                "a" /* FileTransfer */
+              ],
+              __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
+              __WEBPACK_IMPORTED_MODULE_7__app_mtd_service__[
+                "a" /* MTDService */
+              ]
             ])
           ],
           WordModal
         );
         return WordModal;
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
       })();
 
       //# sourceMappingURL=word-modal.component.js.map
@@ -1033,7 +1002,7 @@ webpackJsonp(
         54
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(
-        199
+        200
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(
         105
@@ -1042,22 +1011,22 @@ webpackJsonp(
         106
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(
-        200
+        201
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(
         282
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages__ = __webpack_require__(
-        201
+        202
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mtd_service__ = __webpack_require__(
         29
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pipes_pipes_module__ = __webpack_require__(
-        294
+        295
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_clipboard__ = __webpack_require__(
-        204
+        107
       );
       var __decorate =
         (this && this.__decorate) ||
@@ -1238,16 +1207,16 @@ webpackJsonp(
         13
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(
-        199
+        200
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(
-        200
+        201
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(
         54
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages__ = __webpack_require__(
-        201
+        202
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global__ = __webpack_require__(
         25
@@ -1449,6 +1418,9 @@ webpackJsonp(
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(
         25
       );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(
+        286
+      );
       var __decorate =
         (this && this.__decorate) ||
         function(decorators, target, key, desc) {
@@ -1486,6 +1458,10 @@ webpackJsonp(
       var About = /** @class */ (function() {
         function About(navCtrl) {
           this.navCtrl = navCtrl;
+          this.version =
+            __WEBPACK_IMPORTED_MODULE_3__environments_environment__[
+              "a" /* environment */
+            ].versions.app;
           this.language =
             __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */].config[
               "L1"
@@ -1521,7 +1497,7 @@ webpackJsonp(
             )({
               selector: "page-about",
               template:
-                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/about/about.html"*/ "<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name=\"menu\"></ion-icon>\n    </button>\n    <ion-title>About</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <div style=\"text-align: center;\">\n    <img style=\"margin-top: 20px;\" src='/assets/img/splash.png' />\n  </div>\n  <div style=\"text-align: center;\">\n    <a href='https://www.mothertongues.org'>\n      <img style='width: 150px; margin-top: 30px;' href='https://www.mothertongues.org' src='/assets/img/logo.png' />\n    </a>\n  </div>\n  <p style='text-align: center;'>{{ build }}</p>\n</ion-content>" /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/about/about.html"*/
+                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/about/about.html"*/ '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>About</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <div style="text-align: center;">\n    <img style="margin-top: 20px;" src="/assets/img/splash.png" />\n  </div>\n  <div style="text-align: center;">\n    <a href="https://www.mothertongues.org">\n      <img\n        style="width: 150px; margin-top: 30px;"\n        href="https://www.mothertongues.org"\n        src="/assets/img/logo.png"\n      />\n    </a>\n    <p>UI version {{ version }}</p>\n  </div>\n  <p style="text-align: center;">{{ build }}</p>\n</ion-content>\n' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/about/about.html"*/
             }),
             __metadata("design:paramtypes", [
               __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
@@ -1540,6 +1516,33 @@ webpackJsonp(
     },
 
     /***/ 286: /***/ function(
+      module,
+      __webpack_exports__,
+      __webpack_require__
+    ) {
+      "use strict";
+      /* harmony export (binding) */ __webpack_require__.d(
+        __webpack_exports__,
+        "a",
+        function() {
+          return environment;
+        }
+      );
+      var packageJson = __webpack_require__(297);
+      var environment = {
+        appName: "mothertongues-UI",
+        envName: "DEV",
+        production: false,
+        versions: {
+          app: packageJson.version
+        }
+      };
+      //# sourceMappingURL=environment.js.map
+
+      /***/
+    },
+
+    /***/ 287: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -1644,7 +1647,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 288: /***/ function(
+    /***/ 289: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -1829,178 +1832,6 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 289: /***/ function(
-      module,
-      __webpack_exports__,
-      __webpack_require__
-    ) {
-      "use strict";
-      /* harmony export (binding) */ __webpack_require__.d(
-        __webpack_exports__,
-        "a",
-        function() {
-          return Flashcards;
-        }
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(
-        0
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(
-        13
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__ = __webpack_require__(
-        202
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__ = __webpack_require__(
-        29
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_global__ = __webpack_require__(
-        25
-      );
-      var __decorate =
-        (this && this.__decorate) ||
-        function(decorators, target, key, desc) {
-          var c = arguments.length,
-            r =
-              c < 3
-                ? target
-                : desc === null
-                ? (desc = Object.getOwnPropertyDescriptor(target, key))
-                : desc,
-            d;
-          if (
-            typeof Reflect === "object" &&
-            typeof Reflect.decorate === "function"
-          )
-            r = Reflect.decorate(decorators, target, key, desc);
-          else
-            for (var i = decorators.length - 1; i >= 0; i--)
-              if ((d = decorators[i]))
-                r =
-                  (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) ||
-                  r;
-          return c > 3 && r && Object.defineProperty(target, key, r), r;
-        };
-      var __metadata =
-        (this && this.__metadata) ||
-        function(k, v) {
-          if (
-            typeof Reflect === "object" &&
-            typeof Reflect.metadata === "function"
-          )
-            return Reflect.metadata(k, v);
-        };
-
-      var Flashcards = /** @class */ (function() {
-        function Flashcards(navCtrl, modalCtrl, mtdService, alertCtrl) {
-          this.navCtrl = navCtrl;
-          this.modalCtrl = modalCtrl;
-          this.mtdService = mtdService;
-          this.alertCtrl = alertCtrl;
-          this.deckSelectOptions = { title: "Select a Deck" };
-          this.language =
-            __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config[
-              "L1"
-            ]["name"];
-          this.language2 =
-            __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config[
-              "L2"
-            ]["name"];
-          this.decks = Object.keys(mtdService.categories);
-          this.flashcardStyles = [
-            {
-              title: "Show " + this.language,
-              info:
-                "This is the easiest method. It involves seeing the " +
-                this.language +
-                " word and guessing " +
-                this.language2 +
-                ".",
-              type: "passive"
-            },
-            {
-              title: "Show " + this.language2,
-              info:
-                "This method is designed to test your spelling of the " +
-                this.language +
-                " word. You are provided with the " +
-                this.language2 +
-                ", and have to guess the " +
-                this.language +
-                " word.",
-              type: "active"
-            },
-            {
-              title: "Audio Only",
-              info:
-                "This method is entirely without any written prompt. Try and guess the word in both " +
-                this.language2 +
-                " and " +
-                this.language +
-                "!",
-              type: "audio"
-            }
-          ];
-        }
-        Flashcards.prototype.startFlashcards = function() {
-          if (this.deck === undefined) {
-            var alert_1 = this.alertCtrl.create({
-              title: "Oops!",
-              subTitle: "Did you select a deck?",
-              buttons: ["Try again"]
-            });
-            alert_1.present();
-          } else if (this.selectedFlashcardStyle === undefined) {
-            var alert_2 = this.alertCtrl.create({
-              title: "Oops!",
-              subTitle: "Did you select a flashcard style?",
-              buttons: ["Try again"]
-            });
-            alert_2.present();
-          } else {
-            var flashcardModal = this.modalCtrl.create(
-              __WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__[
-                "a" /* Flashcard */
-              ],
-              { deck: this.deck, style: this.selectedFlashcardStyle }
-            );
-            flashcardModal.present();
-          }
-        };
-        Flashcards = __decorate(
-          [
-            Object(
-              __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */]
-            )({
-              selector: "page-flashcards",
-              template:
-                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/ '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Flashcards</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n\n  <ion-list class="deck-select">\n    <ion-list-header>\n      First, select a flashcard deck:\n    </ion-list-header>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Deck</ion-label>\n      <ion-select mode="ios" [(ngModel)]="deck" [selectOptions]="deckSelectOptions">\n        <ion-option *ngFor=\'let deck of decks\'>{{deck}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n\n  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">\n    <ion-list-header text-wrap>\n      Then, select a style of learning between the following options:\n    </ion-list-header>\n    <ion-item *ngFor="let style of flashcardStyles">\n      <ion-label>{{style.title}}</ion-label>\n      <p>{{style.info}}</p>\n      <ion-radio value="{{style.type}}"></ion-radio>\n    </ion-item>\n  </ion-list>\n\n  <div class="center"><button ion-button secondary (click)=\'startFlashcards()\'>Click here to start!</button></div>\n</ion-content>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/
-            }),
-            __metadata("design:paramtypes", [
-              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                "g" /* NavController */
-              ],
-              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                "e" /* ModalController */
-              ],
-              __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__[
-                "a" /* MTDService */
-              ],
-              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                "a" /* AlertController */
-              ]
-            ])
-          ],
-          Flashcards
-        );
-        return Flashcards;
-      })();
-
-      //# sourceMappingURL=flashcards.js.map
-
-      /***/
-    },
-
     /***/ 29: /***/ function(module, __webpack_exports__, __webpack_require__) {
       "use strict";
       /* harmony export (binding) */ __webpack_require__.d(
@@ -2017,7 +1848,7 @@ webpackJsonp(
         25
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(
-        287
+        288
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(
         __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__
@@ -2235,6 +2066,178 @@ webpackJsonp(
         __webpack_exports__,
         "a",
         function() {
+          return Flashcards;
+        }
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(
+        0
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(
+        13
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__ = __webpack_require__(
+        203
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__ = __webpack_require__(
+        29
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_global__ = __webpack_require__(
+        25
+      );
+      var __decorate =
+        (this && this.__decorate) ||
+        function(decorators, target, key, desc) {
+          var c = arguments.length,
+            r =
+              c < 3
+                ? target
+                : desc === null
+                ? (desc = Object.getOwnPropertyDescriptor(target, key))
+                : desc,
+            d;
+          if (
+            typeof Reflect === "object" &&
+            typeof Reflect.decorate === "function"
+          )
+            r = Reflect.decorate(decorators, target, key, desc);
+          else
+            for (var i = decorators.length - 1; i >= 0; i--)
+              if ((d = decorators[i]))
+                r =
+                  (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) ||
+                  r;
+          return c > 3 && r && Object.defineProperty(target, key, r), r;
+        };
+      var __metadata =
+        (this && this.__metadata) ||
+        function(k, v) {
+          if (
+            typeof Reflect === "object" &&
+            typeof Reflect.metadata === "function"
+          )
+            return Reflect.metadata(k, v);
+        };
+
+      var Flashcards = /** @class */ (function() {
+        function Flashcards(navCtrl, modalCtrl, mtdService, alertCtrl) {
+          this.navCtrl = navCtrl;
+          this.modalCtrl = modalCtrl;
+          this.mtdService = mtdService;
+          this.alertCtrl = alertCtrl;
+          this.deckSelectOptions = { title: "Select a Deck" };
+          this.language =
+            __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config[
+              "L1"
+            ]["name"];
+          this.language2 =
+            __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config[
+              "L2"
+            ]["name"];
+          this.decks = Object.keys(mtdService.categories);
+          this.flashcardStyles = [
+            {
+              title: "Show " + this.language,
+              info:
+                "This is the easiest method. It involves seeing the " +
+                this.language +
+                " word and guessing " +
+                this.language2 +
+                ".",
+              type: "passive"
+            },
+            {
+              title: "Show " + this.language2,
+              info:
+                "This method is designed to test your spelling of the " +
+                this.language +
+                " word. You are provided with the " +
+                this.language2 +
+                ", and have to guess the " +
+                this.language +
+                " word.",
+              type: "active"
+            },
+            {
+              title: "Audio Only",
+              info:
+                "This method is entirely without any written prompt. Try and guess the word in both " +
+                this.language2 +
+                " and " +
+                this.language +
+                "!",
+              type: "audio"
+            }
+          ];
+        }
+        Flashcards.prototype.startFlashcards = function() {
+          if (this.deck === undefined) {
+            var alert_1 = this.alertCtrl.create({
+              title: "Oops!",
+              subTitle: "Did you select a deck?",
+              buttons: ["Try again"]
+            });
+            alert_1.present();
+          } else if (this.selectedFlashcardStyle === undefined) {
+            var alert_2 = this.alertCtrl.create({
+              title: "Oops!",
+              subTitle: "Did you select a flashcard style?",
+              buttons: ["Try again"]
+            });
+            alert_2.present();
+          } else {
+            var flashcardModal = this.modalCtrl.create(
+              __WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__[
+                "a" /* Flashcard */
+              ],
+              { deck: this.deck, style: this.selectedFlashcardStyle }
+            );
+            flashcardModal.present();
+          }
+        };
+        Flashcards = __decorate(
+          [
+            Object(
+              __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */]
+            )({
+              selector: "page-flashcards",
+              template:
+                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/ '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Flashcards</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n\n  <ion-list class="deck-select">\n    <ion-list-header>\n      First, select a flashcard deck:\n    </ion-list-header>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Deck</ion-label>\n      <ion-select mode="ios" [(ngModel)]="deck" [selectOptions]="deckSelectOptions">\n        <ion-option *ngFor=\'let deck of decks\'>{{deck}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n\n  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">\n    <ion-list-header text-wrap>\n      Then, select a style of learning between the following options:\n    </ion-list-header>\n    <ion-item *ngFor="let style of flashcardStyles">\n      <ion-label>{{style.title}}</ion-label>\n      <p>{{style.info}}</p>\n      <ion-radio value="{{style.type}}"></ion-radio>\n    </ion-item>\n  </ion-list>\n\n  <div class="center"><button ion-button secondary (click)=\'startFlashcards()\'>Click here to start!</button></div>\n</ion-content>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/
+            }),
+            __metadata("design:paramtypes", [
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "g" /* NavController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "e" /* ModalController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__[
+                "a" /* MTDService */
+              ],
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "a" /* AlertController */
+              ]
+            ])
+          ],
+          Flashcards
+        );
+        return Flashcards;
+      })();
+
+      //# sourceMappingURL=flashcards.js.map
+
+      /***/
+    },
+
+    /***/ 291: /***/ function(
+      module,
+      __webpack_exports__,
+      __webpack_require__
+    ) {
+      "use strict";
+      /* harmony export (binding) */ __webpack_require__.d(
+        __webpack_exports__,
+        "a",
+        function() {
           return Random;
         }
       );
@@ -2310,7 +2313,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 291: /***/ function(
+    /***/ 292: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2512,7 +2515,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 292: /***/ function(
+    /***/ 293: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2529,7 +2532,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 293: /***/ function(
+    /***/ 294: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2549,7 +2552,7 @@ webpackJsonp(
         13
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__word_modal_component__ = __webpack_require__(
-        203
+        204
       );
       var __decorate =
         (this && this.__decorate) ||
@@ -2678,7 +2681,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 294: /***/ function(
+    /***/ 295: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2695,7 +2698,7 @@ webpackJsonp(
         0
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__no_null_values_no_null_values__ = __webpack_require__(
-        295
+        296
       );
       var __decorate =
         (this && this.__decorate) ||
@@ -2758,7 +2761,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 295: /***/ function(
+    /***/ 296: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2877,6 +2880,99 @@ webpackJsonp(
       })();
 
       //# sourceMappingURL=no-null-values.js.map
+
+      /***/
+    },
+
+    /***/ 297: /***/ function(module, exports) {
+      module.exports = {
+        name: "mothertongues-UI",
+        version: "3.2.0",
+        author: "Aidan Pine",
+        homepage: "http://www.mothertongues.org",
+        private: true,
+        scripts: {
+          clean: "ionic-app-scripts clean",
+          build: "ionic-app-scripts build",
+          "ionic:build": "ionic-app-scripts build",
+          "ionic:serve": "ionic-app-scripts serve",
+          minify:
+            "uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"
+        },
+        husky: {
+          hooks: {
+            "pre-commit": "pretty-quick --staged",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+          }
+        },
+        commitlint: { extends: ["@commitlint/config-conventional"] },
+        dependencies: {
+          "@angular/common": "5.0.3",
+          "@angular/compiler": "5.0.3",
+          "@angular/compiler-cli": "5.0.3",
+          "@angular/core": "5.0.3",
+          "@angular/forms": "5.0.3",
+          "@angular/http": "5.0.3",
+          "@angular/platform-browser": "5.0.3",
+          "@angular/platform-browser-dynamic": "5.0.3",
+          "@commitlint/config-conventional": "^8.3.4",
+          "@ionic-native/android-permissions": "^4.5.3",
+          "@ionic-native/clipboard": "^4.20.0",
+          "@ionic-native/core": "4.4.0",
+          "@ionic-native/file": "^4.5.3",
+          "@ionic-native/file-transfer": "^4.5.3",
+          "@ionic-native/media": "^4.20.0",
+          "@ionic-native/splash-screen": "4.4.0",
+          "@ionic-native/status-bar": "4.4.0",
+          "@ionic/pro": "^1.0.19",
+          "@ionic/storage": "2.1.3",
+          commitlint: "^8.3.5",
+          "cordova-android": "^8.1.0",
+          "cordova-browser": "^5.0.3",
+          "cordova-clipboard": "^1.3.0",
+          "cordova-plugin-device": "^2.0.3",
+          "cordova-plugin-file": "^6.0.2",
+          "cordova-plugin-file-transfer": "^1.7.1",
+          "cordova-plugin-ionic-keyboard": "^2.2.0",
+          "cordova-plugin-ionic-webview": "^4.1.0",
+          "cordova-plugin-media": "5.0.3",
+          "cordova-plugin-splashscreen": "^5.0.3",
+          "cordova-plugin-whitelist": "^1.3.4",
+          husky: "3.0.9",
+          ionic: "^5.4.1",
+          "ionic-angular": "3.9.2",
+          ionicons: "3.0.0",
+          prettier: "^1.19.1",
+          "pretty-quick": "^2.0.1",
+          rxjs: "5.5.2",
+          "sw-toolbox": "3.6.0",
+          web: "0.0.2",
+          "zone.js": "0.8.18"
+        },
+        devDependencies: {
+          "@angular/cli": "^1.7.4",
+          "@ionic/app-scripts": "^3.1.8",
+          typescript: "2.4.2",
+          "uglify-js": "^3.4.9"
+        },
+        description: "A Mother Tongues Dictionary app",
+        cordova: {
+          plugins: {
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-device": {},
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-ionic-webview": {
+              ANDROID_SUPPORT_ANNOTATIONS_VERSION: "27.+"
+            },
+            "cordova-plugin-ionic-keyboard": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-media": { KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE: "NO" },
+            "cordova-clipboard": {}
+          },
+          platforms: ["browser", "android"]
+        }
+      };
 
       /***/
     }

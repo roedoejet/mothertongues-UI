@@ -4,11 +4,14 @@ import { NavController } from "ionic-angular";
 
 import { MTDInfo } from "../../app/global";
 
+import { environment } from "../../environments/environment";
+
 @Component({
   selector: "page-about",
   templateUrl: "about.html"
 })
 export class About {
+  version = environment.versions.app;
   language: string = MTDInfo.config["L1"]["name"];
   build: string = "";
   constructor(public navCtrl: NavController) {
