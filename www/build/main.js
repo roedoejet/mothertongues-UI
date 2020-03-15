@@ -54,7 +54,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bookmarks_bookmarks__ = __webpack_require__(
-        287
+        288
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -64,7 +64,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__browse_browse__ = __webpack_require__(
-        289
+        290
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -74,7 +74,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__flashcards_flashcards__ = __webpack_require__(
-        290
+        291
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -96,7 +96,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__random_random__ = __webpack_require__(
-        291
+        292
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -106,7 +106,7 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__search_search__ = __webpack_require__(
-        292
+        293
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -116,11 +116,11 @@ webpackJsonp(
         }
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_entry_model__ = __webpack_require__(
-        293
+        294
       );
       /* unused harmony namespace reexport */
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_entry_list_component__ = __webpack_require__(
-        294
+        295
       );
       /* harmony namespace reexport (by used) */ __webpack_require__.d(
         __webpack_exports__,
@@ -1023,7 +1023,7 @@ webpackJsonp(
         29
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pipes_pipes_module__ = __webpack_require__(
-        295
+        296
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_clipboard__ = __webpack_require__(
         107
@@ -1467,7 +1467,14 @@ webpackJsonp(
               "L1"
             ]["name"];
           this.build = "";
-          if (this.build) {
+          if (
+            __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */] &&
+            __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */]
+              .config &&
+            "build" in
+              __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */]
+                .config
+          ) {
             this.build = this.buildToString(
               __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */]
                 .config["build"]
@@ -1528,7 +1535,7 @@ webpackJsonp(
           return environment;
         }
       );
-      var packageJson = __webpack_require__(297);
+      var packageJson = __webpack_require__(287);
       var environment = {
         appName: "mothertongues-UI",
         envName: "DEV",
@@ -1542,7 +1549,100 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 287: /***/ function(
+    /***/ 287: /***/ function(module, exports) {
+      module.exports = {
+        name: "mothertongues-UI",
+        version: "3.2.0",
+        author: "Aidan Pine",
+        homepage: "http://www.mothertongues.org",
+        private: true,
+        scripts: {
+          clean: "ionic-app-scripts clean",
+          build: "ionic-app-scripts build",
+          "ionic:build": "ionic-app-scripts build",
+          "ionic:serve": "ionic-app-scripts serve",
+          minify:
+            "uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"
+        },
+        husky: {
+          hooks: {
+            "pre-commit": "pretty-quick --staged",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+          }
+        },
+        commitlint: { extends: ["@commitlint/config-conventional"] },
+        dependencies: {
+          "@angular/common": "5.0.3",
+          "@angular/compiler": "5.0.3",
+          "@angular/compiler-cli": "5.0.3",
+          "@angular/core": "5.0.3",
+          "@angular/forms": "5.0.3",
+          "@angular/http": "5.0.3",
+          "@angular/platform-browser": "5.0.3",
+          "@angular/platform-browser-dynamic": "5.0.3",
+          "@commitlint/config-conventional": "^8.3.4",
+          "@ionic-native/android-permissions": "^4.5.3",
+          "@ionic-native/clipboard": "^4.20.0",
+          "@ionic-native/core": "4.4.0",
+          "@ionic-native/file": "^4.5.3",
+          "@ionic-native/file-transfer": "^4.5.3",
+          "@ionic-native/media": "^4.20.0",
+          "@ionic-native/splash-screen": "4.4.0",
+          "@ionic-native/status-bar": "4.4.0",
+          "@ionic/pro": "^1.0.19",
+          "@ionic/storage": "2.1.3",
+          commitlint: "^8.3.5",
+          "cordova-android": "^8.1.0",
+          "cordova-browser": "^5.0.3",
+          "cordova-clipboard": "^1.3.0",
+          "cordova-plugin-device": "^2.0.3",
+          "cordova-plugin-file": "^6.0.2",
+          "cordova-plugin-file-transfer": "^1.7.1",
+          "cordova-plugin-ionic-keyboard": "^2.2.0",
+          "cordova-plugin-ionic-webview": "^4.1.0",
+          "cordova-plugin-media": "5.0.3",
+          "cordova-plugin-splashscreen": "^5.0.3",
+          "cordova-plugin-whitelist": "^1.3.4",
+          husky: "^3.0.9",
+          ionic: "^5.4.1",
+          "ionic-angular": "3.9.2",
+          ionicons: "3.0.0",
+          prettier: "^1.19.1",
+          "pretty-quick": "^2.0.1",
+          rxjs: "5.5.2",
+          "sw-toolbox": "3.6.0",
+          web: "0.0.2",
+          "zone.js": "0.8.18"
+        },
+        devDependencies: {
+          "@angular/cli": "^1.7.4",
+          "@ionic/app-scripts": "^3.1.8",
+          typescript: "2.4.2",
+          "uglify-js": "^3.4.9"
+        },
+        description: "A Mother Tongues Dictionary app",
+        cordova: {
+          plugins: {
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-device": {},
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-ionic-webview": {
+              ANDROID_SUPPORT_ANNOTATIONS_VERSION: "27.+"
+            },
+            "cordova-plugin-ionic-keyboard": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-media": { KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE: "NO" },
+            "cordova-clipboard": {}
+          },
+          platforms: ["browser", "android"]
+        }
+      };
+
+      /***/
+    },
+
+    /***/ 288: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -1647,191 +1747,6 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 289: /***/ function(
-      module,
-      __webpack_exports__,
-      __webpack_require__
-    ) {
-      "use strict";
-      /* harmony export (binding) */ __webpack_require__.d(
-        __webpack_exports__,
-        "a",
-        function() {
-          return Browse;
-        }
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(
-        0
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(
-        13
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(
-        25
-      );
-      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__ = __webpack_require__(
-        29
-      );
-      var __decorate =
-        (this && this.__decorate) ||
-        function(decorators, target, key, desc) {
-          var c = arguments.length,
-            r =
-              c < 3
-                ? target
-                : desc === null
-                ? (desc = Object.getOwnPropertyDescriptor(target, key))
-                : desc,
-            d;
-          if (
-            typeof Reflect === "object" &&
-            typeof Reflect.decorate === "function"
-          )
-            r = Reflect.decorate(decorators, target, key, desc);
-          else
-            for (var i = decorators.length - 1; i >= 0; i--)
-              if ((d = decorators[i]))
-                r =
-                  (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) ||
-                  r;
-          return c > 3 && r && Object.defineProperty(target, key, r), r;
-        };
-      var __metadata =
-        (this && this.__metadata) ||
-        function(k, v) {
-          if (
-            typeof Reflect === "object" &&
-            typeof Reflect.metadata === "function"
-          )
-            return Reflect.metadata(k, v);
-        };
-
-      var Browse = /** @class */ (function() {
-        function Browse(navCtrl, mtdService) {
-          this.navCtrl = navCtrl;
-          this.mtdService = mtdService;
-          this.currentEntries = window["dataDict"];
-          this.currentTen = window["get10"](window["dataDict"], 0);
-          this.letters =
-            __WEBPACK_IMPORTED_MODULE_2__app_global__[
-              "a" /* MTDInfo */
-            ].config.L1.lettersInLanguage;
-          this.selectedCategory = "words";
-          this.startIndex = 0;
-          // currentBrowsingLetter: String = this.letters[this.currentBrowsingEntries[0].sorting_form[0]];
-          this.letterSelectOptions = { title: "Select a Letter" };
-          this.categorySelectOptions = { title: "Select a Category" };
-          this.initializeEntries(mtdService);
-        }
-        Browse.prototype.initializeEntries = function(mtdService) {
-          this.displayCategories = Object.keys(mtdService.categories);
-          // Add letter index to first words of that letter in entries
-          this.letterInit();
-        };
-        // Determine whether letter occurs word-initially
-        Browse.prototype.letterInit = function() {
-          var letters =
-            __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */].config
-              .L1.lettersInLanguage;
-          var newLetters = [];
-          for (var _i = 0, letters_1 = letters; _i < letters_1.length; _i++) {
-            var letter = letters_1[_i];
-            var ind = letters.indexOf(letter);
-            for (var _a = 0, _b = this.currentEntries; _a < _b.length; _a++) {
-              var entry = _b[_a];
-              if (entry.sorting_form[0] === ind) {
-                entry.firstWordIndex = ind;
-                newLetters.push(letter);
-                break;
-              }
-            }
-          }
-          this.displayLetters = newLetters;
-        };
-        // Scroll to previous 10 entries
-        Browse.prototype.prev10 = function() {
-          if (this.startIndex - 10 > 0) {
-            this.startIndex -= 10;
-            this.currentTen = window["get10"](
-              this.currentEntries,
-              this.startIndex
-            );
-          } else {
-            this.startIndex = 0;
-            this.currentTen = window["get10"](
-              this.currentEntries,
-              this.startIndex
-            );
-          }
-        };
-        // Scroll to next 10 entries
-        Browse.prototype.next10 = function() {
-          if (this.startIndex + 10 < this.currentEntries.length) {
-            this.startIndex += 10;
-            this.currentTen = window["get10"](
-              this.currentEntries,
-              this.startIndex
-            );
-          } else {
-            this.startIndex = this.currentEntries.length - 10;
-            this.currentTen = window["get10"](
-              this.currentEntries,
-              this.startIndex
-            );
-          }
-        };
-        Browse.prototype.secondary = function(cat) {
-          return cat.charAt(0) === "-";
-        };
-        // Scroll to letter
-        // Still needed: change selected letter dynamically
-        Browse.prototype.scrollTo = function(letter) {
-          var letterIndex = this.letters.indexOf(letter);
-          for (var _i = 0, _a = this.currentEntries; _i < _a.length; _i++) {
-            var entry = _a[_i];
-            if (entry.firstWordIndex === letterIndex) {
-              this.startIndex = this.currentEntries.indexOf(entry);
-              this.currentTen = window["get10"](
-                this.currentEntries,
-                this.startIndex
-              );
-              break;
-            }
-          }
-        };
-        Browse.prototype.selectCategory = function(category) {
-          this.currentEntries = this.mtdService.categories[category];
-          this.currentTen = window["get10"](this.currentEntries, 0);
-          this.letterInit();
-        };
-        Browse = __decorate(
-          [
-            Object(
-              __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */]
-            )({
-              selector: "page-browse",
-              template:
-                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/ '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Browse</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content scrollbar-y-auto>\n\n  <ion-list mode="ios">\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Category</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)" [selectOptions]="categorySelectOptions">\n        <ion-option *ngFor=\'let category of displayCategories\'>{{category}}</ion-option>\n      </ion-select>\n    </ion-item>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Letter</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)" [selectOptions]="letterSelectOptions">\n        <ion-option *ngFor=\'let letter of displayLetters\'>{{letter}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n  <div class="entry-container">\n    <entry-list [entries]=\'currentTen\'></entry-list>\n  </div>\n \n\n</ion-content>\n\n <ion-footer>\n    <ion-toolbar>\n      <ion-buttons left class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="prev10()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n      <ion-buttons end class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="next10()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-footer>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/
-            }),
-            __metadata("design:paramtypes", [
-              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
-                "g" /* NavController */
-              ],
-              __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__[
-                "a" /* MTDService */
-              ]
-            ])
-          ],
-          Browse
-        );
-        return Browse;
-      })();
-
-      //# sourceMappingURL=browse.js.map
-
-      /***/
-    },
-
     /***/ 29: /***/ function(module, __webpack_exports__, __webpack_require__) {
       "use strict";
       /* harmony export (binding) */ __webpack_require__.d(
@@ -1848,7 +1763,7 @@ webpackJsonp(
         25
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(
-        288
+        289
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(
         __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__
@@ -2066,6 +1981,191 @@ webpackJsonp(
         __webpack_exports__,
         "a",
         function() {
+          return Browse;
+        }
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(
+        0
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(
+        13
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(
+        25
+      );
+      /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__ = __webpack_require__(
+        29
+      );
+      var __decorate =
+        (this && this.__decorate) ||
+        function(decorators, target, key, desc) {
+          var c = arguments.length,
+            r =
+              c < 3
+                ? target
+                : desc === null
+                ? (desc = Object.getOwnPropertyDescriptor(target, key))
+                : desc,
+            d;
+          if (
+            typeof Reflect === "object" &&
+            typeof Reflect.decorate === "function"
+          )
+            r = Reflect.decorate(decorators, target, key, desc);
+          else
+            for (var i = decorators.length - 1; i >= 0; i--)
+              if ((d = decorators[i]))
+                r =
+                  (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) ||
+                  r;
+          return c > 3 && r && Object.defineProperty(target, key, r), r;
+        };
+      var __metadata =
+        (this && this.__metadata) ||
+        function(k, v) {
+          if (
+            typeof Reflect === "object" &&
+            typeof Reflect.metadata === "function"
+          )
+            return Reflect.metadata(k, v);
+        };
+
+      var Browse = /** @class */ (function() {
+        function Browse(navCtrl, mtdService) {
+          this.navCtrl = navCtrl;
+          this.mtdService = mtdService;
+          this.currentEntries = window["dataDict"];
+          this.currentTen = window["get10"](window["dataDict"], 0);
+          this.letters =
+            __WEBPACK_IMPORTED_MODULE_2__app_global__[
+              "a" /* MTDInfo */
+            ].config.L1.lettersInLanguage;
+          this.selectedCategory = "words";
+          this.startIndex = 0;
+          // currentBrowsingLetter: String = this.letters[this.currentBrowsingEntries[0].sorting_form[0]];
+          this.letterSelectOptions = { title: "Select a Letter" };
+          this.categorySelectOptions = { title: "Select a Category" };
+          this.initializeEntries(mtdService);
+        }
+        Browse.prototype.initializeEntries = function(mtdService) {
+          this.displayCategories = Object.keys(mtdService.categories);
+          // Add letter index to first words of that letter in entries
+          this.letterInit();
+        };
+        // Determine whether letter occurs word-initially
+        Browse.prototype.letterInit = function() {
+          var letters =
+            __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */].config
+              .L1.lettersInLanguage;
+          var newLetters = [];
+          for (var _i = 0, letters_1 = letters; _i < letters_1.length; _i++) {
+            var letter = letters_1[_i];
+            var ind = letters.indexOf(letter);
+            for (var _a = 0, _b = this.currentEntries; _a < _b.length; _a++) {
+              var entry = _b[_a];
+              if (entry.sorting_form[0] === ind) {
+                entry.firstWordIndex = ind;
+                newLetters.push(letter);
+                break;
+              }
+            }
+          }
+          this.displayLetters = newLetters;
+        };
+        // Scroll to previous 10 entries
+        Browse.prototype.prev10 = function() {
+          if (this.startIndex - 10 > 0) {
+            this.startIndex -= 10;
+            this.currentTen = window["get10"](
+              this.currentEntries,
+              this.startIndex
+            );
+          } else {
+            this.startIndex = 0;
+            this.currentTen = window["get10"](
+              this.currentEntries,
+              this.startIndex
+            );
+          }
+        };
+        // Scroll to next 10 entries
+        Browse.prototype.next10 = function() {
+          if (this.startIndex + 10 < this.currentEntries.length) {
+            this.startIndex += 10;
+            this.currentTen = window["get10"](
+              this.currentEntries,
+              this.startIndex
+            );
+          } else {
+            this.startIndex = this.currentEntries.length - 10;
+            this.currentTen = window["get10"](
+              this.currentEntries,
+              this.startIndex
+            );
+          }
+        };
+        Browse.prototype.secondary = function(cat) {
+          return cat.charAt(0) === "-";
+        };
+        // Scroll to letter
+        // Still needed: change selected letter dynamically
+        Browse.prototype.scrollTo = function(letter) {
+          var letterIndex = this.letters.indexOf(letter);
+          for (var _i = 0, _a = this.currentEntries; _i < _a.length; _i++) {
+            var entry = _a[_i];
+            if (entry.firstWordIndex === letterIndex) {
+              this.startIndex = this.currentEntries.indexOf(entry);
+              this.currentTen = window["get10"](
+                this.currentEntries,
+                this.startIndex
+              );
+              break;
+            }
+          }
+        };
+        Browse.prototype.selectCategory = function(category) {
+          this.currentEntries = this.mtdService.categories[category];
+          this.currentTen = window["get10"](this.currentEntries, 0);
+          this.letterInit();
+        };
+        Browse = __decorate(
+          [
+            Object(
+              __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */]
+            )({
+              selector: "page-browse",
+              template:
+                /*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/ '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Browse</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content scrollbar-y-auto>\n\n  <ion-list mode="ios">\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Category</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)" [selectOptions]="categorySelectOptions">\n        <ion-option *ngFor=\'let category of displayCategories\'>{{category}}</ion-option>\n      </ion-select>\n    </ion-item>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Letter</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)" [selectOptions]="letterSelectOptions">\n        <ion-option *ngFor=\'let letter of displayLetters\'>{{letter}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n  <div class="entry-container">\n    <entry-list [entries]=\'currentTen\'></entry-list>\n  </div>\n \n\n</ion-content>\n\n <ion-footer>\n    <ion-toolbar>\n      <ion-buttons left class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="prev10()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n      <ion-buttons end class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="next10()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-footer>' /*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/
+            }),
+            __metadata("design:paramtypes", [
+              __WEBPACK_IMPORTED_MODULE_1_ionic_angular__[
+                "g" /* NavController */
+              ],
+              __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__[
+                "a" /* MTDService */
+              ]
+            ])
+          ],
+          Browse
+        );
+        return Browse;
+      })();
+
+      //# sourceMappingURL=browse.js.map
+
+      /***/
+    },
+
+    /***/ 291: /***/ function(
+      module,
+      __webpack_exports__,
+      __webpack_require__
+    ) {
+      "use strict";
+      /* harmony export (binding) */ __webpack_require__.d(
+        __webpack_exports__,
+        "a",
+        function() {
           return Flashcards;
         }
       );
@@ -2228,7 +2328,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 291: /***/ function(
+    /***/ 292: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2313,7 +2413,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 292: /***/ function(
+    /***/ 293: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2515,7 +2615,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 293: /***/ function(
+    /***/ 294: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2532,7 +2632,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 294: /***/ function(
+    /***/ 295: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2681,7 +2781,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 295: /***/ function(
+    /***/ 296: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2698,7 +2798,7 @@ webpackJsonp(
         0
       );
       /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__no_null_values_no_null_values__ = __webpack_require__(
-        296
+        297
       );
       var __decorate =
         (this && this.__decorate) ||
@@ -2761,7 +2861,7 @@ webpackJsonp(
       /***/
     },
 
-    /***/ 296: /***/ function(
+    /***/ 297: /***/ function(
       module,
       __webpack_exports__,
       __webpack_require__
@@ -2880,99 +2980,6 @@ webpackJsonp(
       })();
 
       //# sourceMappingURL=no-null-values.js.map
-
-      /***/
-    },
-
-    /***/ 297: /***/ function(module, exports) {
-      module.exports = {
-        name: "mothertongues-UI",
-        version: "3.2.0",
-        author: "Aidan Pine",
-        homepage: "http://www.mothertongues.org",
-        private: true,
-        scripts: {
-          clean: "ionic-app-scripts clean",
-          build: "ionic-app-scripts build",
-          "ionic:build": "ionic-app-scripts build",
-          "ionic:serve": "ionic-app-scripts serve",
-          minify:
-            "uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"
-        },
-        husky: {
-          hooks: {
-            "pre-commit": "pretty-quick --staged",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-          }
-        },
-        commitlint: { extends: ["@commitlint/config-conventional"] },
-        dependencies: {
-          "@angular/common": "5.0.3",
-          "@angular/compiler": "5.0.3",
-          "@angular/compiler-cli": "5.0.3",
-          "@angular/core": "5.0.3",
-          "@angular/forms": "5.0.3",
-          "@angular/http": "5.0.3",
-          "@angular/platform-browser": "5.0.3",
-          "@angular/platform-browser-dynamic": "5.0.3",
-          "@commitlint/config-conventional": "^8.3.4",
-          "@ionic-native/android-permissions": "^4.5.3",
-          "@ionic-native/clipboard": "^4.20.0",
-          "@ionic-native/core": "4.4.0",
-          "@ionic-native/file": "^4.5.3",
-          "@ionic-native/file-transfer": "^4.5.3",
-          "@ionic-native/media": "^4.20.0",
-          "@ionic-native/splash-screen": "4.4.0",
-          "@ionic-native/status-bar": "4.4.0",
-          "@ionic/pro": "^1.0.19",
-          "@ionic/storage": "2.1.3",
-          commitlint: "^8.3.5",
-          "cordova-android": "^8.1.0",
-          "cordova-browser": "^5.0.3",
-          "cordova-clipboard": "^1.3.0",
-          "cordova-plugin-device": "^2.0.3",
-          "cordova-plugin-file": "^6.0.2",
-          "cordova-plugin-file-transfer": "^1.7.1",
-          "cordova-plugin-ionic-keyboard": "^2.2.0",
-          "cordova-plugin-ionic-webview": "^4.1.0",
-          "cordova-plugin-media": "5.0.3",
-          "cordova-plugin-splashscreen": "^5.0.3",
-          "cordova-plugin-whitelist": "^1.3.4",
-          husky: "3.0.9",
-          ionic: "^5.4.1",
-          "ionic-angular": "3.9.2",
-          ionicons: "3.0.0",
-          prettier: "^1.19.1",
-          "pretty-quick": "^2.0.1",
-          rxjs: "5.5.2",
-          "sw-toolbox": "3.6.0",
-          web: "0.0.2",
-          "zone.js": "0.8.18"
-        },
-        devDependencies: {
-          "@angular/cli": "^1.7.4",
-          "@ionic/app-scripts": "^3.1.8",
-          typescript: "2.4.2",
-          "uglify-js": "^3.4.9"
-        },
-        description: "A Mother Tongues Dictionary app",
-        cordova: {
-          plugins: {
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-device": {},
-            "cordova-plugin-splashscreen": {},
-            "cordova-plugin-ionic-webview": {
-              ANDROID_SUPPORT_ANNOTATIONS_VERSION: "27.+"
-            },
-            "cordova-plugin-ionic-keyboard": {},
-            "cordova-plugin-file": {},
-            "cordova-plugin-file-transfer": {},
-            "cordova-plugin-media": { KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE: "NO" },
-            "cordova-clipboard": {}
-          },
-          platforms: ["browser", "android"]
-        }
-      };
 
       /***/
     }

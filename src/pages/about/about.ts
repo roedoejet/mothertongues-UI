@@ -15,7 +15,7 @@ export class About {
   language: string = MTDInfo.config["L1"]["name"];
   build: string = "";
   constructor(public navCtrl: NavController) {
-    if (this.build) {
+    if (MTDInfo && MTDInfo.config && "build" in MTDInfo.config) {
       this.build = this.buildToString(MTDInfo.config["build"]);
     }
   }
