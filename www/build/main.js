@@ -496,9 +496,9 @@ var WordModal = /** @class */ (function () {
     WordModal.prototype.mediaPlay = function (path) {
         var _this = this;
         var audio = this.audio.create(path);
-        audio.onError.subscribe(function () {
+        audio.onError.subscribe(function (err) {
+            console.log(err);
             _this.audio_playing.pop();
-            _this.onError("The audio file wasn't found.");
         });
         audio.onStatusUpdate.subscribe(function (status) {
             if (status === 1 || status === 2) {
@@ -513,9 +513,9 @@ var WordModal = /** @class */ (function () {
     WordModal.prototype.htmlAudioPlay = function (path) {
         var _this = this;
         var audio = new Audio(path);
-        audio.onerror = function () {
+        audio.onerror = function (err) {
+            console.log(err);
             _this.audio_playing.pop();
-            _this.onError("The audio file wasn't found.");
         };
         audio.onended = function () {
             _this.audio_playing.pop();
@@ -544,7 +544,7 @@ var WordModal = /** @class */ (function () {
             .then(function (track) {
             _this.mediaPlay(track.toInternalURL());
         }, function (error) {
-            _this.onError(error);
+            _this.onError("The audio file could not be downloaded.");
         });
     };
     WordModal.prototype.playAudio = function (track) {
@@ -584,13 +584,14 @@ var WordModal = /** @class */ (function () {
             }
         }
         else {
-            this.onError("No audio for this file.");
+            this.onError("There is no audio for this file.");
         }
     };
     WordModal.prototype.onError = function (err) {
+        if (err === void 0) { err = 'Something went wrong with the audio for this file.'; }
         var alert = this.alertCtrl.create({
             title: "Sorry",
-            subTitle: "We couldn't play the audio for this file. Please make sure you're connected to the internet and try again.",
+            subTitle: err,
             buttons: ["OK"]
         });
         alert.present();
@@ -995,7 +996,7 @@ var environment = {
 /***/ 287:
 /***/ (function(module, exports) {
 
-module.exports = {"name":"mothertongues-UI","version":"3.2.0","author":"Aidan Pine","homepage":"http://www.mothertongues.org","private":true,"scripts":{"clean":"ionic-app-scripts clean","build":"ionic-app-scripts build","ionic:build":"ionic-app-scripts build","ionic:serve":"ionic-app-scripts serve","minify":"uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"},"husky":{"hooks":{"pre-commit":"pretty-quick --staged","commit-msg":"commitlint -E HUSKY_GIT_PARAMS"}},"commitlint":{"extends":["@commitlint/config-conventional"]},"dependencies":{"@angular/common":"5.0.3","@angular/compiler":"5.0.3","@angular/compiler-cli":"5.0.3","@angular/core":"5.0.3","@angular/forms":"5.0.3","@angular/http":"5.0.3","@angular/platform-browser":"5.0.3","@angular/platform-browser-dynamic":"5.0.3","@commitlint/config-conventional":"^8.3.4","@ionic-native/android-permissions":"^4.5.3","@ionic-native/clipboard":"^4.20.0","@ionic-native/core":"4.4.0","@ionic-native/file":"^4.5.3","@ionic-native/file-transfer":"^4.5.3","@ionic-native/media":"^4.20.0","@ionic-native/splash-screen":"4.4.0","@ionic-native/status-bar":"4.4.0","@ionic/pro":"^1.0.19","@ionic/storage":"2.1.3","commitlint":"^8.3.5","cordova-android":"^8.1.0","cordova-browser":"^5.0.3","cordova-clipboard":"^1.3.0","cordova-plugin-device":"^2.0.3","cordova-plugin-file":"^6.0.2","cordova-plugin-file-transfer":"^1.7.1","cordova-plugin-ionic-keyboard":"^2.2.0","cordova-plugin-ionic-webview":"^4.1.0","cordova-plugin-media":"5.0.3","cordova-plugin-splashscreen":"^5.0.3","cordova-plugin-whitelist":"^1.3.4","husky":"^3.0.9","ionic":"^5.4.1","ionic-angular":"3.9.2","ionicons":"3.0.0","prettier":"^1.19.1","pretty-quick":"^2.0.1","rxjs":"5.5.2","sw-toolbox":"3.6.0","web":"0.0.2","zone.js":"0.8.18"},"devDependencies":{"@angular/cli":"^1.7.4","@ionic/app-scripts":"^3.1.8","typescript":"2.4.2","uglify-js":"^3.4.9"},"description":"A Mother Tongues Dictionary app","cordova":{"plugins":{"cordova-plugin-whitelist":{},"cordova-plugin-device":{},"cordova-plugin-splashscreen":{},"cordova-plugin-ionic-webview":{"ANDROID_SUPPORT_ANNOTATIONS_VERSION":"27.+"},"cordova-plugin-ionic-keyboard":{},"cordova-plugin-file":{},"cordova-plugin-file-transfer":{},"cordova-plugin-media":{"KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE":"NO"},"cordova-clipboard":{}},"platforms":["browser","android"]}}
+module.exports = {"name":"mothertongues-UI","version":"3.2.1","author":"Aidan Pine","homepage":"http://www.mothertongues.org","private":true,"scripts":{"clean":"ionic-app-scripts clean","build":"ionic-app-scripts build","ionic:build":"ionic-app-scripts build","ionic:serve":"ionic-app-scripts serve","minify":"uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"},"husky":{"hooks":{"pre-commit":"pretty-quick --staged","commit-msg":"commitlint -E HUSKY_GIT_PARAMS"}},"commitlint":{"extends":["@commitlint/config-conventional"]},"dependencies":{"@angular/common":"5.0.3","@angular/compiler":"5.0.3","@angular/compiler-cli":"5.0.3","@angular/core":"5.0.3","@angular/forms":"5.0.3","@angular/http":"5.0.3","@angular/platform-browser":"5.0.3","@angular/platform-browser-dynamic":"5.0.3","@commitlint/config-conventional":"^8.3.4","@ionic-native/android-permissions":"^4.5.3","@ionic-native/clipboard":"^4.20.0","@ionic-native/core":"4.4.0","@ionic-native/file":"^4.5.3","@ionic-native/file-transfer":"^4.5.3","@ionic-native/media":"^4.20.0","@ionic-native/splash-screen":"4.4.0","@ionic-native/status-bar":"4.4.0","@ionic/pro":"^1.0.19","@ionic/storage":"2.1.3","commitlint":"^8.3.5","cordova-android":"^8.1.0","cordova-browser":"^5.0.3","cordova-ios":"^4.5.5","cordova-clipboard":"^1.3.0","cordova-plugin-device":"^2.0.3","cordova-plugin-file":"^6.0.2","cordova-plugin-file-transfer":"^1.7.1","cordova-plugin-ionic-keyboard":"^2.2.0","cordova-plugin-ionic-webview":"^4.1.0","cordova-plugin-media":"5.0.3","cordova-plugin-splashscreen":"^5.0.3","cordova-plugin-whitelist":"^1.3.4","husky":"^3.0.9","ionic":"^5.4.1","ionic-angular":"3.9.2","ionicons":"3.0.0","prettier":"^1.19.1","pretty-quick":"^2.0.1","rxjs":"5.5.2","sw-toolbox":"3.6.0","web":"0.0.2","zone.js":"0.8.18"},"devDependencies":{"@angular/cli":"^1.7.4","@ionic/app-scripts":"^3.1.8","typescript":"2.4.2","uglify-js":"^3.4.9"},"description":"A Mother Tongues Dictionary app","cordova":{"plugins":{"cordova-plugin-whitelist":{},"cordova-plugin-device":{},"cordova-plugin-splashscreen":{},"cordova-plugin-ionic-webview":{"ANDROID_SUPPORT_ANNOTATIONS_VERSION":"27.+"},"cordova-plugin-ionic-keyboard":{},"cordova-plugin-file":{},"cordova-plugin-file-transfer":{},"cordova-plugin-media":{"KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE":"NO"},"cordova-clipboard":{}},"platforms":["browser","android","ios"]}}
 
 /***/ }),
 

@@ -154,9 +154,9 @@ export class WordModal {
 
   mediaPlay(path) {
     let audio: MediaObject = this.audio.create(path);
-    audio.onError.subscribe(() => {
+    audio.onError.subscribe(err => {
+      console.log(err);
       this.audio_playing.pop();
-      this.onError("The audio file wasn't found.");
     });
     audio.onStatusUpdate.subscribe(status => {
       if (status === 1 || status === 2) {
@@ -171,9 +171,9 @@ export class WordModal {
 
   htmlAudioPlay(path) {
     let audio = new Audio(path);
-    audio.onerror = () => {
+    audio.onerror = err => {
+      console.log(err);
       this.audio_playing.pop();
-      this.onError("The audio file wasn't found.");
     };
     audio.onended = () => {
       this.audio_playing.pop();
@@ -205,7 +205,7 @@ export class WordModal {
           this.mediaPlay(track.toInternalURL());
         },
         error => {
-          this.onError(error);
+          this.onError("The audio file could not be downloaded.");
         }
       );
   }
@@ -242,15 +242,14 @@ export class WordModal {
         this.showAlert();
       }
     } else {
-      this.onError("No audio for this file.");
+      this.onError("There is no audio for this file.");
     }
   }
 
-  onError(err) {
+  onError(err = "Something went wrong with the audio for this file.") {
     let alert = this.alertCtrl.create({
       title: "Sorry",
-      subTitle:
-        "We couldn't play the audio for this file. Please make sure you're connected to the internet and try again.",
+      subTitle: err,
       buttons: ["OK"]
     });
     alert.present();
