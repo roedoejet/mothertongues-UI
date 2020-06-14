@@ -53,31 +53,31 @@ function createCompositeTransducer(orth_names) {
 }
 
 function createTransducer(cors) {
-    return (function() {
-      var correspondences = {};
-      for (var i = 0; i < cors.length; i++) {
-        var key = Object.keys(cors[i])[0];
-        correspondences[key] = cors[i][key];
-      }
-      function getKeys(x) {
-        return Object.keys(x)[0]
-      }
-      var keys = cors.map(getKeys);
-      var regex = new RegExp("(" + keys.join("|") + ")", "g");
-      return function(str) {
-        return str.replace(regex, function(a, b) {
-          return correspondences[a];
-        });
-      };
-    })();
-  }
+  return (function() {
+    var correspondences = {};
+    for (var i = 0; i < cors.length; i++) {
+      var key = Object.keys(cors[i])[0];
+      correspondences[key] = cors[i][key];
+    }
+    function getKeys(x) {
+      return Object.keys(x)[0];
+    }
+    var keys = cors.map(getKeys);
+    var regex = new RegExp("(" + keys.join("|") + ")", "g");
+    return function(str) {
+      return str.replace(regex, function(a, b) {
+        return correspondences[a];
+      });
+    };
+  })();
+}
 
 mtd.transduce = function(str, transducerName) {
   if (transducerName in mtd.transducers) {
     var transducer = mtd.transducers[transducerName];
     return transducer(str);
   } else {
-//     console.log("Transducer with name " + transducerName + " was not found.");
+    //     console.log("Transducer with name " + transducerName + " was not found.");
     return str;
   }
 };

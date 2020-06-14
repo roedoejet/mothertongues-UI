@@ -1,14 +1,10 @@
-import { Component, Input, OnChanges, SimpleChange } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 
 import { NavController, ViewController, ModalController } from "ionic-angular";
-
-import { SearchBar } from "../search/search-bar.component";
 
 import { Entry } from "./entry.model";
 
 import { WordModal } from "./word-modal.component";
-
-import { Bookmarks } from "../bookmarks/bookmarks";
 
 import { slugify } from "transliteration";
 
@@ -57,7 +53,7 @@ export class EntryList implements OnChanges {
     private viewCtrl: ViewController,
     public modalCtrl: ModalController
   ) {
-    this.pageName = viewCtrl.name;
+    this.pageName = this.viewCtrl.name;
   }
 
   trackByFn(index, item) {

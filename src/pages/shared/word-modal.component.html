@@ -14,11 +14,7 @@
 <ion-content>
   <ion-card>
     <div *ngIf="displayImages">
-      <img
-        [(src)]="entry.img"
-        onError="this.src='assets/img/default.png'"
-        *ngIf="entry.img"
-      />
+      <img [(src)]="entry.img" onError="this.src='assets/img/default.png'" *ngIf="entry.img" />
     </div>
     <ion-card-content>
       <ion-card-title>
@@ -27,13 +23,8 @@
       <p class="definition">
         {{ entry.definition }}
       </p>
-      <div
-        *ngIf="entry.optional && optional && checkOptionTruth(entry.optional)"
-      >
-        <div
-          class="option"
-          *ngFor="let optional_dict of entry.optional; let i = index"
-        >
+      <div *ngIf="entry.optional && optional && checkOptionTruth(entry.optional)">
+        <div class="option" *ngFor="let optional_dict of entry.optional; let i = index">
           <ng-container *ngFor="let option of objectKeys(optional_dict)">
             <p *ngIf="entry.optional[i][option]">
               <span>{{ option }} - {{ entry.optional[i][option] }} </span>
@@ -52,11 +43,7 @@
 
         <ion-list>
           <!-- <button ion-item *ngFor="let track of (entry.audio | noNullObjectValues)" (click)="playAudio(track)"> -->
-          <button
-            ion-item
-            *ngFor="let track of entry.audio"
-            (click)="playAudio(track)"
-          >
+          <button ion-item *ngFor="let track of entry.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
           </button>
@@ -70,19 +57,13 @@
           Sentences
         </ion-card-header>
 
-        <ion-list
-          *ngFor="
+        <ion-list *ngFor="
             let sentence of entry.example_sentence | noNullValues;
             let i = index
-          "
-        >
+          ">
           <!-- <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
           (click)="playAudio(track)"> -->
-          <button
-            ion-item
-            *ngFor="let track of entry.example_sentence_audio[i]"
-            (click)="playAudio(track)"
-          >
+          <button ion-item *ngFor="let track of entry.example_sentence_audio[i]" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <h2>{{ sentence }}</h2>
             <h4>{{ entry.example_sentence_definition[i] }}</h4>
@@ -94,31 +75,14 @@
 
     <ion-row no-padding>
       <ion-col>
-        <button
-          ion-button
-          clear
-          small
-          color="primary"
-          icon-left
-          (click)="toggleFav(entry)"
-        >
+        <button ion-button clear small color="primary" icon-left (click)="toggleFav(entry)">
           <ion-icon *ngIf="favourited(entry)" name="ios-bookmarks"></ion-icon>
-          <ion-icon
-            *ngIf="!favourited(entry)"
-            name="ios-bookmarks-outline"
-          ></ion-icon>
+          <ion-icon *ngIf="!favourited(entry)" name="ios-bookmarks-outline"></ion-icon>
           Bookmark
         </button>
       </ion-col>
       <ion-col>
-        <button
-          ion-button
-          clear
-          small
-          color="primary"
-          icon-left
-          (click)="copyToClipboard(entry.word)"
-        >
+        <button ion-button clear small color="primary" icon-left (click)="copyToClipboard(entry.word)">
           <ion-icon name="copy"></ion-icon>
           Copy
         </button>

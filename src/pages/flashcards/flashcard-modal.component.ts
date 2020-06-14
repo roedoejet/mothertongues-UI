@@ -17,11 +17,7 @@ import { File, FileEntry } from "@ionic-native/file";
 
 import { Media, MediaObject } from "@ionic-native/media";
 
-import {
-  FileTransfer,
-  FileUploadOptions,
-  FileTransferObject
-} from "@ionic-native/file-transfer";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
 import { Clipboard } from "@ionic-native/clipboard";
 

@@ -6,18 +6,12 @@ import {
   ViewController,
   AlertController,
   Platform,
-  ItemSliding,
-  ToastController,
-  Toast
+  ToastController
 } from "ionic-angular";
 
 import { File, FileEntry } from "@ionic-native/file";
 
-import {
-  FileTransfer,
-  FileUploadOptions,
-  FileTransferObject
-} from "@ionic-native/file-transfer";
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
 import { Clipboard } from "@ionic-native/clipboard";
 
@@ -60,7 +54,7 @@ export class WordModal {
     public plt: Platform,
     public mtdService: MTDService
   ) {
-    this.entry = navParams.get("entry");
+    this.entry = this.navParams.get("entry");
     if (this.entry.optional) {
       this.optionalSelection = this.entry.optional.map(x => Object.keys(x))[0];
     }
@@ -220,7 +214,6 @@ export class WordModal {
       }
       // set ID and path to internal storage
       let internal_path = "assets/audio/" + this.getBaseName(track.filename);
-      let id = Date.now().toString();
       // if desktop or browser, run as HTML5 Audio
       if (this.plt.is("core") || this.plt.is("mobileweb")) {
         this.htmlAudioPlay(path);

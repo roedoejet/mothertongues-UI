@@ -14,12 +14,7 @@
 <ion-content ng-switch="style" on-swipe-up="front = !front">
   <ion-card>
     <div *ngIf="displayImages && style === 'audio'">
-      <img
-        (click)="playAudio(card)"
-        [(src)]="image"
-        onError="this.src='assets/img/default.png'"
-        *ngIf="card.img"
-      />
+      <img (click)="playAudio(card)" [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="card.img" />
     </div>
     <ion-card-content [ngSwitch]="style">
       <div *ngSwitchCase="'active'">
@@ -59,13 +54,9 @@
 
         <ion-list>
           <!-- <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudio(track)"> -->
-          <button
-            ion-item
-            *ngFor="let track of card.audio"
-            (click)="playAudio(track)"
-          >
+          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
-            Speaker: {{ track.speaker }}
+            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
           </button>
         </ion-list>
       </ion-card>
@@ -77,22 +68,16 @@
           Sentences
         </ion-card-header>
 
-        <ion-list
-          *ngFor="
+        <ion-list *ngFor="
             let sentence of card.example_sentence | noNullValues;
             let i = index
-          "
-        >
+          ">
           <!-- <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudio(track)"> -->
-          <button
-            ion-item
-            *ngFor="let track of card.audio"
-            (click)="playAudio(track)"
-          >
+          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <h2>{{ sentence }}</h2>
             <h4>{{ card.example_sentence_definition[i] }}</h4>
-            <h6>Speaker: {{ track.speaker }}</h6>
+            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
           </button>
         </ion-list>
       </ion-card>
@@ -100,45 +85,20 @@
 
     <ion-row no-padding>
       <ion-col>
-        <button
-          ion-button
-          clear
-          small
-          color="primary"
-          icon-left
-          (click)="toggleFav(card)"
-        >
+        <button ion-button clear small color="primary" icon-left (click)="toggleFav(card)">
           <ion-icon *ngIf="favourited(card)" name="ios-bookmarks"></ion-icon>
-          <ion-icon
-            *ngIf="!favourited(card)"
-            name="ios-bookmarks-outline"
-          ></ion-icon>
+          <ion-icon *ngIf="!favourited(card)" name="ios-bookmarks-outline"></ion-icon>
           Bookmark
         </button>
         <ion-col>
-          <button
-            ion-button
-            clear
-            small
-            color="primary"
-            icon-left
-            (click)="copyToClipboard(card.word)"
-          >
+          <button ion-button clear small color="primary" icon-left (click)="copyToClipboard(card.word)">
             <ion-icon name="copy"></ion-icon>
             Copy
           </button>
         </ion-col>
-        <button
-          ion-button
-          clear
-          small
-          color="primary"
-          icon-left
-          (click)="front = !front"
-        >
+        <button ion-button clear small color="primary" icon-left (click)="front = !front">
           <ion-icon name="refresh"></ion-icon>
-          <span *ngIf="front">Flip to back</span
-          ><span *ngIf="!front">Flip to front</span>
+          <span *ngIf="front">Flip to back</span><span *ngIf="!front">Flip to front</span>
         </button>
       </ion-col>
     </ion-row>
