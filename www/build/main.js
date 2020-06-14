@@ -38,25 +38,25 @@ webpackEmptyAsyncContext.id = 159;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__about_about__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__about_about__ = __webpack_require__(284);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__about_about__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bookmarks_bookmarks__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bookmarks_bookmarks__ = __webpack_require__(289);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__bookmarks_bookmarks__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__browse_browse__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__browse_browse__ = __webpack_require__(291);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__browse_browse__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__flashcards_flashcards__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__flashcards_flashcards__ = __webpack_require__(292);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_3__flashcards_flashcards__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__flashcards_flashcard_modal_component__ = __webpack_require__(203);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__flashcards_flashcard_modal_component__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__random_random__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__random_random__ = __webpack_require__(293);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_5__random_random__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__search_search__ = __webpack_require__(293);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__search_search__ = __webpack_require__(294);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_6__search_search__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_entry_model__ = __webpack_require__(294);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_entry_model__ = __webpack_require__(295);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_entry_list_component__ = __webpack_require__(295);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_entry_list_component__ = __webpack_require__(296);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_8__shared_entry_list_component__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_word_modal_component__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_word_modal_component__ = __webpack_require__(205);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_9__shared_word_modal_component__["a"]; });
 
 
@@ -176,9 +176,10 @@ var Flashcard = /** @class */ (function () {
     };
     Flashcard.prototype.onSuccess = function (id) { };
     Flashcard.prototype.onError = function (err) {
+        if (err === void 0) { err = "Something went wrong with the audio for this file."; }
         var alert = this.alertCtrl.create({
             title: "Sorry",
-            subTitle: "We couldn't play the audio for this file. Please make sure you're connected to the internet and try again.",
+            subTitle: err,
             buttons: ["OK"]
         });
         alert.present();
@@ -202,7 +203,6 @@ var Flashcard = /** @class */ (function () {
         var audio = this.audio.create(path);
         audio.onError.subscribe(function () {
             _this.audio_playing.pop();
-            _this.onError("The audio file wasn't found.");
         });
         audio.onStatusUpdate.subscribe(function (status) {
             if (status === 1 || status === 2) {
@@ -219,7 +219,6 @@ var Flashcard = /** @class */ (function () {
         var audio = new Audio(path);
         audio.onerror = function () {
             _this.audio_playing.pop();
-            _this.onError("The audio file wasn't found.");
         };
         audio.onended = function () {
             _this.audio_playing.pop();
@@ -242,7 +241,7 @@ var Flashcard = /** @class */ (function () {
             position: "top"
         });
         toast.onDidDismiss(function () {
-            console.log("Dismissed toast");
+            // console.log("Dismissed toast");
         });
         toast.present();
     };
@@ -283,7 +282,7 @@ var Flashcard = /** @class */ (function () {
             .then(function (track) {
             _this.mediaPlay(track.toInternalURL());
         }, function (error) {
-            _this.onError(error);
+            _this.onError("The audio file could not be downloaded.");
         });
     };
     Flashcard.prototype.playAudio = function (track) {
@@ -323,7 +322,7 @@ var Flashcard = /** @class */ (function () {
             }
         }
         else {
-            this.onError("No audio for this file.");
+            this.onError("There is no audio for this file.");
         }
     };
     Flashcard.prototype.imageError = function () {
@@ -358,7 +357,7 @@ var Flashcard = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 204:
+/***/ 205:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -465,7 +464,7 @@ var WordModal = /** @class */ (function () {
             position: "top"
         });
         toast.onDidDismiss(function () {
-            console.log("Dismissed toast");
+            // console.log("Dismissed toast");
         });
         toast.present();
     };
@@ -588,7 +587,7 @@ var WordModal = /** @class */ (function () {
         }
     };
     WordModal.prototype.onError = function (err) {
-        if (err === void 0) { err = 'Something went wrong with the audio for this file.'; }
+        if (err === void 0) { err = "Something went wrong with the audio for this file."; }
         var alert = this.alertCtrl.create({
             title: "Sorry",
             subTitle: err,
@@ -686,13 +685,13 @@ var WordModal = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 205:
+/***/ 206:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(206);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(229);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -700,7 +699,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 228:
+/***/ 229:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -714,10 +713,10 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file_transfer__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mtd_service__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pipes_pipes_module__ = __webpack_require__(296);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pipes_pipes_module__ = __webpack_require__(297);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_clipboard__ = __webpack_require__(107);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -802,7 +801,7 @@ var AppModule = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MTDInfo; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 
 var MTDInfo = Object.freeze({
@@ -816,7 +815,7 @@ var MTDInfo = Object.freeze({
 
 /***/ }),
 
-/***/ 282:
+/***/ 283:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -923,7 +922,7 @@ var MyApp = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 283:
+/***/ 284:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -931,7 +930,7 @@ var MyApp = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(287);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -975,12 +974,12 @@ var About = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 286:
+/***/ 287:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
-var packageJson = __webpack_require__(287);
+var packageJson = __webpack_require__(288);
 var environment = {
     appName: "mothertongues-UI",
     envName: "DEV",
@@ -993,14 +992,14 @@ var environment = {
 
 /***/ }),
 
-/***/ 287:
+/***/ 288:
 /***/ (function(module, exports) {
 
-module.exports = {"name":"mothertongues-UI","version":"3.2.1","author":"Aidan Pine","homepage":"http://www.mothertongues.org","private":true,"scripts":{"clean":"ionic-app-scripts clean","build":"ionic-app-scripts build","ionic:build":"ionic-app-scripts build","ionic:serve":"ionic-app-scripts serve","minify":"uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"},"husky":{"hooks":{"pre-commit":"pretty-quick --staged","commit-msg":"commitlint -E HUSKY_GIT_PARAMS"}},"commitlint":{"extends":["@commitlint/config-conventional"]},"dependencies":{"@angular/common":"5.0.3","@angular/compiler":"5.0.3","@angular/compiler-cli":"5.0.3","@angular/core":"5.0.3","@angular/forms":"5.0.3","@angular/http":"5.0.3","@angular/platform-browser":"5.0.3","@angular/platform-browser-dynamic":"5.0.3","@commitlint/config-conventional":"^8.3.4","@ionic-native/android-permissions":"^4.5.3","@ionic-native/clipboard":"^4.20.0","@ionic-native/core":"4.4.0","@ionic-native/file":"^4.5.3","@ionic-native/file-transfer":"^4.5.3","@ionic-native/media":"^4.20.0","@ionic-native/splash-screen":"4.4.0","@ionic-native/status-bar":"4.4.0","@ionic/pro":"^1.0.19","@ionic/storage":"2.1.3","commitlint":"^8.3.5","cordova-android":"^8.1.0","cordova-browser":"^5.0.3","cordova-ios":"^4.5.5","cordova-clipboard":"^1.3.0","cordova-plugin-device":"^2.0.3","cordova-plugin-file":"^6.0.2","cordova-plugin-file-transfer":"^1.7.1","cordova-plugin-ionic-keyboard":"^2.2.0","cordova-plugin-ionic-webview":"^4.1.0","cordova-plugin-media":"5.0.3","cordova-plugin-splashscreen":"^5.0.3","cordova-plugin-whitelist":"^1.3.4","husky":"^3.0.9","ionic":"^5.4.1","ionic-angular":"3.9.2","ionicons":"3.0.0","prettier":"^1.19.1","pretty-quick":"^2.0.1","rxjs":"5.5.2","sw-toolbox":"3.6.0","web":"0.0.2","zone.js":"0.8.18"},"devDependencies":{"@angular/cli":"^1.7.4","@ionic/app-scripts":"^3.1.8","typescript":"2.4.2","uglify-js":"^3.4.9"},"description":"A Mother Tongues Dictionary app","cordova":{"plugins":{"cordova-plugin-whitelist":{},"cordova-plugin-device":{},"cordova-plugin-splashscreen":{},"cordova-plugin-ionic-webview":{"ANDROID_SUPPORT_ANNOTATIONS_VERSION":"27.+"},"cordova-plugin-ionic-keyboard":{},"cordova-plugin-file":{},"cordova-plugin-file-transfer":{},"cordova-plugin-media":{"KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE":"NO"},"cordova-clipboard":{}},"platforms":["browser","android","ios"]}}
+module.exports = {"name":"mothertongues-UI","version":"3.2.2","author":"Aidan Pine","homepage":"http://www.mothertongues.org","private":true,"scripts":{"clean":"ionic-app-scripts clean","build":"ionic-app-scripts build","ionic:build":"ionic-app-scripts build","ionic:serve":"ionic-app-scripts serve","minify":"uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"},"husky":{"hooks":{"pre-commit":"pretty-quick --staged","commit-msg":"commitlint -E HUSKY_GIT_PARAMS"}},"commitlint":{"extends":["@commitlint/config-conventional"]},"dependencies":{"@angular/common":"5.0.3","@angular/compiler":"5.0.3","@angular/compiler-cli":"5.0.3","@angular/core":"5.0.3","@angular/forms":"5.0.3","@angular/http":"5.0.3","@angular/platform-browser":"5.0.3","@angular/platform-browser-dynamic":"5.0.3","@commitlint/config-conventional":"^8.3.4","@ionic-native/android-permissions":"^4.5.3","@ionic-native/clipboard":"^4.20.0","@ionic-native/core":"4.4.0","@ionic-native/file":"^4.5.3","@ionic-native/file-transfer":"^4.5.3","@ionic-native/media":"^4.20.0","@ionic-native/splash-screen":"4.4.0","@ionic-native/status-bar":"4.4.0","@ionic/pro":"^1.0.19","@ionic/storage":"2.1.3","commitlint":"^8.3.5","cordova-android":"^8.1.0","cordova-browser":"^5.0.3","cordova-clipboard":"^1.3.0","cordova-ios":"^4.5.5","cordova-plugin-device":"^2.0.3","cordova-plugin-file":"^6.0.2","cordova-plugin-file-transfer":"^1.7.1","cordova-plugin-ionic-keyboard":"^2.2.0","cordova-plugin-ionic-webview":"^4.1.0","cordova-plugin-media":"5.0.3","cordova-plugin-splashscreen":"^5.0.3","cordova-plugin-whitelist":"^1.3.4","husky":"^3.0.9","ionic":"^5.4.1","ionic-angular":"3.9.2","ionicons":"3.0.0","prettier":"^1.19.1","pretty-quick":"^2.0.1","rxjs":"5.5.2","sw-toolbox":"3.6.0","transliteration":"^2.1.11","web":"0.0.2","zone.js":"0.8.18"},"devDependencies":{"@angular/cli":"^1.7.4","@ionic/app-scripts":"^3.1.8","typescript":"2.4.2","uglify-js":"^3.4.9"},"description":"A Mother Tongues Dictionary app","cordova":{"plugins":{"cordova-plugin-whitelist":{},"cordova-plugin-device":{},"cordova-plugin-splashscreen":{},"cordova-plugin-ionic-webview":{"ANDROID_SUPPORT_ANNOTATIONS_VERSION":"27.+"},"cordova-plugin-ionic-keyboard":{},"cordova-plugin-file":{},"cordova-plugin-file-transfer":{},"cordova-plugin-media":{"KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE":"NO"},"cordova-clipboard":{}},"platforms":["browser","android","ios"]}}
 
 /***/ }),
 
-/***/ 288:
+/***/ 289:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1055,7 +1054,7 @@ var Bookmarks = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MTDService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__global__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(290);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1164,7 +1163,7 @@ var MTDService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 290:
+/***/ 291:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1279,7 +1278,7 @@ var Browse = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 291:
+/***/ 292:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1354,7 +1353,7 @@ var Flashcards = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 292:
+/***/ 293:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1392,7 +1391,7 @@ var Random = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 293:
+/***/ 294:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1400,6 +1399,8 @@ var Random = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_global__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_transliteration__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_transliteration___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_transliteration__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1412,16 +1413,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var Search = /** @class */ (function () {
     function Search(navCtrl) {
         this.navCtrl = navCtrl;
         this.entries = __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */].allEntries;
-        this.searchQuery = '';
+        this.searchQuery = "";
+        this.matchThreshold = 0;
+        this.partialThreshold = 1;
+        this.maybeThreshold = 2;
     }
-    Search.prototype.getRegex = function (key) {
-        if (key === void 0) { key = 'definition'; }
+    Search.prototype.getRegex = function (re, key) {
+        if (key === void 0) { key = "definition"; }
         var results = [];
-        var re = new RegExp(this.searchQuery, 'i');
         for (var _i = 0, _a = this.entries; _i < _a.length; _i++) {
             var entry = _a[_i];
             if (re.test(entry[key])) {
@@ -1431,34 +1435,89 @@ var Search = /** @class */ (function () {
         var sorted_answers = results.sort(function (a, b) {
             return a[key].length - b[key].length;
         });
-        return (sorted_answers.slice(0, 9));
+        return sorted_answers.slice(0, 9);
     };
-    ;
-    // Get English and target results
+    Search.prototype.getRegexFromSlug = function (re, key) {
+        if (key === void 0) { key = "word"; }
+        var results = [];
+        for (var _i = 0, _a = this.entries; _i < _a.length; _i++) {
+            var entry = _a[_i];
+            if (re.test(Object(__WEBPACK_IMPORTED_MODULE_3_transliteration__["slugify"])(entry[key]))) {
+                results.push(entry);
+            }
+        }
+        var sorted_answers = results.sort(function (a, b) {
+            return a[key].length - b[key].length;
+        });
+        return sorted_answers.slice(0, 9);
+    };
+    // Results are sourced from multiple places and ordered accordingly:
+    // 1. Exact Regex match (L1 || L2)
+    // 2. Partial Regex match (L1 || L2)
+    // 3. Exact match on slugified form
+    // 4. levenstein on display form || levenstein on compare form
+    // The first two are mutually exclusive due to complementary regular expressions
+    // The third must be added only if the first two have not found the matches
     Search.prototype.getResults = function () {
+        var _this = this;
         if (this.searchQuery.length > 1) {
-            var english_1 = this.getRegex();
-            var exact_1 = this.getRegex('word');
-            var target_1 = window["searchL1"](this.searchQuery);
+            // Normalize
+            var mtd = window["mtd"];
+            var searchQuery = mtd.convertQuery(this.searchQuery);
+            // 1. Exact match
+            var searchQueryRegex = new RegExp("(\\s|^){1}" + searchQuery + "(?=([;.?!\\s]|$))", "i");
+            var l1Exact_1 = this.getRegex(searchQueryRegex, "word");
+            var l2Exact_1 = this.getRegex(searchQueryRegex);
+            // 2. Partial match
+            var searchQueryPartialRegex = new RegExp("(^" + searchQuery + "(?=[\\S])|(?<=\\S)" + searchQuery + "|(?<=\\s)" + searchQuery + "(?!\\s))", "i");
+            var l1Partial_1 = this.getRegex(searchQueryPartialRegex, "word");
+            var l2Partial_1 = this.getRegex(searchQueryPartialRegex);
+            // 3. Partial match on slugified form
+            var l1PartialSlug_1 = this.getRegexFromSlug(new RegExp(searchQueryPartialRegex.source + "|" + searchQueryRegex.source, "i"));
+            // 4. levenstein (includes compare form and display)
+            var target_1 = window["searchL1"](searchQuery);
+            // Match containers
             var allMatches_1 = [];
             var matches_1 = [];
             var partMatches_1 = [];
             var maybeMatches_1 = [];
-            var populateEng = function () {
-                for (var _i = 0, english_2 = english_1; _i < english_2.length; _i++) {
-                    var result = english_2[_i];
+            // Collect l1Exact matches and add to allMatches
+            var populateL1Exact = function () {
+                for (var _i = 0, l1Exact_2 = l1Exact_1; _i < l1Exact_2.length; _i++) {
+                    var result = l1Exact_2[_i];
                     var entry = result;
-                    entry.type = "L2";
-                    entry.distance = 0;
+                    entry.type = "L1";
+                    entry.distance = _this.matchThreshold;
                     allMatches_1.push(entry);
                 }
             };
-            var populateExact = function () {
-                for (var _i = 0, exact_2 = exact_1; _i < exact_2.length; _i++) {
-                    var result = exact_2[_i];
+            // Collect l2Exact matches and add to allMatches
+            var populateL2Exact = function () {
+                for (var _i = 0, l2Exact_2 = l2Exact_1; _i < l2Exact_2.length; _i++) {
+                    var result = l2Exact_2[_i];
+                    var entry = result;
+                    entry.type = "L2";
+                    entry.distance = _this.matchThreshold;
+                    allMatches_1.push(entry);
+                }
+            };
+            // Collect l1Partial matches and add to allMatches
+            var populateL1Partial = function () {
+                for (var _i = 0, _a = l1Partial_1.concat(l1PartialSlug_1); _i < _a.length; _i++) {
+                    var result = _a[_i];
                     var entry = result;
                     entry.type = "L1";
-                    entry.distance = 0;
+                    entry.distance = _this.partialThreshold;
+                    allMatches_1.push(entry);
+                }
+            };
+            // Collect l2Partial matches and add to allMatches
+            var populateL2Partial = function () {
+                for (var _i = 0, l2Partial_2 = l2Partial_1; _i < l2Partial_2.length; _i++) {
+                    var result = l2Partial_2[_i];
+                    var entry = result;
+                    entry.type = "L2";
+                    entry.distance = _this.partialThreshold;
                     allMatches_1.push(entry);
                 }
             };
@@ -1467,7 +1526,10 @@ var Search = /** @class */ (function () {
                     var result = target_2[_i];
                     var entry = result[1];
                     entry.type = "L1";
-                    if (allMatches_1.findIndex(function (match) { return match.word === entry.word && match.definition === match.definition; }) === -1) {
+                    if (allMatches_1.findIndex(function (match) {
+                        return match.word === entry.word &&
+                            match.definition === match.definition;
+                    }) === -1) {
                         allMatches_1.push(entry);
                     }
                 }
@@ -1475,14 +1537,17 @@ var Search = /** @class */ (function () {
             var mergeMatches = function () {
                 for (var _i = 0, allMatches_2 = allMatches_1; _i < allMatches_2.length; _i++) {
                     var entry = allMatches_2[_i];
-                    if ('distance' in entry) {
-                        if (entry.distance === 0) {
+                    if ("distance" in entry) {
+                        if (entry.distance === _this.matchThreshold) {
                             matches_1.push(entry);
                         }
-                        else if ('distance' in entry && entry.distance <= 1 && entry.distance > 0) {
+                        else if ("distance" in entry &&
+                            entry.distance <= _this.partialThreshold &&
+                            entry.distance > _this.matchThreshold) {
                             partMatches_1.push(entry);
                         }
-                        else if (entry.distance <= 2 && entry.distance > 1) {
+                        else if (entry.distance <= _this.matchThreshold &&
+                            entry.distance > _this.partialThreshold) {
                             maybeMatches_1.push(entry);
                         }
                     }
@@ -1491,20 +1556,23 @@ var Search = /** @class */ (function () {
                     }
                 }
             };
-            populateExact();
-            populateEng();
+            populateL1Exact();
+            populateL2Exact();
+            populateL1Partial();
+            populateL2Partial();
             populateTarget();
-            allMatches_1 = allMatches_1.filter(function (match, index, self) { return self.findIndex(function (t) { return t.word === match.word && t.definition === match.definition; }) === index; });
+            allMatches_1 = allMatches_1.filter(function (match, index, self) {
+                return self.findIndex(function (t) { return t.word === match.word && t.definition === match.definition; }) === index;
+            });
             mergeMatches();
             this.matches = matches_1;
             this.partMatches = partMatches_1;
             this.maybeMatches = maybeMatches_1;
         }
     };
-    ;
     Search = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-search',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/search/search.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Search</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <ion-searchbar (ionInput)="getResults()" [(ngModel)]="searchQuery" autocapitalize="none"></ion-searchbar>\n  <div *ngIf="searchQuery?.length > 1">\n    <div class="result-container" *ngIf="matches?.length > 0">\n      <h4>Matches</h4>\n      <entry-list [entries]="matches" [searchterm]="searchQuery"></entry-list>\n    </div>\n    <div class="result-container" *ngIf="partMatches?.length > 0">\n      <h4>Partial Matches</h4>\n      <entry-list [entries]="partMatches" [searchterm]="searchQuery"></entry-list>\n    </div>\n    <div class="result-container" *ngIf="maybeMatches?.length > 0">\n      <h4>Maybe you meant this?</h4>\n      <entry-list [entries]="maybeMatches" [searchterm]="searchQuery"></entry-list>\n    </div>\n    <div class="result-container" *ngIf="matches?.length === 0 && partMatches?.length === 0 && maybeMatches?.length === 0">\n      <h6>Sorry, we couldn\'t find any words matching \'{{ searchQuery }}\'. Please try something else.</h6>\n    </div>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/search/search.html"*/
+            selector: "page-search",template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/search/search.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Search</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <ion-searchbar\n    (ionInput)="getResults()"\n    [(ngModel)]="searchQuery"\n    autocapitalize="none"\n  ></ion-searchbar>\n  <div *ngIf="searchQuery?.length > 1">\n    <div class="result-container" *ngIf="matches?.length > 0">\n      <h4>Matches</h4>\n      <entry-list\n        [entries]="matches"\n        [searchterm]="searchQuery"\n        [threshold]="matchThreshold"\n      ></entry-list>\n    </div>\n    <div class="result-container" *ngIf="partMatches?.length > 0">\n      <h4>Partial Matches</h4>\n      <entry-list\n        [entries]="partMatches"\n        [searchterm]="searchQuery"\n        [threshold]="partialThreshold"\n      ></entry-list>\n    </div>\n    <div class="result-container" *ngIf="maybeMatches?.length > 0">\n      <h4>Maybe you meant this?</h4>\n      <entry-list\n        [entries]="maybeMatches"\n        [searchterm]="searchQuery"\n        [threshold]="maybeThreshold"\n      ></entry-list>\n    </div>\n    <div\n      class="result-container"\n      *ngIf="matches?.length === 0 && partMatches?.length === 0 && maybeMatches?.length === 0"\n    >\n      <h6>\n        Sorry, we couldn\'t find any words matching \'{{ searchQuery }}\'. Please\n        try something else.\n      </h6>\n    </div>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/search/search.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]])
     ], Search);
@@ -1515,7 +1583,7 @@ var Search = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 294:
+/***/ 295:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1530,14 +1598,16 @@ var Entry = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 295:
+/***/ 296:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EntryList; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__word_modal_component__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__word_modal_component__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_transliteration__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_transliteration___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_transliteration__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1550,6 +1620,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+var levenstein = function (string1, string2) {
+    var a = string1, b = string2 + "", m = [], i, j, min = Math.min;
+    if (!(a && b))
+        return (b || a).length;
+    for (i = 0; i <= b.length; m[i] = [i++])
+        ;
+    for (j = 0; j <= a.length; m[0][j] = j++)
+        ;
+    for (i = 1; i <= b.length; i++) {
+        for (j = 1; j <= a.length; j++) {
+            m[i][j] =
+                b.charAt(i - 1) == a.charAt(j - 1)
+                    ? m[i - 1][j - 1]
+                    : (m[i][j] = min(m[i - 1][j - 1] + 1, min(m[i][j - 1] + 1, m[i - 1][j] + 1)));
+        }
+    }
+    return m[b.length][a.length];
+};
 var EntryList = /** @class */ (function () {
     function EntryList(navCtrl, viewCtrl, modalCtrl) {
         this.navCtrl = navCtrl;
@@ -1558,15 +1647,162 @@ var EntryList = /** @class */ (function () {
         this.edit = false;
         this.pageName = viewCtrl.name;
     }
+    EntryList.prototype.trackByFn = function (index, item) {
+        return item.entryID;
+    };
     EntryList.prototype.showModal = function (clicked_entry) {
         var wordModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__word_modal_component__["a" /* WordModal */], { entry: clicked_entry });
         wordModal.present();
     };
-    EntryList.prototype.highlight = function (text) {
+    EntryList.prototype.highlight = function (entry, langType) {
+        // TODO: this cannot properly deal with multi-word inputs.
+        var text;
+        if (langType === "L1") {
+            text = entry.word;
+        }
+        else if (langType === "L2") {
+            text = entry.definition;
+        }
         if (!this.searchterm) {
             return text;
         }
-        return text.replace(new RegExp(this.searchterm, 'gi'), '<span class="langMatched">$&</span>');
+        if (langType === "L1") {
+            // if normalized, lower case search term matches word, return that, wrapped in <span>
+            // else if compare form is < 2 distance, wrap that in <span>
+            var mtd_1 = window["mtd"];
+            var normTransducerName_1 = "norm";
+            if ("norm_composite" in mtd_1.transducers) {
+                normTransducerName_1 = "norm_composite";
+            }
+            var compareTransducerName_1 = "compare";
+            if ("compare_composite" in mtd_1.transducers) {
+                compareTransducerName_1 = "compare_composite";
+            }
+            // initial terms
+            var searchTerm_1 = mtd_1
+                .transduce(this.searchterm, normTransducerName_1)
+                .toLowerCase();
+            var normText = mtd_1.transduce(text, normTransducerName_1).toLowerCase();
+            var normSearchTermPattern = new RegExp(searchTerm_1, "gi");
+            // Match norm against text
+            var match = void 0;
+            if (text.match(normSearchTermPattern)) {
+                var highlightIndices = [];
+                while ((match = normSearchTermPattern.exec(text))) {
+                    highlightIndices.push([match.index, normSearchTermPattern.lastIndex]);
+                }
+                highlightIndices.reverse();
+                var newText = text;
+                for (var i = 0; i < highlightIndices.length; i++) {
+                    var beforeMatch = newText.substring(0, highlightIndices[i][0]);
+                    var startMatchWrapper = '<span class="langMatched">';
+                    var match_1 = newText.substring(highlightIndices[i][0], highlightIndices[i][1]);
+                    var endMatchWrapper = "</span>";
+                    var afterMatch = newText.substring(highlightIndices[i][1], newText.length);
+                    newText =
+                        beforeMatch +
+                            startMatchWrapper +
+                            match_1 +
+                            endMatchWrapper +
+                            afterMatch;
+                }
+                return newText;
+            }
+            // Match norm against slugified text
+            var slugText = Object(__WEBPACK_IMPORTED_MODULE_3_transliteration__["slugify"])(entry.word);
+            // Match norm against slug. Lengths of text and slugText must be the same to work properly
+            var slugMatch = void 0;
+            if (slugText.match(normSearchTermPattern) &&
+                slugText.length === text.length) {
+                var highlightIndices = [];
+                while ((slugMatch = normSearchTermPattern.exec(slugText))) {
+                    highlightIndices.push([
+                        slugMatch.index,
+                        normSearchTermPattern.lastIndex
+                    ]);
+                }
+                highlightIndices.reverse();
+                var newText = text;
+                for (var i = 0; i < highlightIndices.length; i++) {
+                    var beforeMatch = newText.substring(0, highlightIndices[i][0]);
+                    var startMatchWrapper = '<span class="langMatched">';
+                    var slugMatch_1 = newText.substring(highlightIndices[i][0], highlightIndices[i][1]);
+                    var endMatchWrapper = "</span>";
+                    var afterMatch = newText.substring(highlightIndices[i][1], newText.length);
+                    newText =
+                        beforeMatch +
+                            startMatchWrapper +
+                            slugMatch_1 +
+                            endMatchWrapper +
+                            afterMatch;
+                }
+                return newText;
+            }
+            // Match norm against compare text
+            var compareText = entry.word;
+            if ('compare_form' in entry) {
+                compareText = entry.compare_form;
+            }
+            compareText = compareText.toLowerCase();
+            // Match lev distance between norm or compare on single word
+            if (levenstein(normText, searchTerm_1) <= this.threshold ||
+                levenstein(compareText, searchTerm_1) <= this.threshold ||
+                levenstein(slugText, searchTerm_1) <= this.threshold) {
+                return "<span class=\"langMatched\">" + text + "</span>";
+            }
+            // match lev distance between word and sentence matches
+            if (text.indexOf(" ") !== -1 && searchTerm_1.indexOf(" ") < 0) {
+                // highlight lowest distance word if search is single word and text is sentence
+                var words = text.split(" ");
+                var normWords = words.map(function (x) {
+                    return mtd_1.transduce(x, normTransducerName_1).toLowerCase();
+                });
+                var normWordsDistances = normWords.map(function (x) {
+                    return levenstein(x, searchTerm_1);
+                });
+                var normMinIndex = normWordsDistances.indexOf(Math.min.apply(Math, normWordsDistances));
+                if (normWordsDistances[normMinIndex] <= this.threshold) {
+                    words[normMinIndex] = "<span class=\"langMatched\">" + words[normMinIndex] + "</span>";
+                    return words.join(" ");
+                }
+                // else look at compare
+                var compareWords = words.map(function (x) {
+                    return mtd_1.transduce(x, compareTransducerName_1).toLowerCase();
+                });
+                var compareWordsDistances = compareWords.map(function (x) {
+                    return levenstein(x, searchTerm_1);
+                });
+                var compareMinIndex = compareWordsDistances.indexOf(Math.min.apply(Math, compareWordsDistances));
+                if (compareWordsDistances[compareMinIndex] <= this.threshold) {
+                    words[compareMinIndex] = "<span class=\"langMatched\">" + words[compareMinIndex] + "</span>";
+                    return words.join(" ");
+                }
+                // else look at slugified
+                var slugWords = words.map(function (x) { return Object(__WEBPACK_IMPORTED_MODULE_3_transliteration__["slugify"])(x); });
+                var slugWordsDistances = slugWords.map(function (x) {
+                    return levenstein(x, searchTerm_1);
+                });
+                var slugMinIndex = slugWordsDistances.indexOf(Math.min.apply(Math, slugWordsDistances));
+                if (slugWordsDistances[slugMinIndex] <= this.threshold) {
+                    words[slugMinIndex] = "<span class=\"langMatched\">" + words[slugMinIndex] + "</span>";
+                    return words.join(" ");
+                }
+            }
+            // Last resort, just highlight the whole thing if it doesn't already match L2
+            var l2Pattern = new RegExp(this.searchterm, 'gi');
+            if (!l2Pattern.test(entry.definition)) {
+                return "<span class=\"langMatched\">" + text + "</span>";
+            }
+            else {
+                return "<span>" + text + "</span>";
+            }
+        }
+        else if (langType === "L2") {
+            return text.replace(new RegExp(this.searchterm, "gi"), '<span class="langMatched">$&</span>');
+        }
+        else {
+            return text;
+        }
     };
     EntryList.prototype.ngOnChanges = function () {
         this.edit = this.parentEdit;
@@ -1583,11 +1819,17 @@ var EntryList = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
         __metadata("design:type", String)
     ], EntryList.prototype, "searchterm", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Number)
+    ], EntryList.prototype, "threshold", void 0);
     EntryList = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'entry-list',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/entry-list.component.html"*/'<div id="browseEntries" class="browseElements">\n  <ion-list>\n    <div>\n      <ion-item class="matchContainer" (click)="showModal(entry)" *ngFor="let entry of entries" text-wrap>\n        <ion-checkbox color="danger" checked="false" *ngIf="edit" [(ngModel)]="entry.checked"></ion-checkbox>\n        <ion-label>\n          <div class="matchLeftContainer">\n            <span class="response matchLeftDiv" [ngClass]="{\'langMatched\': entry.type === \'L1\' && pageName === \'Search\'}">{{entry.word}}</span>\n          </div>\n          <div class="matchRightContainer">\n            <span class="response matchRightDiv" [innerHTML]="highlight(entry.definition)"></span>\n          </div>\n        </ion-label>\n      </ion-item>\n    </div>\n  </ion-list>\n</div>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/entry-list.component.html"*/
+            selector: "entry-list",template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/shared/entry-list.component.html"*/'<div id="browseEntries" class="browseElements">\n  <ion-list>\n    <div>\n      <ion-item class="matchContainer" (click)="showModal(entry)" *ngFor="let entry of entries; trackBy: trackByFn"\n        text-wrap>\n        <ion-checkbox color="danger" checked="false" *ngIf="edit" [(ngModel)]="entry.checked"></ion-checkbox>\n        <ion-label>\n          <div class="matchLeftContainer">\n            <span class="response matchLeftDiv" [innerHTML]="highlight(entry, \'L1\')"></span>\n          </div>\n          <div class="matchRightContainer">\n            <span class="response matchRightDiv" [innerHTML]="highlight(entry, \'L2\')"></span>\n          </div>\n        </ion-label>\n      </ion-item>\n    </div>\n  </ion-list>\n</div>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/shared/entry-list.component.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */]])
     ], EntryList);
     return EntryList;
 }());
@@ -1596,13 +1838,13 @@ var EntryList = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 296:
+/***/ 297:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PipesModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__no_null_values_no_null_values__ = __webpack_require__(297);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__no_null_values_no_null_values__ = __webpack_require__(298);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1628,7 +1870,7 @@ var PipesModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 297:
+/***/ 298:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1706,5 +1948,5 @@ var NoNullObjectValuesPipe = /** @class */ (function () {
 
 /***/ })
 
-},[205]);
+},[206]);
 //# sourceMappingURL=main.js.map

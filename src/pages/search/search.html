@@ -8,22 +8,44 @@
 </ion-header>
 
 <ion-content padding scrollbar-y-auto>
-  <ion-searchbar (ionInput)="getResults()" [(ngModel)]="searchQuery" autocapitalize="none"></ion-searchbar>
+  <ion-searchbar
+    (ionInput)="getResults()"
+    [(ngModel)]="searchQuery"
+    autocapitalize="none"
+  ></ion-searchbar>
   <div *ngIf="searchQuery?.length > 1">
     <div class="result-container" *ngIf="matches?.length > 0">
       <h4>Matches</h4>
-      <entry-list [entries]="matches" [searchterm]="searchQuery"></entry-list>
+      <entry-list
+        [entries]="matches"
+        [searchterm]="searchQuery"
+        [threshold]="matchThreshold"
+      ></entry-list>
     </div>
     <div class="result-container" *ngIf="partMatches?.length > 0">
       <h4>Partial Matches</h4>
-      <entry-list [entries]="partMatches" [searchterm]="searchQuery"></entry-list>
+      <entry-list
+        [entries]="partMatches"
+        [searchterm]="searchQuery"
+        [threshold]="partialThreshold"
+      ></entry-list>
     </div>
     <div class="result-container" *ngIf="maybeMatches?.length > 0">
       <h4>Maybe you meant this?</h4>
-      <entry-list [entries]="maybeMatches" [searchterm]="searchQuery"></entry-list>
+      <entry-list
+        [entries]="maybeMatches"
+        [searchterm]="searchQuery"
+        [threshold]="maybeThreshold"
+      ></entry-list>
     </div>
-    <div class="result-container" *ngIf="matches?.length === 0 && partMatches?.length === 0 && maybeMatches?.length === 0">
-      <h6>Sorry, we couldn't find any words matching '{{ searchQuery }}'. Please try something else.</h6>
+    <div
+      class="result-container"
+      *ngIf="matches?.length === 0 && partMatches?.length === 0 && maybeMatches?.length === 0"
+    >
+      <h6>
+        Sorry, we couldn't find any words matching '{{ searchQuery }}'. Please
+        try something else.
+      </h6>
     </div>
   </div>
 </ion-content>

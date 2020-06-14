@@ -1,61 +1,58 @@
 entry-list {
-
-.browseElements {
+  .browseElements {
     margin: auto;
-    height:auto;
+    height: auto;
     width: auto;
     text-align: center;
     background-color: $secondary;
-}
+  }
 
-.browseElements {
+  .browseElements {
     margin: auto;
-    height:auto;
+    height: auto;
     width: auto;
     text-align: center !important;
     background-color: $secondary;
-}
+  }
 
-
-.matchContainer {
+  .matchContainer {
     margin: 1em 0;
     text-align: center;
-}
+  }
 
-.matchLeftDiv {
+  .matchLeftDiv {
     color: $match;
-    margin-right: .2em;
+    margin-right: 0.2em;
     text-align: left;
-}
+  }
 
-.matchLeftContainer, .matchRightContainer {
+  .matchLeftContainer,
+  .matchRightContainer {
     display: initial;
-}
+  }
 
-.matchRightDiv {
-    margin-left:.2em;
-}
+  .matchRightDiv {
+    margin-left: 0.2em;
+  }
 
-.matchResponse {
-    margin: 2.5em 0 .75em 0;
+  .matchResponse {
+    margin: 2.5em 0 0.75em 0;
     text-decoration: underline;
-}
+  }
 
-.matchLeftDiv.langMatched{
+  .matchLeftDiv .langMatched {
     background: #eee;
-    border-radius: 15px;
+    // border-radius: 15px;
     font-weight: 900;
-    padding: 5px;
-}
+    // padding: 5px;
+  }
 
-.matchRightDiv .langMatched{
+  .matchRightDiv .langMatched {
     background: #eee;
     font-weight: 900;
-}
+  }
 
-// ion-item {
-//     text-align: center;
-// }
-
-    
+  // ion-item {
+  //     text-align: center;
+  // }
 }
