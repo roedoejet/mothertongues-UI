@@ -40,9 +40,9 @@ if (config) {
 }
 
 function createCompositeTransducer(orth_names) {
-  return (function() {
+  return (function () {
     var orths = orth_names;
-    return function(str) {
+    return function (str) {
       for (var i = 0; i < orths.length; i++) {
         var transducer = mtd.transducers[orths[i]];
         str = transducer(str);
@@ -53,26 +53,31 @@ function createCompositeTransducer(orth_names) {
 }
 
 function createTransducer(cors) {
-  return (function() {
-    var correspondences = {};
-    for (var i = 0; i < cors.length; i++) {
-      var key = Object.keys(cors[i])[0];
-      correspondences[key] = cors[i][key];
-    }
-    function getKeys(x) {
-      return Object.keys(x)[0];
-    }
-    var keys = cors.map(getKeys);
-    var regex = new RegExp("(" + keys.join("|") + ")", "g");
-    return function(str) {
-      return str.replace(regex, function(a, b) {
-        return correspondences[a];
-      });
-    };
-  })();
+  if (cors.length > 0) {
+    return (function () {
+      var correspondences = {};
+      for (var i = 0; i < cors.length; i++) {
+        var key = Object.keys(cors[i])[0];
+        correspondences[key] = cors[i][key];
+      }
+      function getKeys(x) {
+        return Object.keys(x)[0];
+      }
+      var keys = cors.map(getKeys);
+      var regex = new RegExp("(" + keys.join("|") + ")", "g");
+      return function (str) {
+        return str.replace(regex, function (a, b) {
+          return correspondences[a];
+        });
+      };
+    })();
+  } else {
+    console.warn('Warning: One of your transducers is null!')
+    return (function () { return function (str) { return str } })();
+  }
 }
 
-mtd.transduce = function(str, transducerName) {
+mtd.transduce = function (str, transducerName) {
   if (transducerName in mtd.transducers) {
     var transducer = mtd.transducers[transducerName];
     return transducer(str);
@@ -84,7 +89,7 @@ mtd.transduce = function(str, transducerName) {
 
 var l1NormTransducer = null;
 
-mtd.convertQuery = function(str) {
+mtd.convertQuery = function (str) {
   if (l1NormTransducer === null) {
     if ("norm_composite" in mtd.transducers) {
       l1NormTransducer = "norm_composite";

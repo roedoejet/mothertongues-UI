@@ -73,7 +73,7 @@ export class Search {
       let l2Exact = this.getRegex(searchQueryRegex);
       // 2. Partial match
       let searchQueryPartialRegex = new RegExp(
-        `(^${searchQuery}(?=[\\S])|(?<=\\S)${searchQuery}|(?<=\\s)${searchQuery}(?!\\s))`,
+        `(\\s|^){1}(${this.searchQuery})\\S|\\S(${this.searchQuery})(\\s|^){1}|\\S(${this.searchQuery})\\S`,
         "i"
       );
       let l1Partial = this.getRegex(searchQueryPartialRegex, "word");

@@ -120,9 +120,8 @@ var Flashcard = /** @class */ (function () {
         this.audio_playing = [];
         this.audio_path = __WEBPACK_IMPORTED_MODULE_7__app_global__["a" /* MTDInfo */].config["audio_path"];
         this.fileTransfer = this.transfer.create();
-        this.deck = navParams.get("deck");
+        this.deckTitle = navParams.get("deck");
         this.categories = mtdService.categories;
-        this.card = this.categories[this.deck][this.startIndex];
         this.front = true;
         try {
             this.image = "assets/img/" + this.card.img;
@@ -131,12 +130,19 @@ var Flashcard = /** @class */ (function () {
             this.image = "";
         }
         this.style = navParams.get("style");
+        if (this.style === "audio") {
+            this.deck = this.categories[this.deckTitle].filter(function (x) { return x.audio.length > 0; });
+        }
+        else {
+            this.deck = this.categories[this.deckTitle];
+        }
+        this.card = this.deck[this.startIndex];
     }
     // Go to previous card in deck
     Flashcard.prototype.prev1 = function () {
         if (this.startIndex - 1 > 0) {
             this.startIndex -= 1;
-            this.card = this.categories[this.deck][this.startIndex];
+            this.card = this.deck[this.startIndex];
             try {
                 this.image = "assets/img/" + this.card.img;
             }
@@ -144,7 +150,7 @@ var Flashcard = /** @class */ (function () {
         }
         else {
             this.startIndex = 0;
-            this.card = this.categories[this.deck][this.startIndex];
+            this.card = this.deck[this.startIndex];
             try {
                 this.image = "assets/img/" + this.card.img;
             }
@@ -153,17 +159,17 @@ var Flashcard = /** @class */ (function () {
     };
     // Go to next card in deck
     Flashcard.prototype.next1 = function () {
-        if (this.startIndex + 1 < this.categories[this.deck].length) {
+        if (this.startIndex + 1 < this.deck.length) {
             this.startIndex += 1;
-            this.card = this.categories[this.deck][this.startIndex];
+            this.card = this.deck[this.startIndex];
             try {
                 this.image = "assets/img/" + this.card.img;
             }
             catch (error) { }
         }
         else {
-            this.startIndex = this.categories[this.deck].length - 1;
-            this.card = this.categories[this.deck][this.startIndex];
+            this.startIndex = this.deck.length - 1;
+            this.card = this.deck[this.startIndex];
             try {
                 this.image = "assets/img/" + this.card.img;
             }
@@ -1024,7 +1030,9 @@ var Bookmarks = /** @class */ (function () {
         this.navCtrl = navCtrl;
         this.mtdService = mtdService;
         this.edit = false;
-        this.mtdService.bookmarks.subscribe(function (bookmarks) { _this.bookmarks = bookmarks; });
+        this.mtdService.bookmarks.subscribe(function (bookmarks) {
+            _this.bookmarks = bookmarks;
+        });
     }
     Bookmarks.prototype.removeEntries = function (bookmarks) {
         this.mtdService.setBookmarks(bookmarks.filter(function (bookmark) { return !bookmark.checked; }));
@@ -1035,7 +1043,8 @@ var Bookmarks = /** @class */ (function () {
     };
     Bookmarks = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-bookmarks',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/bookmarks/bookmarks.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Bookmarks</ion-title>\n    <ion-buttons right>\n      <button ion-button (click)="edit = !edit">\n      <ion-icon name="trash" *ngIf="!edit"></ion-icon>\n      <span *ngIf="edit">cancel</span>\n    </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <entry-list [entries]=\'bookmarks\' [parentEdit]="edit"></entry-list>\n  <div class=\'center\'>\n    <button ion-button color="danger" class="remove" *ngIf="edit" (click)="removeEntries(bookmarks)">Remove selected bookmarks</button>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/bookmarks/bookmarks.html"*/,
+            selector: "page-bookmarks",template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/bookmarks/bookmarks.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Bookmarks</ion-title>\n    <ion-buttons right>\n      <button ion-button (click)="edit = !edit">\n      <ion-icon name="trash" *ngIf="!edit"></ion-icon>\n      <span *ngIf="edit">cancel</span>\n    </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n  <entry-list [entries]=\'bookmarks\' [parentEdit]="edit"></entry-list>\n  <div class=\'center\'>\n    <button ion-button color="danger" class="remove" *ngIf="edit" (click)="removeEntries(bookmarks)">Remove selected bookmarks</button>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/bookmarks/bookmarks.html"*/
+            // providers: [EntryList]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__app_mtd_service__["a" /* MTDService */]])
     ], Bookmarks);
@@ -1075,12 +1084,13 @@ var MTDService = /** @class */ (function () {
         this.storage = storage;
         this.bookmarks = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"]([]);
         this.categories = {};
-        if (__WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allAudioEntries.length > 0 && __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allAudioEntries.length < (__WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allEntries.length * .5)) {
+        if (__WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allAudioEntries.length > 0 &&
+            __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allAudioEntries.length < __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allEntries.length * 0.5) {
             this.categories["audio"] = {};
             this.categories["audio"] = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allAudioEntries;
         }
         var _loop_1 = function (key) {
-            this_1.categories[key] = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].dataDict.filter(function (x) { return x['source'] == key; });
+            this_1.categories[key] = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].dataDict.filter(function (x) { return x["source"] == key; });
         };
         var this_1 = this;
         for (var _i = 0, _a = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].dataKeys; _i < _a.length; _i++) {
@@ -1094,7 +1104,9 @@ var MTDService = /** @class */ (function () {
                 if (!(formattedTheme in semantic_categories)) {
                     semantic_categories[formattedTheme] = [];
                 }
-                if ('secondary_theme' in entry && entry.secondary_theme && entry.theme) {
+                if ("secondary_theme" in entry &&
+                    entry.secondary_theme &&
+                    entry.theme) {
                     var formattedSecondaryTheme = _this.formatSecondaryTheme(entry.theme, entry.secondary_theme);
                     if (semantic_categories[formattedTheme].indexOf(formattedSecondaryTheme) < 0) {
                         semantic_categories[formattedTheme].push(formattedSecondaryTheme);
@@ -1104,13 +1116,19 @@ var MTDService = /** @class */ (function () {
         });
         // sort themes
         var ordered_categories = [];
-        Object.keys(semantic_categories).sort().forEach(function (key) {
+        Object.keys(semantic_categories)
+            .sort()
+            .forEach(function (key) {
             ordered_categories.push(key);
             ordered_categories = ordered_categories.concat(semantic_categories[key].sort());
         });
         var _loop_2 = function (cat) {
             if (cat) {
-                this_2.categories[cat] = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allEntries.filter(function (entry) { return _this.formatTheme(entry.theme) === cat || _this.formatSecondaryTheme(entry.theme, entry.secondary_theme) === cat; });
+                this_2.categories[cat] = __WEBPACK_IMPORTED_MODULE_1__global__["a" /* MTDInfo */].allEntries.filter(function (entry) {
+                    return _this.formatTheme(entry.theme) === cat ||
+                        _this.formatSecondaryTheme(entry.theme, entry.secondary_theme) ===
+                            cat;
+                });
             }
         };
         var this_2 = this;
@@ -1124,15 +1142,15 @@ var MTDService = /** @class */ (function () {
             return theme.charAt(0).toUpperCase() + theme.slice(1);
         }
         else {
-            return '';
+            return "";
         }
     };
     MTDService.prototype.formatSecondaryTheme = function (theme, secondary_theme) {
         if (theme && secondary_theme) {
-            return this.formatTheme(theme) + ' / ' + secondary_theme.toLowerCase();
+            return this.formatTheme(theme) + " / " + secondary_theme.toLowerCase();
         }
         else {
-            return '';
+            return "";
         }
     };
     MTDService.prototype.setBookmarks = function (val) {
@@ -1188,8 +1206,8 @@ var Browse = /** @class */ (function () {
     function Browse(navCtrl, mtdService) {
         this.navCtrl = navCtrl;
         this.mtdService = mtdService;
-        this.currentEntries = window['dataDict'];
-        this.currentTen = window['get10'](window['dataDict'], 0);
+        this.currentEntries = window["dataDict"];
+        this.currentTen = window["get10"](window["dataDict"], 0);
         this.letters = __WEBPACK_IMPORTED_MODULE_2__app_global__["a" /* MTDInfo */].config.L1.lettersInLanguage;
         this.selectedCategory = "words";
         this.startIndex = 0;
@@ -1225,26 +1243,26 @@ var Browse = /** @class */ (function () {
     Browse.prototype.prev10 = function () {
         if (this.startIndex - 10 > 0) {
             this.startIndex -= 10;
-            this.currentTen = window['get10'](this.currentEntries, this.startIndex);
+            this.currentTen = window["get10"](this.currentEntries, this.startIndex);
         }
         else {
             this.startIndex = 0;
-            this.currentTen = window['get10'](this.currentEntries, this.startIndex);
+            this.currentTen = window["get10"](this.currentEntries, this.startIndex);
         }
     };
     // Scroll to next 10 entries
     Browse.prototype.next10 = function () {
         if (this.startIndex + 10 < this.currentEntries.length) {
             this.startIndex += 10;
-            this.currentTen = window['get10'](this.currentEntries, this.startIndex);
+            this.currentTen = window["get10"](this.currentEntries, this.startIndex);
         }
         else {
             this.startIndex = this.currentEntries.length - 10;
-            this.currentTen = window['get10'](this.currentEntries, this.startIndex);
+            this.currentTen = window["get10"](this.currentEntries, this.startIndex);
         }
     };
     Browse.prototype.secondary = function (cat) {
-        return cat.charAt(0) === '-';
+        return cat.charAt(0) === "-";
     };
     // Scroll to letter
     // Still needed: change selected letter dynamically
@@ -1254,19 +1272,19 @@ var Browse = /** @class */ (function () {
             var entry = _a[_i];
             if (entry.firstWordIndex === letterIndex) {
                 this.startIndex = this.currentEntries.indexOf(entry);
-                this.currentTen = window['get10'](this.currentEntries, this.startIndex);
+                this.currentTen = window["get10"](this.currentEntries, this.startIndex);
                 break;
             }
         }
     };
     Browse.prototype.selectCategory = function (category) {
         this.currentEntries = this.mtdService.categories[category];
-        this.currentTen = window['get10'](this.currentEntries, 0);
+        this.currentTen = window["get10"](this.currentEntries, 0);
         this.letterInit();
     };
     Browse = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-browse',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Browse</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content scrollbar-y-auto>\n\n  <ion-list mode="ios">\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Category</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)" [selectOptions]="categorySelectOptions">\n        <ion-option *ngFor=\'let category of displayCategories\'>{{category}}</ion-option>\n      </ion-select>\n    </ion-item>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Letter</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)" [selectOptions]="letterSelectOptions">\n        <ion-option *ngFor=\'let letter of displayLetters\'>{{letter}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n  <div class="entry-container">\n    <entry-list [entries]=\'currentTen\'></entry-list>\n  </div>\n \n\n</ion-content>\n\n <ion-footer>\n    <ion-toolbar>\n      <ion-buttons left class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="prev10()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n      <ion-buttons end class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="next10()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-footer>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/
+            selector: "page-browse",template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Browse</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content scrollbar-y-auto>\n\n  <ion-list mode="ios">\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Category</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)" [selectOptions]="categorySelectOptions">\n        <ion-option *ngFor=\'let category of displayCategories\'>{{category}}</ion-option>\n      </ion-select>\n    </ion-item>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Letter</ion-label>\n      <ion-select mode="ios" [(ngModel)]="selectedLetter" (ngModelChange)="scrollTo($event)" [selectOptions]="letterSelectOptions">\n        <ion-option *ngFor=\'let letter of displayLetters\'>{{letter}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n  <div class="entry-container">\n    <entry-list [entries]=\'currentTen\'></entry-list>\n  </div>\n \n\n</ion-content>\n\n <ion-footer>\n    <ion-toolbar>\n      <ion-buttons left class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="prev10()">\n        <ion-icon name="ios-arrow-back" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n      <ion-buttons end class="bar-buttons bar-buttons-ios">\n        <button ion-button icon-only (click)="next10()">\n        <ion-icon name="ios-arrow-forward" class="scroll"></ion-icon>\n      </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-footer>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/browse/browse.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__["a" /* MTDService */]])
     ], Browse);
@@ -1308,42 +1326,60 @@ var Flashcards = /** @class */ (function () {
         this.mtdService = mtdService;
         this.alertCtrl = alertCtrl;
         this.deckSelectOptions = { title: "Select a Deck" };
-        this.language = __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config['L1']['name'];
-        this.language2 = __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config['L2']['name'];
+        this.language = __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config["L1"]["name"];
+        this.language2 = __WEBPACK_IMPORTED_MODULE_4__app_global__["a" /* MTDInfo */].config["L2"]["name"];
         this.decks = Object.keys(mtdService.categories);
         this.flashcardStyles = [
-            { "title": "Show " + this.language, "info": "This is the easiest method. It involves seeing the " + this.language + " word and guessing " + this.language2 + ".", "type": "passive" },
-            { "title": "Show " + this.language2, "info": "This method is designed to test your spelling of the " + this.language + " word. You are provided with the " + this.language2 + ", and have to guess the " + this.language + " word.", "type": "active" },
-            { "title": "Audio Only", "info": "This method is entirely without any written prompt. Try and guess the word in both " + this.language2 + " and " + this.language + "!", "type": "audio" }
+            {
+                title: "Show " + this.language,
+                info: "This is the easiest method. It involves seeing the " + this.language + " word and guessing " + this.language2 + ".",
+                type: "passive"
+            },
+            {
+                title: "Show " + this.language2,
+                info: "This method is designed to test your spelling of the " + this.language + " word. You are provided with the " + this.language2 + ", and have to guess the " + this.language + " word.",
+                type: "active"
+            },
+            {
+                title: "Audio Only",
+                info: "This method is entirely without any written prompt. Try and guess the word in both " + this.language2 + " and " + this.language + "!",
+                type: "audio"
+            }
         ];
     }
     Flashcards.prototype.startFlashcards = function () {
         if (this.deck === undefined) {
             var alert_1 = this.alertCtrl.create({
-                title: 'Oops!',
-                subTitle: 'Did you select a deck?',
-                buttons: ['Try again']
+                title: "Oops!",
+                subTitle: "Did you select a deck?",
+                buttons: ["Try again"]
             });
             alert_1.present();
         }
         else if (this.selectedFlashcardStyle === undefined) {
             var alert_2 = this.alertCtrl.create({
-                title: 'Oops!',
-                subTitle: 'Did you select a flashcard style?',
-                buttons: ['Try again']
+                title: "Oops!",
+                subTitle: "Did you select a flashcard style?",
+                buttons: ["Try again"]
             });
             alert_2.present();
         }
         else {
-            var flashcardModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__["a" /* Flashcard */], { deck: this.deck, style: this.selectedFlashcardStyle });
+            var flashcardModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__flashcard_modal_component__["a" /* Flashcard */], {
+                deck: this.deck,
+                style: this.selectedFlashcardStyle
+            });
             flashcardModal.present();
         }
     };
     Flashcards = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-flashcards',template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Flashcards</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n\n  <ion-list class="deck-select">\n    <ion-list-header>\n      First, select a flashcard deck:\n    </ion-list-header>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Deck</ion-label>\n      <ion-select mode="ios" [(ngModel)]="deck" [selectOptions]="deckSelectOptions">\n        <ion-option *ngFor=\'let deck of decks\'>{{deck}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n\n  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">\n    <ion-list-header text-wrap>\n      Then, select a style of learning between the following options:\n    </ion-list-header>\n    <ion-item *ngFor="let style of flashcardStyles">\n      <ion-label>{{style.title}}</ion-label>\n      <p>{{style.info}}</p>\n      <ion-radio value="{{style.type}}"></ion-radio>\n    </ion-item>\n  </ion-list>\n\n  <div class="center"><button ion-button secondary (click)=\'startFlashcards()\'>Click here to start!</button></div>\n</ion-content>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/
+            selector: "page-flashcards",template:/*ion-inline-start:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Flashcards</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding scrollbar-y-auto>\n\n  <ion-list class="deck-select">\n    <ion-list-header>\n      First, select a flashcard deck:\n    </ion-list-header>\n    <ion-item mode="ios">\n      <ion-label class="label-left" mode="ios">Select a Deck</ion-label>\n      <ion-select mode="ios" [(ngModel)]="deck" [selectOptions]="deckSelectOptions">\n        <ion-option *ngFor=\'let deck of decks\'>{{deck}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-list>\n\n  <ion-list radio-group [(ngModel)]="selectedFlashcardStyle">\n    <ion-list-header text-wrap>\n      Then, select a style of learning between the following options:\n    </ion-list-header>\n    <ion-item *ngFor="let style of flashcardStyles">\n      <ion-label>{{style.title}}</ion-label>\n      <p>{{style.info}}</p>\n      <ion-radio value="{{style.type}}"></ion-radio>\n    </ion-item>\n  </ion-list>\n\n  <div class="center"><button ion-button secondary (click)=\'startFlashcards()\'>Click here to start!</button></div>\n</ion-content>'/*ion-inline-end:"/Users/pinea/mothertongues-UI/src/pages/flashcards/flashcards.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */], __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__["a" /* MTDService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */],
+            __WEBPACK_IMPORTED_MODULE_3__app_mtd_service__["a" /* MTDService */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]])
     ], Flashcards);
     return Flashcards;
 }());
@@ -1421,6 +1457,7 @@ var Search = /** @class */ (function () {
         this.matchThreshold = 0;
         this.partialThreshold = 1;
         this.maybeThreshold = 2;
+        this.approxWeight = 1;
     }
     Search.prototype.getRegex = function (re, key) {
         if (key === void 0) { key = "definition"; }
@@ -1468,7 +1505,7 @@ var Search = /** @class */ (function () {
             var l1Exact_1 = this.getRegex(searchQueryRegex, "word");
             var l2Exact_1 = this.getRegex(searchQueryRegex);
             // 2. Partial match
-            var searchQueryPartialRegex = new RegExp("(^" + searchQuery + "(?=[\\S])|(?<=\\S)" + searchQuery + "|(?<=\\s)" + searchQuery + "(?!\\s))", "i");
+            var searchQueryPartialRegex = new RegExp("(\\s|^){1}(" + this.searchQuery + ")\\S|\\S(" + this.searchQuery + ")(\\s|^){1}|\\S(" + this.searchQuery + ")\\S", 'i');
             var l1Partial_1 = this.getRegex(searchQueryPartialRegex, "word");
             var l2Partial_1 = this.getRegex(searchQueryPartialRegex);
             // 3. Partial match on slugified form
@@ -1525,11 +1562,17 @@ var Search = /** @class */ (function () {
                     var result = target_2[_i];
                     var entry = result[1];
                     entry.type = "L1";
-                    if (allMatches_1.findIndex(function (match) {
-                        return match.word === entry.word &&
-                            match.definition === match.definition;
-                    }) === -1) {
+                    var resultIndex = allMatches_1.findIndex(function (match) {
+                        return match.word === entry.word && match.definition === match.definition;
+                    });
+                    if (resultIndex === -1) {
                         allMatches_1.push(entry);
+                    }
+                    else {
+                        if ("distance" in allMatches_1[resultIndex] &&
+                            allMatches_1[resultIndex].distance > result[0]) {
+                            allMatches_1[resultIndex].distance = result[0] + _this.approxWeight;
+                        }
                     }
                 }
             };
@@ -1545,7 +1588,7 @@ var Search = /** @class */ (function () {
                             entry.distance > _this.matchThreshold) {
                             partMatches_1.push(entry);
                         }
-                        else if (entry.distance <= _this.matchThreshold &&
+                        else if (entry.distance <= _this.maybeThreshold &&
                             entry.distance > _this.partialThreshold) {
                             maybeMatches_1.push(entry);
                         }
