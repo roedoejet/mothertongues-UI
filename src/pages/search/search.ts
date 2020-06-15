@@ -23,6 +23,7 @@ export class Search {
   matchThreshold = 0;
   partialThreshold = 1;
   maybeThreshold = 2;
+  approxWeight = 1;
   constructor(public navCtrl: NavController) {}
 
   getRegex(re, key = "definition") {
@@ -136,14 +137,19 @@ export class Search {
         for (let result of target) {
           var entry = result[1];
           entry.type = "L1";
-          if (
-            allMatches.findIndex(
-              match =>
-                match.word === entry.word &&
-                match.definition === match.definition
-            ) === -1
-          ) {
+          const resultIndex = allMatches.findIndex(
+            match =>
+              match.word === entry.word && match.definition === match.definition
+          );
+          if (resultIndex === -1) {
             allMatches.push(entry);
+          } else {
+            if (
+              "distance" in allMatches[resultIndex] &&
+              allMatches[resultIndex].distance > result[0]
+            ) {
+              allMatches[resultIndex].distance = result[0] + this.approxWeight;
+            }
           }
         }
       };
@@ -160,7 +166,7 @@ export class Search {
             ) {
               partMatches.push(entry);
             } else if (
-              entry.distance <= this.matchThreshold &&
+              entry.distance <= this.maybeThreshold &&
               entry.distance > this.partialThreshold
             ) {
               maybeMatches.push(entry);
