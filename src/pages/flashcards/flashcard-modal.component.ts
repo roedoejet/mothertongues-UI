@@ -23,6 +23,8 @@ import { Clipboard } from "@ionic-native/clipboard";
 
 import { MTDInfo } from "../../app/global";
 
+import { FlashcardStyle } from "./flashcards";
+
 @Component({
   selector: "flashcard-modal",
   templateUrl: "flashcard-modal.component.html"
@@ -31,7 +33,8 @@ export class Flashcard {
   displayImages: boolean = true; //default show images, turns to false on 404
   card: Entry;
   categories: Object;
-  deck: string;
+  deckTitle: string;
+  deck: Entry[];
   front: Boolean;
   image: string;
   startIndex: number = 0;
@@ -51,9 +54,9 @@ export class Flashcard {
     private plt: Platform,
     private transfer: FileTransfer
   ) {
-    this.deck = navParams.get("deck");
+    this.deckTitle = navParams.get("deck");
     this.categories = mtdService.categories;
-    this.card = this.categories[this.deck][this.startIndex];
+
     this.front = true;
     try {
       this.image = "assets/img/" + this.card.img;
@@ -62,6 +65,14 @@ export class Flashcard {
     }
 
     this.style = navParams.get("style");
+    if (this.style === "audio") {
+      this.deck = this.categories[this.deckTitle].filter(
+        x => x.audio.length > 0
+      );
+    } else {
+      this.deck = this.categories[this.deckTitle];
+    }
+    this.card = this.deck[this.startIndex];
   }
 
   fileTransfer: FileTransferObject = this.transfer.create();
@@ -70,13 +81,13 @@ export class Flashcard {
   prev1() {
     if (this.startIndex - 1 > 0) {
       this.startIndex -= 1;
-      this.card = this.categories[this.deck][this.startIndex];
+      this.card = this.deck[this.startIndex];
       try {
         this.image = "assets/img/" + this.card.img;
       } catch (error) {}
     } else {
       this.startIndex = 0;
-      this.card = this.categories[this.deck][this.startIndex];
+      this.card = this.deck[this.startIndex];
       try {
         this.image = "assets/img/" + this.card.img;
       } catch (error) {}
@@ -85,15 +96,15 @@ export class Flashcard {
 
   // Go to next card in deck
   next1() {
-    if (this.startIndex + 1 < this.categories[this.deck].length) {
+    if (this.startIndex + 1 < this.deck.length) {
       this.startIndex += 1;
-      this.card = this.categories[this.deck][this.startIndex];
+      this.card = this.deck[this.startIndex];
       try {
         this.image = "assets/img/" + this.card.img;
       } catch (error) {}
     } else {
-      this.startIndex = this.categories[this.deck].length - 1;
-      this.card = this.categories[this.deck][this.startIndex];
+      this.startIndex = this.deck.length - 1;
+      this.card = this.deck[this.startIndex];
       try {
         this.image = "assets/img/" + this.card.img;
       } catch (error) {}
