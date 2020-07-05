@@ -57,18 +57,21 @@
           Sentences
         </ion-card-header>
 
-        <ion-list *ngFor="
-            let sentence of entry.example_sentence | noNullValues;
-            let i = index
-          ">
-          <!-- <button ion-item *ngFor="let track of (entry.example_sentence_audio[i] | noNullObjectValues)"
-          (click)="playAudio(track)"> -->
-          <button ion-item *ngFor="let track of entry.example_sentence_audio[i]" (click)="playAudio(track)">
-            <ion-icon name="musical-notes" item-start></ion-icon>
-            <h2>{{ sentence }}</h2>
-            <h4>{{ entry.example_sentence_definition[i] }}</h4>
-            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
-          </button>
+        <ion-list *ngFor="let sentence of entry.example_sentence | noNullValues; let i = index">
+          <ng-container *ngIf="hasKey(entry, 'example_sentence_audio')">
+            <button ion-item *ngFor="let track of entry.example_sentence_audio[i]" (click)="playAudio(track)">
+              <ion-icon name="musical-notes" item-start></ion-icon>
+              <h2>{{ sentence }}</h2>
+              <h4>{{ entry.example_sentence_definition[i] }}</h4>
+              <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="!hasKey(entry, 'example_sentence_audio')">
+            <div ion-item>
+              <h2>{{ sentence }}</h2>
+              <h4>{{ entry.example_sentence_definition[i] }}</h4>
+            </div>
+          </ng-container>
         </ion-list>
       </ion-card>
     </ion-row>
