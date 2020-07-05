@@ -13,59 +13,85 @@
 //
 //        You should have received a copy of the GNU Affero General Public License
 //        along with this program.  If not, see //<http://www.gnu.org/licenses/>.
-'use strict';
-
-
+"use strict";
 
 // get the distances
 
 var l1SearchAlg = null;
+var l1SearchAlgWord = null;
 
 function searchL1(query_value) {
-    if (l1SearchAlg === null) {
-        l1SearchAlg = distanceCalculator(getAllEntries());
+  if (l1SearchAlg === null || l1SearchAlgWord) {
+    l1SearchAlg = distanceCalculator(getAllEntries());
+    l1SearchAlgWord = distanceCalculatorWord(getAllEntries());
+  }
+  query_value = query_value.toLowerCase();
+  // Case for multi-word query
+  if (query_value.indexOf(" ") >= 0) {
+    var query_array = query_value.split(" ");
+    var result_container = [];
+    for (var i = 0; i < query_array.length; i++) {
+      var needle = mtd.convertQuery(query_array[i]);
+      result_container = result_container.concat(l1SearchAlg(needle));
     }
-    query_value = query_value.toLowerCase();
-    // Case for multi-word query
-    if (query_value.indexOf(' ') >= 0) {
-        var query_array = query_value.split(" ");
-        var result_container = []
-        for (var i = 0; i < query_array.length; i++) {
-            var needle = mtd.convertQuery(query_array[i], "L1", "compare")
-            result_container = result_container.concat(l1SearchAlg(needle))
+    return result_container;
+    // Case for single-word query
+  } else {
+    // Find lev distance on compare form
+    var needle = mtd.convertQuery(query_value);
+    var compare_results = l1SearchAlg(needle);
+    // Weight them lower than exact word matches (weight = 0.5)
+    for (var i = 0; i < compare_results.length; i++) {
+      compare_results[i][1].distance += 0.5;
+    }
+    // Find lev distance on display form
+    var word_results = l1SearchAlgWord(needle);
+
+    var results = [];
+    if (compare_results.length > 0) {
+      var word_result_keys = [];
+      for (var i = 0; i < word_results.length; i++) {
+        word_result_keys.push(word_results[i].word);
+      }
+      // Add the compare result only if it doesn't exist as display form match
+      for (var i = 0; i < compare_results.length; i++) {
+        if (!(compare_results[i]["word"] in word_result_keys)) {
+          results.push(compare_results[i]);
         }
-        return result_container
-        // Case for single-word query
+      }
+      results = results.concat(compare_results);
     } else {
-        var needle = mtd.convertQuery(query_value, "L1", "compare");
-        return l1SearchAlg(needle);
+      results = word_results;
     }
+    return results;
+  }
 }
 
 function shuffle(array) {
-    var tmp, current, top = array.length;
+  var tmp,
+    current,
+    top = array.length;
 
-    if (top)
-        while (--top) {
-            current = Math.floor(Math.random() * (top + 1));
-            tmp = array[current];
-            array[current] = array[top];
-            array[top] = tmp;
-        }
+  if (top)
+    while (--top) {
+      current = Math.floor(Math.random() * (top + 1));
+      tmp = array[current];
+      array[current] = array[top];
+      array[top] = tmp;
+    }
 
-    return array;
+  return array;
 }
 
 function getRandom10() {
-    var entries = shuffle(getAllEntries()); // shuffle entries
-    return entries.slice(0, 10);
+  var entries = shuffle(getAllEntriesByValue()); // shuffle entries
+  return entries.slice(0, 10);
 }
 
 function get10(entries, startIndex) {
-    return entries.slice(startIndex, startIndex + 10);
+  return entries.slice(startIndex, startIndex + 10);
 }
 
 function get1(entries, startIndex) {
-    return entries.slice(startIndex, startIndex + 1);
+  return entries.slice(startIndex, startIndex + 1);
 }
-

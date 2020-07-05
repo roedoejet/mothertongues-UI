@@ -1,14 +1,15 @@
 <div id="browseEntries" class="browseElements">
   <ion-list>
     <div>
-      <ion-item class="matchContainer" (click)="showModal(entry)" *ngFor="let entry of entries" text-wrap>
+      <ion-item class="matchContainer" (click)="showModal(entry)" *ngFor="let entry of entries; trackBy: trackByFn"
+        text-wrap>
         <ion-checkbox color="danger" checked="false" *ngIf="edit" [(ngModel)]="entry.checked"></ion-checkbox>
         <ion-label>
           <div class="matchLeftContainer">
-            <span class="response matchLeftDiv" [ngClass]="{'langMatched': entry.type === 'L1' && pageName === 'Search'}">{{entry.word}}</span>
+            <span class="response matchLeftDiv" [innerHTML]="highlight(entry, 'L1')"></span>
           </div>
           <div class="matchRightContainer">
-            <span class="response matchRightDiv" [innerHTML]="highlight(entry.definition)"></span>
+            <span class="response matchRightDiv" [innerHTML]="highlight(entry, 'L2')"></span>
           </div>
         </ion-label>
       </ion-item>

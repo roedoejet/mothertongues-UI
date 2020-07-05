@@ -1,0 +1,5 @@
+*.min.*
+www/*
+*.js
+*.html
+*.scss

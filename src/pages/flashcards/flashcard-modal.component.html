@@ -12,57 +12,54 @@
 </ion-header>
 
 <ion-content ng-switch="style" on-swipe-up="front = !front">
-
   <ion-card>
-
     <div *ngIf="displayImages && style === 'audio'">
       <img (click)="playAudio(card)" [(src)]="image" onError="this.src='assets/img/default.png'" *ngIf="card.img" />
     </div>
     <ion-card-content [ngSwitch]="style">
       <div *ngSwitchCase="'active'">
         <ion-card-title *ngIf="!front">
-          {{card.word}}
+          {{ card.word }}
         </ion-card-title>
         <ion-card-title class="definition" *ngIf="front">
-          {{card.definition}}
+          {{ card.definition }}
         </ion-card-title>
       </div>
       <div *ngSwitchCase="'passive'">
         <ion-card-title *ngIf="!front">
-          {{card.definition}}
+          {{ card.definition }}
         </ion-card-title>
         <ion-card-title class="definition" *ngIf="front">
-          {{card.word}}
+          {{ card.word }}
         </ion-card-title>
       </div>
       <div *ngSwitchCase="'audio'">
         <ion-card-title *ngIf="!front">
-          {{card.word}} - {{card.definition}}
+          {{ card.word }} - {{ card.definition }}
         </ion-card-title>
       </div>
       <div *ngIf="card.optional && optional">
         <p class="option" *ngFor="let option of checkedOptions; let i = index">
-          {{option}} - {{card.optional[option]}}
+          {{ option }} - {{ card.optional[option] }}
         </p>
       </div>
     </ion-card-content>
 
-    <ion-row *ngIf="(card.audio)?.length > 0">
-    <!-- <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0"> -->
+    <ion-row *ngIf="card.audio?.length > 0">
+      <!-- <ion-row *ngIf="(card.audio | noNullObjectValues)?.length > 0"> -->
       <ion-card>
         <ion-card-header>
           Audio
         </ion-card-header>
 
         <ion-list>
-          <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudio(track)">
+          <!-- <button ion-item *ngFor="let track of (card.audio | noNullObjectValues)" (click)="playAudio(track)"> -->
+          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
-            Speaker: {{ track.speaker }}
+            <span *ngIf="track.speaker">Speaker: {{ track.speaker }}</span>
           </button>
-
         </ion-list>
       </ion-card>
-
     </ion-row>
 
     <ion-row *ngIf="(card.example_sentence | noNullValues)?.length > 0">
@@ -71,18 +68,19 @@
           Sentences
         </ion-card-header>
 
-        <ion-list *ngFor="let sentence of (card.example_sentence | noNullValues); let i = index">
-
-          <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudio(track)">
+        <ion-list *ngFor="
+            let sentence of card.example_sentence | noNullValues;
+            let i = index
+          ">
+          <!-- <button ion-item *ngFor="let track of (card.example_sentence_audio[i] | noNullObjectValues)" (click)="playAudio(track)"> -->
+          <button ion-item *ngFor="let track of card.audio" (click)="playAudio(track)">
             <ion-icon name="musical-notes" item-start></ion-icon>
             <h2>{{ sentence }}</h2>
             <h4>{{ card.example_sentence_definition[i] }}</h4>
-            <h6>Speaker: {{ track.speaker }}</h6>
+            <h6 *ngIf="track.speaker">Speaker: {{ track.speaker }}</h6>
           </button>
-
         </ion-list>
       </ion-card>
-
     </ion-row>
 
     <ion-row no-padding>
@@ -92,16 +90,19 @@
           <ion-icon *ngIf="!favourited(card)" name="ios-bookmarks-outline"></ion-icon>
           Bookmark
         </button>
+        <ion-col>
+          <button ion-button clear small color="primary" icon-left (click)="copyToClipboard(card.word)">
+            <ion-icon name="copy"></ion-icon>
+            Copy
+          </button>
+        </ion-col>
         <button ion-button clear small color="primary" icon-left (click)="front = !front">
-          <ion-icon name='refresh'></ion-icon>
+          <ion-icon name="refresh"></ion-icon>
           <span *ngIf="front">Flip to back</span><span *ngIf="!front">Flip to front</span>
         </button>
       </ion-col>
-
     </ion-row>
-
   </ion-card>
-
 </ion-content>
 
 <ion-footer>

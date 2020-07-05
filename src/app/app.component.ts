@@ -32,7 +32,7 @@ export class MyApp {
     this.pages = [
       { title: 'Search', component: Search },
       { title: 'Browse', component: Browse },
-      { title: 'Pick a Random Word!', component: Random },
+      { title: 'Random', component: Random },
       { title: 'Bookmarks', component: Bookmarks },
       { title: 'Flashcards', component: Flashcards },
       { title: 'About', component: About }

@@ -29641,28 +29641,27 @@ entry-list .matchContainer {
 
 entry-list .matchLeftDiv {
   color: #05668D;
-  margin-right: .2em;
+  margin-right: 0.2em;
   text-align: left;
 }
 
-entry-list .matchLeftContainer, entry-list .matchRightContainer {
+entry-list .matchLeftContainer,
+entry-list .matchRightContainer {
   display: initial;
 }
 
 entry-list .matchRightDiv {
-  margin-left: .2em;
+  margin-left: 0.2em;
 }
 
 entry-list .matchResponse {
-  margin: 2.5em 0 .75em 0;
+  margin: 2.5em 0 0.75em 0;
   text-decoration: underline;
 }
 
-entry-list .matchLeftDiv.langMatched {
+entry-list .matchLeftDiv .langMatched {
   background: #eee;
-  border-radius: 15px;
   font-weight: 900;
-  padding: 5px;
 }
 
 entry-list .matchRightDiv .langMatched {

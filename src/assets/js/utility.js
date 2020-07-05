@@ -24,6 +24,16 @@ function getAllEntries() {
     }
 }
 
+function getAllEntriesByValue() {
+    var allEntriesValues = allEntries.slice(0);
+    if (allEntriesValues.length > 0) {
+        return allEntriesValues;
+    } else {
+        allEntriesValues = dataDict
+        return allEntriesValues;
+    }
+}
+
 var allWords = []
 
 function getAllWords() {

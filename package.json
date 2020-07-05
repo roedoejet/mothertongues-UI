@@ -1,5 +1,6 @@
 {
   "name": "mothertongues-UI",
+  "version": "3.3.0",
   "author": "Aidan Pine",
   "homepage": "http://www.mothertongues.org",
   "private": true,
@@ -10,6 +11,17 @@
     "ionic:serve": "ionic-app-scripts serve",
     "minify": "uglifyjs src/assets/js/mtd.js src/assets/js/levenshtein.js src/assets/js/editDistance.js src/assets/js/utility.js src/assets/js/deadSearch.js -o src/assets/js/mtd-ui.min.js"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "dependencies": {
     "@angular/common": "5.0.3",
     "@angular/compiler": "5.0.3",
@@ -19,7 +31,9 @@
     "@angular/http": "5.0.3",
     "@angular/platform-browser": "5.0.3",
     "@angular/platform-browser-dynamic": "5.0.3",
+    "@commitlint/config-conventional": "^8.3.4",
     "@ionic-native/android-permissions": "^4.5.3",
+    "@ionic-native/clipboard": "^4.20.0",
     "@ionic-native/core": "4.4.0",
     "@ionic-native/file": "^4.5.3",
     "@ionic-native/file-transfer": "^4.5.3",
@@ -28,8 +42,11 @@
     "@ionic-native/status-bar": "4.4.0",
     "@ionic/pro": "^1.0.19",
     "@ionic/storage": "2.1.3",
+    "commitlint": "^8.3.5",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^5.0.3",
+    "cordova-clipboard": "^1.3.0",
+    "cordova-ios": "^4.5.5",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -38,11 +55,15 @@
     "cordova-plugin-media": "5.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-whitelist": "^1.3.4",
+    "husky": "^3.0.9",
     "ionic": "^5.4.1",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
+    "transliteration": "^2.1.11",
     "web": "0.0.2",
     "zone.js": "0.8.18"
   },
@@ -58,20 +79,21 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-media": {
         "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
       },
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      }
+      "cordova-clipboard": {}
     },
     "platforms": [
       "browser",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
